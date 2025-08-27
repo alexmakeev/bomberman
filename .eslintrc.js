@@ -71,5 +71,11 @@ module.exports = {
     'sort-imports': ['error', { ignoreDeclarationSort: true }],
     'no-empty-function': 'warn',
     'no-magic-numbers': ['warn', { ignore: [-1, 0, 1, 2, 10, 100, 1000] }],
+    
+    // Fifth batch: More strict code quality rules
+    'no-shadow': 'error',
+    'no-param-reassign': 'warn',
+    'prefer-destructuring': ['warn', { object: true, array: false }],
+    'no-nested-ternary': 'warn',
   },
 };
