@@ -9,20 +9,23 @@ The system uses a **dual-storage architecture** with different technologies opti
 - **PostgreSQL** - Persistent storage for users, game statistics, and long-term data
 - **Redis** - High-speed state synchronization and real-time game data
 - **WebSocket** - Real-time bidirectional communication
-- **Vue.js** - Reactive frontend with PWA capabilities
+- **Vue 3 + Vite** - Modern reactive frontend with PWA capabilities
+- **Event-Driven Architecture** - Unified EventBus for all system communication
 
 ```mermaid
 graph TB
-    Client[Vue.js PWA Client<br/>Progressive Web App]
-    Server[Node.js + Koa.js<br/>WebSocket + Static Files]
+    Client[Vue 3 PWA Client<br/>Canvas Rendering + WebSocket]
+    Server[UnifiedGameServer<br/>EventBus + WebSocket + Static Files]
+    Modules[Game Modules<br/>BombManager + PlayerStateManager<br/>MazeGenerator + CollisionDetector]
     Redis[(Redis<br/>Real-time State<br/>Pub/Sub)]
     PostgreSQL[(PostgreSQL<br/>Persistent Storage)]
     
-    Client <-->|WebSocket<br/>Real-time Updates| Server
+    Client <-->|WebSocket<br/>Real-time Events| Server
     Client <-->|HTTP<br/>Static Files & API| Server
-    Server <-->|Game State<br/>Session Data| Redis
+    Server <-->|EventBus<br/>Module Coordination| Modules
+    Modules <-->|Game State<br/>Session Data| Redis
     Server -->|Statistics<br/>User Data| PostgreSQL
-    Redis -->|Pub/Sub<br/>State Sync| Server
+    Redis -->|Pub/Sub<br/>Event Distribution| Server
     
     subgraph "Data Flow"
         GameStart[Game Start] --> RedisState[Redis: Active Game State]
@@ -47,11 +50,12 @@ graph TB
 - **PWA Support**: Excellent tooling for Progressive Web Apps
 
 **Responsibilities**:
-- Game rendering and UI management
-- WebSocket client coordination
-- State management (via Vuex/Pinia)
-- Component-based architecture
-- Mobile-responsive interface
+- Canvas-based game rendering with 8-bit pixel art style
+- WebSocket client coordination and real-time updates
+- State management via Pinia stores
+- Component-based architecture (game, UI, layout components)
+- Mobile-responsive interface with touch controls
+- PWA installation and offline capabilities
 
 ### HTML5 Canvas
 **Role**: High-performance 2D game rendering
@@ -491,16 +495,53 @@ The current stack eliminates internal reverse proxy complexity by:
 - **tsconfig-paths** for development time path resolution
 
 ### Module Architecture
+
+#### Backend Modules
+- **Core Modules**: `src/modules/` - Game logic with EventBus integration
+  - `UnifiedGameServerImpl/` - Central server orchestration
+  - `EventBusImpl/` - Core event distribution system
+  - `GameEventHandlerImpl/` - Real-time game events
+  - `BombManager/` - Bomb mechanics and explosions
+  - `MazeGenerator/` - Procedural maze generation
+  - `CollisionDetector/` - High-performance collision detection
+  - `PlayerStateManager/` - Player lifecycle and statistics
+  - `PowerUpManager/` - Power-up spawning and effects
+  - `MonsterAI/` - AI behavior and pathfinding
+  - `UserNotificationHandlerImpl/` - Multi-channel notifications
+  - `UserActionHandlerImpl/` - Behavioral analytics
+
+#### Frontend Modules
+- **Vue 3 Application**: `src/frontend/` - Modern reactive frontend
+  - `components/game/` - Game-specific components (canvas, HUD, minimap)
+  - `components/ui/` - Generic UI components (buttons, modals)
+  - `components/layout/` - Layout components (app layout, game layout)
+  - `stores/` - Pinia state management (game state, player state)
+  - `composables/` - Reusable composition functions (WebSocket, input)
+  - `utils/` - Utility functions (game helpers, network utils)
+  - `styles/` - 8-bit pixel art CSS styling
+
+#### Type System
 - **Type definitions** in `src/types/` (separate from implementations)
 - **Interface definitions** in `src/interfaces/` (API contracts)
-- **Stub implementations** in `src/modules/` (actual business logic)
-- **Unified exports** through `src/index.d.ts` for easy consumption
+- **Module implementations** use EventBus for unified communication
+- **README documentation** in each module directory
 
 ### Development Commands
 ```bash
+# Backend Development
 npm run dev:server     # Start development server with hot reload
 npm run build:server   # Build TypeScript to JavaScript
 npm run typecheck      # Type checking without output
 npm run lint           # ESLint code quality check
 npm run lint:fix       # Auto-fix linting issues
+
+# Frontend Development (when implemented)
+npm run dev:frontend   # Start Vue 3 development server
+npm run build:frontend # Build frontend for production
+npm run type-check:frontend # Type checking for Vue components
+npm run lint:frontend  # ESLint for frontend code
+
+# Testing
+npm run test           # Run Vitest unit tests
+npm run test:coverage  # Generate test coverage report
 ```

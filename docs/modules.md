@@ -7,39 +7,44 @@ This document defines the module structure, interfaces, and responsibilities for
 The system is organized into distinct modules with clear separation of concerns:
 
 ### Core Game Modules
-- **GameServer** - WebSocket handling, room orchestration
-- **GameEngine** - Core logic, physics, collision detection  
-- **PlayerManager** - Player lifecycle, authentication, sessions
-- **RoomManager** - Room creation, joining, lobby management
-- **BombSystem** - Placement, timers, explosions, damage calculation
-- **PowerUpSystem** - Spawning, collection, ability enhancement
-- **MonsterSystem** - AI behavior, combat, monster waves
-- **BossAI** - Boss mechanics, phases, special attacks
-- **GateSystem** - Exit objectives, destruction mechanics
-- **MazeGenerator** - Level creation, destructible walls
+- **UnifiedGameServer** - Central server orchestration with integrated event system
+- **EventBusImpl** - Core event distribution system for all modules
+- **GameEventHandler** - Real-time game events and mechanics processing
+- **BombManager** - Bomb placement, timing, explosions, chain reactions
+- **MazeGenerator** - Procedural maze generation with strategic placement
+- **CollisionDetector** - High-performance collision detection system
+- **PowerUpManager** - Power-up spawning, collection, and effects
+- **PlayerStateManager** - Player positions, health, respawning, statistics
+- **MonsterAI** - AI behavior, pathfinding, wave spawning
+- **BossAI** - Advanced boss enemy mechanics and phases
+- **GateManager** - Exit gate discovery and monster wave triggers
 
-### Client Modules
-- **GameClient** - WebSocket client, state coordination
-- **GameRenderer** - Canvas rendering, sprites, animations
-- **MinimapRenderer** - Map display, fog of war, real-time updates
-- **InputHandler** - Cross-platform input processing
-- **MobileControls** - Touch controls, haptics, mobile optimization
-- **PWAManager** - Installation, offline capabilities
-- **StateManager** - Client-side state, synchronization
+### Client Modules (Frontend)
+- **Vue 3 App** - Main frontend application entry point
+- **Game Components** - Canvas rendering, HUD, minimap, player list
+- **UI Components** - Buttons, modals, loading spinners
+- **Layout Components** - Application layout and game layout wrappers
+- **Pinia Stores** - Game state, player state, connection state management
+- **Composables** - WebSocket client, game renderer, input handler
+- **Utils** - Game utilities, network helpers, canvas utilities
+- **Mobile Support** - Touch controls, responsive design, PWA capabilities
 
-### Admin Modules
-- **AdminDashboard** - Monitoring interface, real-time statistics
-- **AdminAPI** - Management operations, room control
-- **LoggingService** - System logs, filtering, export
-- **ReportGenerator** - Usage analytics, performance reports
-- **ConfigManager** - Game parameters, validation
+### Admin & Support Modules
+- **UserNotificationHandler** - Multi-channel notification delivery system
+- **UserActionHandler** - Behavioral analytics and tracking
+- **LoggingService** - Centralized structured logging
+- **MetricsService** - Performance monitoring and alerting
+- **ConfigurationService** - Environment-based configuration management
+- **ScoreManager** - Cooperative scoring and leaderboards
+- **MatchmakingService** - Room creation and player coordination
 
-### Infrastructure
+### Infrastructure Modules
+- **WebSocketHandler** - Enhanced WebSocket connection management
+- **DatabaseService** - PostgreSQL/Redis data access layer
+- **AuthenticationService** - Player session and security management
 - **PostgreSQL** - Persistent storage, player data, statistics, audit logs
 - **Redis** - Real-time state, pub/sub messaging, session cache
-- **WebSocketManager** - Connection handling, broadcasting
-- **AuthService** - Authentication, session management
-- **ValidationService** - Input validation, security
+- **Docker Services** - Containerized database and application services
 
 ---
 

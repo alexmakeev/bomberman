@@ -40,39 +40,91 @@ interface UniversalEvent<TData = any> {
 
 ### 2. Specialized Event Handlers
 
-#### GameEventHandler (`src/interfaces/specialized/GameEventHandler.d.ts`)
+#### GameEventHandler (`src/modules/GameEventHandlerImpl/`)
 - **Game-specific events**: Player moves, bomb explosions, power-ups
 - **Real-time optimization**: High-frequency updates, delta compression
 - **Team coordination**: Cooperative gameplay events, friendly fire warnings
 - **State management**: Game state reconstruction from events
+- **Module Integration**: Works with BombManager, PlayerStateManager, MazeGenerator
 
-#### UserNotificationHandler (`src/interfaces/specialized/UserNotificationHandler.d.ts`)
-- **Multi-channel delivery**: In-game, WebSocket, email, push notifications
-- **Notification templates**: Reusable notification formats
-- **User preferences**: Channel preferences, quiet hours, frequency limits
-- **Delivery tracking**: Read receipts, engagement metrics
+#### UserNotificationHandler (`src/modules/UserNotificationHandlerImpl/`)
+- **Multi-channel delivery**: In-game, WebSocket, browser notifications
+- **Notification templates**: Reusable notification formats with dynamic content
+- **User preferences**: Channel preferences, frequency limits, achievement settings
+- **Delivery analytics**: Tracking delivery success, read rates, engagement
+- **Real-time Integration**: Cooperative game achievements, team coordination alerts
 
-#### UserActionHandler (`src/interfaces/specialized/UserActionHandler.d.ts`)
-- **Action tracking**: All user interactions and behaviors
-- **Analytics pipeline**: Pattern detection, conversion funnels, A/B testing
-- **Personalization**: Action recommendations, user segmentation
-- **Anomaly detection**: Unusual behavior patterns, security events
+#### UserActionHandler (`src/modules/UserActionHandlerImpl/`)
+- **Action tracking**: All user interactions, gameplay patterns, behavior analysis
+- **Analytics pipeline**: Pattern detection, skill assessment, progression tracking
+- **Player Segmentation**: Automatic categorization based on behavior patterns
+- **Anomaly detection**: Unusual behavior patterns, potential cheating detection
+- **Performance Analytics**: Reaction times, success rates, learning curves
 
-### 3. WebSocket Integration (`src/types/websocket.d.ts`)
+### 6. Frontend Integration (`src/frontend/`)
 
-WebSocket layer built on top of the unified EventBus:
-- **Event-driven messaging**: All WebSocket messages are events
-- **Auto-subscription**: Context-aware event subscriptions
-- **Efficient delivery**: Compression, batching, priority routing
-- **Real-time synchronization**: Sub-millisecond event distribution
+#### Vue 3 Application
+- **Component Architecture**: Game canvas, HUD, minimap, mobile controls
+- **State Management**: Pinia stores for game state, player state, connection status
+- **Real-time Updates**: WebSocket integration with reactive UI updates
+- **Mobile Optimization**: Touch controls, responsive design, PWA capabilities
+- **EventBus Connection**: Receives events via WebSocket for real-time gameplay
 
-### 4. Unified GameServer (`src/interfaces/core/UnifiedGameServer.d.ts`)
+### 3. WebSocket Integration (`src/modules/WebSocketHandler/`)
 
-Enhanced server interface that orchestrates all components:
-- **EventBus integration**: Direct access to all event handlers
-- **Context-aware subscriptions**: Auto-subscribe based on room/game context
-- **Unified broadcasting**: Single interface for all event types
+Enhanced WebSocket management with EventBus integration:
+- **Event-driven messaging**: All WebSocket messages converted to EventBus events
+- **Auto-subscription**: Context-aware event subscriptions based on game state
+- **Connection Management**: Authentication, rate limiting, graceful disconnection
+- **Real-time synchronization**: Sub-100ms event distribution to clients
+- **Performance Optimization**: Message batching, compression, priority queues
+
+### 4. Unified GameServer (`src/modules/UnifiedGameServerImpl/`)
+
+Central orchestration layer that coordinates all game modules:
+- **EventBus integration**: Direct access to all specialized handlers
+- **Module Coordination**: Integrates BombManager, PlayerStateManager, MazeGenerator, etc.
+- **WebSocket Management**: Real-time client communication and broadcasting
+- **Room & Game Lifecycle**: Complete multiplayer session management
 - **Performance monitoring**: Comprehensive metrics across all systems
+- **Configuration Management**: Environment-based settings and runtime parameters
+
+### 5. Game-Specific Modules
+
+#### BombManager (`src/modules/BombManager/`)
+- **Bomb Lifecycle**: Placement validation, timer management, explosion triggers
+- **Chain Reactions**: Bombs triggering other bombs for combo effects
+- **Damage Calculation**: Cross-pattern explosions with wall destruction
+- **Performance Optimization**: Efficient processing for smooth multiplayer
+- **EventBus Integration**: Publishes bomb_placed, bomb_exploded, chain_reaction events
+
+#### PlayerStateManager (`src/modules/PlayerStateManager/`)
+- **Player Lifecycle**: Position tracking, health management, respawn coordination
+- **State Synchronization**: Real-time position updates across all clients
+- **Statistics Tracking**: Performance metrics, achievements, progression
+- **Respawn Logic**: 10-second countdown, corner position spawning
+- **EventBus Integration**: Publishes player_moved, player_eliminated, player_respawned events
+
+#### MazeGenerator (`src/modules/MazeGenerator/`)
+- **Procedural Generation**: Classic Bomberman grid with strategic placement
+- **Dynamic Content**: Power-ups hidden under destructible walls
+- **Gate Placement**: Exit points with monster wave consequences
+- **Balance Validation**: Ensures fair and playable maze layouts
+- **EventBus Integration**: Publishes maze_generated, wall_destroyed, gate_revealed events
+
+#### CollisionDetector (`src/modules/CollisionDetector/`)
+- **High-Performance Detection**: Sub-millisecond collision calculations
+- **Multi-Entity Support**: Players, bombs, walls, power-ups, monsters
+- **Movement Validation**: Prevents invalid player positions
+- **Explosion Hit Detection**: Determines entities affected by bomb blasts
+- **EventBus Integration**: Publishes collision_detected, powerup_collected events
+
+#### PowerUpManager (`src/modules/PowerUpManager/`)
+- **Effect Management**: Bomb upgrades, speed boosts, special abilities
+- **Collection Processing**: Validates and applies power-up effects
+- **Player Enhancement**: Stacking effects, temporary abilities
+- **Balance Control**: Configurable spawn rates and effect durations
+- **EventBus Integration**: Publishes powerup_spawned, powerup_collected, effect_applied events
 
 ## Event Flow Examples
 

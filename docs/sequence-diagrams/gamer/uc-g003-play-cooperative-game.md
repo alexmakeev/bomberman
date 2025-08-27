@@ -4,64 +4,73 @@
 sequenceDiagram
     participant Gamer
     participant GameClient
-    participant GameServer
-    participant GameEngine
+    participant UnifiedGameServer
+    participant EventBus
+    participant GameEventHandler
+    participant BombManager
+    participant PlayerStateManager
     participant Redis
     participant PostgreSQL
     participant Teammates
 
-    Note over Gamer,PostgreSQL: Game Start & WebSocket-Redis Bridge Setup
-    GameServer->>GameClient: Auto-subscribe to game channels
-    GameClient->>GameServer: Subscribe to game:{gameId}:events
-    GameServer->>Redis: Subscribe WebSocket to pub/sub channels
-    GameServer->>GameEngine: Initialize game state
-    GameEngine->>Redis: Create game state in cache
+    Note over Gamer,PostgreSQL: Game Start & Event-Driven Architecture
+    UnifiedGameServer->>GameClient: Auto-subscribe to game channels
+    GameClient->>UnifiedGameServer: Subscribe to game events
+    UnifiedGameServer->>EventBus: Subscribe to game event categories
+    UnifiedGameServer->>GameEventHandler: Initialize game handlers
+    GameEventHandler->>Redis: Create game state in cache
     Redis->>Redis: Set TTL for game duration
-    GameEngine->>Redis: Publish game_started event
-    Redis->>GameServer: Game started event via pub/sub
-    GameServer->>GameClient: Forward via WebSocket
+    GameEventHandler->>EventBus: Publish game_started event
+    EventBus->>UnifiedGameServer: Route game started event
+    UnifiedGameServer->>GameClient: Forward via WebSocket
     GameClient-->>Gamer: Show game view
 
     loop Game Loop
         Gamer->>GameClient: Movement input (arrow keys/touch)
-        GameClient->>GameServer: Send player action via WebSocket
-        GameServer->>GameEngine: Process movement
-        GameEngine->>Redis: Update game state
-        GameEngine->>Redis: Publish player_action event
+        GameClient->>UnifiedGameServer: Send player action via WebSocket
+        UnifiedGameServer->>EventBus: Publish player action event
+        EventBus->>GameEventHandler: Route to game handler
+        GameEventHandler->>PlayerStateManager: Update player position
+        PlayerStateManager->>Redis: Update game state
+        PlayerStateManager->>EventBus: Publish player_moved event
         
-        Note over Redis,Teammates: Redis Pub/Sub to WebSocket Bridge
-        Redis->>GameServer: player_action event via pub/sub
-        GameServer->>GameClient: Forward event via WebSocket
-        GameServer->>Teammates: Forward event via WebSocket bridge
+        Note over EventBus,Teammates: EventBus to WebSocket Bridge
+        EventBus->>UnifiedGameServer: Route player_moved event
+        UnifiedGameServer->>GameClient: Forward event via WebSocket
+        UnifiedGameServer->>Teammates: Forward event via WebSocket bridge
         GameClient-->>Gamer: Update display with real-time state
         
         opt Place bomb
             Gamer->>GameClient: Bomb input
-            GameClient->>GameServer: Place bomb action via WebSocket
-            GameServer->>GameEngine: Validate & create bomb
-            GameEngine->>Redis: Add bomb to game state
-            GameEngine->>Redis: Publish bomb_placed event
+            GameClient->>UnifiedGameServer: Place bomb action via WebSocket
+            UnifiedGameServer->>EventBus: Publish bomb_place event
+            EventBus->>BombManager: Route to bomb handler
+            BombManager->>BombManager: Validate & create bomb
+            BombManager->>Redis: Add bomb to game state
+            BombManager->>EventBus: Publish bomb_placed event
             
-            Note over Redis,Teammates: Instant bomb placement notification
-            Redis->>GameServer: bomb_placed event via pub/sub
-            GameServer->>GameClient: Forward bomb placement via WebSocket
-            GameServer->>Teammates: Notify teammates via WebSocket bridge
+            Note over EventBus,Teammates: Instant bomb placement notification
+            EventBus->>UnifiedGameServer: Route bomb_placed event
+            UnifiedGameServer->>GameClient: Forward bomb placement via WebSocket
+            UnifiedGameServer->>Teammates: Notify teammates via WebSocket bridge
             
-            Note over GameEngine: Bomb explodes (timer-based)
-            GameEngine->>Redis: Update explosion effects
-            GameEngine->>Redis: Remove destroyed walls
-            GameEngine->>Redis: Publish bomb_exploded event
+            Note over BombManager: Bomb explodes (timer-based)
+            BombManager->>BombManager: Timer expires, trigger explosion
+            BombManager->>Redis: Update explosion effects
+            BombManager->>Redis: Remove destroyed walls
+            BombManager->>EventBus: Publish bomb_exploded event
             
-            Redis->>GameServer: explosion event via pub/sub
-            GameServer->>GameClient: Forward explosion via WebSocket
-            GameServer->>Teammates: Broadcast explosion via WebSocket bridge
+            EventBus->>UnifiedGameServer: Route explosion event
+            UnifiedGameServer->>GameClient: Forward explosion via WebSocket
+            UnifiedGameServer->>Teammates: Broadcast explosion via WebSocket bridge
             
             alt Friendly fire
-                GameEngine->>Redis: Update teammate damage
-                GameEngine->>Redis: Publish friendly_fire event
-                Redis->>GameServer: friendly_fire event via pub/sub
-                GameServer->>Teammates: Forward friendly fire warning via WebSocket
-                GameServer->>GameClient: Show teamwork warning via WebSocket
+                BombManager->>PlayerStateManager: Calculate teammate damage
+                PlayerStateManager->>Redis: Update teammate health
+                PlayerStateManager->>EventBus: Publish friendly_fire event
+                EventBus->>UnifiedGameServer: Route friendly fire event
+                UnifiedGameServer->>Teammates: Forward friendly fire warning via WebSocket
+                UnifiedGameServer->>GameClient: Show teamwork warning via WebSocket
                 GameClient-->>Gamer: Display warning message
             end
         end
