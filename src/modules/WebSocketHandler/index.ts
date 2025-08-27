@@ -18,7 +18,7 @@ class WebSocketHandlerImpl {
     console.log('🔌 WebSocketHandler initialized');
   }
 
-  async handleConnection(connectionId: EntityId, socket: any): Promise<void> {
+  async handleConnection(connectionId: EntityId, _socket: any): Promise<void> {
     console.log(`🔌 WebSocket connection handled: ${connectionId}`);
     // TODO: Implement enhanced WebSocket management
   }

@@ -212,12 +212,12 @@ class PlayerStateManagerImpl {
 
   async getPlayersInGame(gameId: EntityId): Promise<PlayerState[]> {
     const playerIds = this._gamePlayerLists.get(gameId);
-    if (!playerIds) return [];
+    if (!playerIds) {return [];}
 
     const players: PlayerState[] = [];
     for (const playerId of playerIds) {
       const state = await this.getPlayerState(playerId);
-      if (state) players.push(state);
+      if (state) {players.push(state);}
     }
 
     return players;
@@ -225,18 +225,18 @@ class PlayerStateManagerImpl {
 
   async updatePlayerStats(playerId: EntityId, stats: Partial<Pick<PlayerState, 'bombsPlaced' | 'wallsDestroyed' | 'powerUpsCollected'>>): Promise<void> {
     const playerState = this._playerStates.get(playerId);
-    if (!playerState) return;
+    if (!playerState) {return;}
 
-    if (stats.bombsPlaced !== undefined) playerState.bombsPlaced += stats.bombsPlaced;
-    if (stats.wallsDestroyed !== undefined) playerState.wallsDestroyed += stats.wallsDestroyed;
-    if (stats.powerUpsCollected !== undefined) playerState.powerUpsCollected += stats.powerUpsCollected;
+    if (stats.bombsPlaced !== undefined) {playerState.bombsPlaced += stats.bombsPlaced;}
+    if (stats.wallsDestroyed !== undefined) {playerState.wallsDestroyed += stats.wallsDestroyed;}
+    if (stats.powerUpsCollected !== undefined) {playerState.powerUpsCollected += stats.powerUpsCollected;}
     
     playerState.lastUpdate = new Date();
   }
 
   async removePlayer(playerId: EntityId): Promise<boolean> {
     const playerState = this._playerStates.get(playerId);
-    if (!playerState) return false;
+    if (!playerState) {return false;}
 
     // Clear respawn timer if exists
     const timer = this._respawnTimers.get(playerId);
@@ -270,7 +270,7 @@ class PlayerStateManagerImpl {
     }
   }
 
-  private async findRespawnPosition(gameId: EntityId): Promise<{ x: number; y: number } | null> {
+  private async findRespawnPosition(_gameId: EntityId): Promise<{ x: number; y: number } | null> {
     // TODO: Find safe corner positions, check for obstacles
     // For now, return random corner
     const corners = [

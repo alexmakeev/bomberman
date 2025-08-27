@@ -14,7 +14,7 @@ const POWER_UP_TYPES = {
   BOMB_KICK: 'bomb_kick',       // Ability to kick bombs
   BOMB_THROW: 'bomb_throw',     // Ability to throw bombs
   INVINCIBILITY: 'invincibility', // Temporary invincibility
-  REMOTE_DETONATOR: 'remote_detonator' // Manual bomb detonation
+  REMOTE_DETONATOR: 'remote_detonator', // Manual bomb detonation
 } as const;
 
 type PowerUpType = typeof POWER_UP_TYPES[keyof typeof POWER_UP_TYPES];

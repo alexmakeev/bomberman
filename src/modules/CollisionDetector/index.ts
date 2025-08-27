@@ -10,8 +10,8 @@ import type { EntityId } from '../../types/common';
 const PLAYER_SIZE = 0.8; // Player collision box size (smaller than grid cell)
 const BOMB_SIZE = 0.6;
 const POWERUP_SIZE = 0.5;
-const GRID_CELL_SIZE = 1.0;
-const MOVEMENT_EPSILON = 0.01; // Minimum movement for collision check
+// const GRID_CELL_SIZE = 1.0; // TODO: Use in future collision optimizations
+// const MOVEMENT_EPSILON = 0.01; // TODO: Use for movement validation
 
 /**
  * Position with floating point coordinates
@@ -84,7 +84,7 @@ class CollisionDetectorImpl {
     playerId: EntityId,
     currentPosition: Position,
     movement: MovementVector,
-    mazeData: any
+    mazeData: any,
   ): Promise<CollisionResult> {
     const newPosition = {
       x: currentPosition.x + movement.dx,
@@ -125,7 +125,7 @@ class CollisionDetectorImpl {
   async checkBombPlacement(
     playerId: EntityId,
     position: Position,
-    mazeData: any
+    mazeData: any,
   ): Promise<CollisionResult> {
     console.log(`🎯 Checking bomb placement at (${position.x}, ${position.y})`);
 
@@ -157,7 +157,7 @@ class CollisionDetectorImpl {
 
   async checkExplosionHit(
     explosionCells: Array<{ x: number; y: number }>,
-    gameId: EntityId
+    _gameId: EntityId,
   ): Promise<Array<{ entityId: EntityId; entityType: string; position: Position }>> {
     console.log(`🎯 Checking explosion hits for ${explosionCells.length} cells`);
 
@@ -181,7 +181,7 @@ class CollisionDetectorImpl {
 
   async checkPowerUpCollection(
     playerId: EntityId,
-    playerPosition: Position
+    playerPosition: Position,
   ): Promise<Array<{ powerUpId: EntityId; powerUpType: string; position: Position }>> {
     console.log(`🎯 Checking power-up collection for ${playerId}`);
 
@@ -191,7 +191,7 @@ class CollisionDetectorImpl {
     for (const [entityId, collider] of this._dynamicColliders) {
       if (collider.entityType === 'powerup' && this.checkBoxCollision(
         this.createPlayerBox(playerPosition, playerId),
-        collider
+        collider,
       )) {
         collectedPowerUps.push({
           powerUpId: entityId,
@@ -207,7 +207,7 @@ class CollisionDetectorImpl {
   async raycast(
     from: Position,
     to: Position,
-    ignoredEntities?: EntityId[]
+    ignoredEntities?: EntityId[],
   ): Promise<RaycastResult> {
     const distance = this.calculateDistance(from, to);
     const direction = {
@@ -236,7 +236,7 @@ class CollisionDetectorImpl {
 
       // Check against dynamic colliders
       for (const [entityId, collider] of this._dynamicColliders) {
-        if (ignoredEntities?.includes(entityId)) continue;
+        if (ignoredEntities?.includes(entityId)) {continue;}
 
         if (this.isPointInBox(checkPosition, collider)) {
           return {
@@ -253,7 +253,7 @@ class CollisionDetectorImpl {
 
     return {
       hit: false,
-      distance: distance,
+      distance,
     };
   }
 
@@ -307,7 +307,7 @@ class CollisionDetectorImpl {
     const testBox = this.createEntityBox(position, excludeId, entityType);
 
     for (const [entityId, collider] of this._dynamicColliders) {
-      if (entityId === excludeId) continue;
+      if (entityId === excludeId) {continue;}
 
       if (this.checkBoxCollision(testBox, collider)) {
         return {
@@ -323,7 +323,7 @@ class CollisionDetectorImpl {
   }
 
   private checkEntityCollisionAtGrid(gridX: number, gridY: number, entityType: string): CollisionResult {
-    for (const [entityId, collider] of this._dynamicColliders) {
+    for (const [, collider] of this._dynamicColliders) {
       if (collider.entityType === entityType) {
         const colliderGridX = Math.floor(collider.x);
         const colliderGridY = Math.floor(collider.y);
@@ -405,8 +405,8 @@ class CollisionDetectorImpl {
 
   private createEntityBox(position: Position, entityId: EntityId, entityType: string): CollisionBox {
     let size = PLAYER_SIZE;
-    if (entityType === 'bomb') size = BOMB_SIZE;
-    if (entityType === 'powerup') size = POWERUP_SIZE;
+    if (entityType === 'bomb') {size = BOMB_SIZE;}
+    if (entityType === 'powerup') {size = POWERUP_SIZE;}
 
     return {
       x: position.x,
