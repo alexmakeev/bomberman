@@ -14,11 +14,12 @@ The system uses a **dual-storage architecture** with different technologies opti
 ```mermaid
 graph TB
     Client[Vue.js PWA Client<br/>Progressive Web App]
-    Server[Node.js + Koa.js<br/>WebSocket Server]
+    Server[Node.js + Koa.js<br/>WebSocket + Static Files]
     Redis[(Redis<br/>Real-time State<br/>Pub/Sub)]
     PostgreSQL[(PostgreSQL<br/>Persistent Storage)]
     
     Client <-->|WebSocket<br/>Real-time Updates| Server
+    Client <-->|HTTP<br/>Static Files & API| Server
     Server <-->|Game State<br/>Session Data| Redis
     Server -->|Statistics<br/>User Data| PostgreSQL
     Redis -->|Pub/Sub<br/>State Sync| Server
@@ -287,10 +288,9 @@ enum PubSubChannel {
 **Services**:
 ```yaml
 services:
-  app:          # Node.js application
+  app:          # Node.js application with static file serving
   postgres:     # PostgreSQL database
   redis:        # Redis cache/pub-sub
-  nginx:        # Reverse proxy & static files
 ```
 
 ### Docker Compose
@@ -301,15 +301,14 @@ services:
 - Easy service dependencies
 - Simplified testing setup
 
-### Nginx
-**Role**: Reverse proxy, load balancer, and static file server
+### Static File Serving
+**Role**: Direct static file serving via Node.js application
 
-**Responsibilities**:
-- Static asset serving (built Vue.js app)
-- WebSocket proxy configuration
-- Load balancing (for multiple server instances)
-- SSL termination
-- Gzip compression
+**Implementation**:
+- Koa.js static middleware for serving built Vue.js app
+- Direct WebSocket connections to Node.js server
+- Prepared for external reverse proxy integration (Caddy/Nginx)
+- Localhost-only binding for enhanced security
 
 ---
 
@@ -377,7 +376,7 @@ Logs → Application → {
 
 ```mermaid
 graph TB
-    LB[Load Balancer<br/>Nginx]
+    LB[External Load Balancer<br/>Caddy/Nginx]
     
     subgraph "Application Layer"
         App1[Node.js Server 1]
@@ -461,9 +460,17 @@ graph TB
   "ws": "^8.13.0",
   "postgresql": "15.x",
   "redis": "7.x",
-  "docker": "20.x",
-  "nginx": "1.24.x"
+  "docker": "20.x"
 }
 ```
 
 This technical stack provides a robust, scalable, and maintainable foundation for the cooperative multiplayer Bomberman game, with clear separation between persistent storage, real-time synchronization, and client-server communication layers.
+
+## Simplified Architecture Benefits
+
+The current stack eliminates internal reverse proxy complexity by:
+- **Direct static file serving** from Node.js using Koa.js middleware
+- **Localhost-only binding** (127.0.0.1:8080) for enhanced security  
+- **External proxy readiness** for production HTTPS termination via Caddy or other reverse proxies
+- **Reduced infrastructure overhead** while maintaining all functionality
+- **Single-service simplicity** for development and debugging

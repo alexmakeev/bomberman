@@ -62,7 +62,7 @@ Transform the traditional competitive Bomberman experience into a **cooperative 
 - **Docker containerization** for consistent deployment environments
 - **Redis** for real-time event distribution and pub/sub messaging
 - **PostgreSQL** for persistent game data, user statistics, and audit logs
-- **Nginx** for load balancing and static asset serving
+- **Static file serving** directly from Node.js with Koa.js middleware
 - **Dual-storage architecture** optimized for both real-time and persistent data
 
 ### System Architecture
