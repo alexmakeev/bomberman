@@ -122,3 +122,4 @@ Current directory structure:
 - Secure room ID generation
 - If gates are boomed, and monsters out - gates remain destorted (not usable) until all monsters are boomed.
 - Use Vue, Vuex, Node.js, Typescript, koa.js
+- IMPORTANT! Claude behaviour: After each step, initiated by the user is completed, do the commit, where at the very beginning put summary of user request for the step (like a title of the comment message) and push it to repo.

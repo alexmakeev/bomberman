@@ -1,0 +1,111 @@
+{
+  "name": "bomberman-multiplayer",
+  "version": "1.0.0",
+  "description": "Cooperative multiplayer Bomberman game with real-time WebSocket communication",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "nodemon --exec ts-node src/server.ts",
+    "dev:client": "vite serve client --port 3000",
+    "build": "npm run build:server && npm run build:client",
+    "build:server": "tsc -p tsconfig.json",
+    "build:client": "vite build client --outDir dist",
+    "start": "node dist/server.js",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src/**/*.ts client/**/*.{ts,vue}",
+    "lint:fix": "eslint src/**/*.ts client/**/*.{ts,vue} --fix",
+    "typecheck": "tsc --noEmit && vue-tsc --noEmit",
+    "docker:build": "docker build -t bomberman-app .",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:prod": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d",
+    "db:migrate": "node dist/database/migrate.js",
+    "db:seed": "node dist/database/seed.js",
+    "prepare": "husky install"
+  },
+  "keywords": [
+    "bomberman",
+    "multiplayer",
+    "websocket",
+    "vue",
+    "typescript",
+    "cooperative",
+    "real-time",
+    "game"
+  ],
+  "author": "Alexander Makeev <alexander.v.makeev@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "koa": "^2.14.2",
+    "koa-bodyparser": "^4.4.1",
+    "koa-cors": "^0.0.16",
+    "koa-helmet": "^7.0.2",
+    "koa-logger": "^3.2.1",
+    "koa-router": "^12.0.0",
+    "koa-static": "^5.0.0",
+    "ws": "^8.13.0",
+    "ioredis": "^5.3.2",
+    "pg": "^8.11.1",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.1",
+    "uuid": "^9.0.0",
+    "joi": "^17.9.2",
+    "winston": "^3.9.0",
+    "compression": "^1.7.4",
+    "rate-limiter-flexible": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.2",
+    "@types/koa": "^2.13.8",
+    "@types/koa-bodyparser": "^4.3.10",
+    "@types/koa-cors": "^0.0.2",
+    "@types/koa-logger": "^3.1.2",
+    "@types/koa-router": "^7.4.4",
+    "@types/koa-static": "^4.0.2",
+    "@types/ws": "^8.5.5",
+    "@types/pg": "^8.10.2",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/uuid": "^9.0.2",
+    "@types/compression": "^1.7.2",
+    "@typescript-eslint/eslint-plugin": "^6.1.0",
+    "@typescript-eslint/parser": "^6.1.0",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "@vue/eslint-config-typescript": "^11.0.3",
+    "concurrently": "^8.2.0",
+    "eslint": "^8.45.0",
+    "eslint-plugin-vue": "^9.15.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
+    "nodemon": "^3.0.1",
+    "prettier": "^3.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.4",
+    "vitest": "^0.33.0",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.4",
+    "vue-tsc": "^1.8.6",
+    "pinia": "^2.1.4"
+  },
+  "lint-staged": {
+    "*.{ts,vue}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexmakeev/bomberman.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alexmakeev/bomberman/issues"
+  },
+  "homepage": "https://github.com/alexmakeev/bomberman#readme"
+}
