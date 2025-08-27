@@ -89,5 +89,11 @@ module.exports = {
     '@typescript-eslint/no-unsafe-member-access': 'warn',
     '@typescript-eslint/no-unsafe-call': 'warn',
     '@typescript-eslint/no-unsafe-return': 'warn',
+    
+    // Eighth batch: Final strict rules for maximum code quality
+    '@typescript-eslint/prefer-readonly': 'warn',
+    '@typescript-eslint/prefer-readonly-parameter-types': 'off', // Too strict for current codebase
+    '@typescript-eslint/strict-boolean-expressions': 'off', // Can break existing logic
+    '@typescript-eslint/prefer-literal-enum-member': 'warn',
   },
 };
