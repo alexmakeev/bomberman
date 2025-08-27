@@ -1,0 +1,81 @@
+/**
+ * Bomberman Multiplayer Game - Main Styles
+ * 8-bit pixel art inspired design system
+ */
+
+/* CSS Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* 8-bit Font Stack */
+body {
+  font-family: 'Courier New', 'Monaco', 'Lucida Console', monospace;
+  font-size: 14px;
+  line-height: 1.2;
+  background: #000000;
+  color: #ffffff;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* Disable text selection for game elements */
+.game-area {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* 8-bit color palette */
+:root {
+  --color-bg-primary: #000000;
+  --color-bg-secondary: #1a1a1a;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #cccccc;
+  --color-accent: #00ff00;
+  --color-danger: #ff0000;
+  --color-warning: #ffff00;
+  --color-info: #00ffff;
+  
+  /* Game colors */
+  --color-wall: #808080;
+  --color-destructible: #8B4513;
+  --color-bomb: #ff4500;
+  --color-explosion: #ffff00;
+  --color-powerup: #00ff00;
+  --color-player1: #0080ff;
+  --color-player2: #ff0080;
+  --color-player3: #80ff00;
+  --color-player4: #ff8000;
+}
+
+/* Game canvas styling */
+canvas {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  background: #000000;
+  border: 2px solid var(--color-text-secondary);
+}
+
+/* Mobile touch areas */
+@media (max-width: 768px) {
+  .touch-controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+  }
+}
