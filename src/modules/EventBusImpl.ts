@@ -159,3 +159,8 @@ class EventBusImpl implements EventBus {
 export function createEventBusImpl(): EventBus {
   return new EventBusImpl();
 }
+
+/**
+ * Export the implementation class for testing
+ */
+export { EventBusImpl };
