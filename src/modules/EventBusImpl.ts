@@ -23,9 +23,9 @@ import type { EntityId } from '../types/common';
  */
 class EventBusImpl implements EventBus {
   private _config?: EventBusConfig;
-  private _subscriptions = new Map<EntityId, EventSubscription>();
-  private _handlers = new Map<string, EventHandler[]>();
-  private _middleware: EventMiddleware[] = [];
+  private readonly _subscriptions = new Map<EntityId, EventSubscription>();
+  private readonly _handlers = new Map<string, EventHandler[]>();
+  private readonly _middleware: EventMiddleware[] = [];
   private _isRunning = false;
 
   async initialize(config: EventBusConfig): Promise<void> {
@@ -52,7 +52,7 @@ class EventBusImpl implements EventBus {
     
     // TODO: Apply middleware, validate event, publish to Redis
     // For now, just execute local handlers
-    const handlers = this._handlers.get(`${event.category}:${event.type}`) || [];
+    const handlers = this._handlers.get(`${event.category}:${event.type}`) ?? [];
     
     let successCount = 0;
     const errors: any[] = [];
@@ -99,10 +99,10 @@ class EventBusImpl implements EventBus {
     
     // Register handler for each category/type combination
     for (const category of subscription.categories) {
-      const eventTypes = subscription.eventTypes || ['*'];
+      const eventTypes = subscription.eventTypes ?? ['*'];
       for (const eventType of eventTypes) {
         const key = `${category}:${eventType}`;
-        const existingHandlers = this._handlers.get(key) || [];
+        const existingHandlers = this._handlers.get(key) ?? [];
         this._handlers.set(key, [...existingHandlers, handler as EventHandler]);
       }
     }

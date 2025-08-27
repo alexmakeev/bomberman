@@ -3,6 +3,18 @@
  * Stub implementation of the unified game server with event system integration
  */
 
+// Constants for magic numbers
+const RANDOM_STRING_LENGTH_36 = 36;
+const RANDOM_STRING_LENGTH_9 = 9;
+const KILOBYTES_64 = 64;
+const BYTES_PER_KB = 1024;
+const MEGABYTES_512 = 512;
+
+// Helper to generate IDs
+const generateId = (prefix: string): string => {
+  return `${prefix}_${Date.now()}_${Math.random().toString(RANDOM_STRING_LENGTH_36).substr(2, RANDOM_STRING_LENGTH_9)}`;
+};
+
 import type { 
   ConnectionInfo,
   ServerStatus,
@@ -34,9 +46,9 @@ class UnifiedGameServerImpl implements UnifiedGameServer {
   private _isRunning = false;
   private _startTime?: Date;
   private _config?: UnifiedGameServerConfig;
-  private _connections = new Map<EntityId, ConnectionInfo>();
-  private _rooms = new Map<EntityId, Room>();
-  private _games = new Map<EntityId, Game>();
+  private readonly _connections = new Map<EntityId, ConnectionInfo>();
+  private readonly _rooms = new Map<EntityId, Room>();
+  private readonly _games = new Map<EntityId, Game>();
 
   constructor() {
     // Initialize the unified event system
@@ -103,7 +115,7 @@ class UnifiedGameServerImpl implements UnifiedGameServer {
   }
 
   async createRoom(hostPlayerId: EntityId, settings: RoomSettings): Promise<Room> {
-    const roomId = `room_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const roomId = generateId('room');
     const room: Room = {
       roomId,
       hostPlayerId,
@@ -127,7 +139,7 @@ class UnifiedGameServerImpl implements UnifiedGameServer {
       throw new Error(`Room not found: ${roomId}`);
     }
 
-    const gameId = `game_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const gameId = generateId('game');
     const game: Game = {
       gameId,
       roomId,
@@ -193,7 +205,7 @@ export async function createConfiguredUnifiedGameServer(
     },
     eventBus: {
       defaultTTL: 300000,
-      maxEventSize: 64 * 1024,
+      maxEventSize: KILOBYTES_64 * BYTES_PER_KB,
       enablePersistence: false,
       enableTracing: true,
       defaultRetry: {
@@ -211,7 +223,7 @@ export async function createConfiguredUnifiedGameServer(
           maxLatencyMs: 1000,
           maxErrorRate: 10,
           maxQueueDepth: 1000,
-          maxMemoryBytes: 512 * 1024 * 1024,
+          maxMemoryBytes: MEGABYTES_512 * BYTES_PER_KB * BYTES_PER_KB,
         },
       },
     },
@@ -224,7 +236,7 @@ export async function createConfiguredUnifiedGameServer(
       host: 'localhost',
       port: 5432,
       database: 'bomberman',
-      username: process.env.POSTGRES_USER || 'bomberman_user',
+      username: process.env.POSTGRES_USER ?? 'bomberman_user',
       password: process.env.POSTGRES_PASSWORD,
     },
   };

@@ -20,8 +20,17 @@ import type { EventCategory, UniversalEvent } from './types/events';
 import type { UnifiedGameServer } from './interfaces/core/UnifiedGameServer';
 import { createConfiguredUnifiedGameServer } from './modules/UnifiedGameServerImpl';
 
-const PORT = process.env.PORT || 8080;
-const NODE_ENV = process.env.NODE_ENV || 'development';
+const DEFAULT_PORT = 8080;
+const RANDOM_STRING_LENGTH_36 = 36;
+const RANDOM_STRING_LENGTH_9 = 9;
+
+// Helper to generate connection IDs
+const generateConnectionId = (): string => {
+  return `conn_${Date.now()}_${Math.random().toString(RANDOM_STRING_LENGTH_36).substr(2, RANDOM_STRING_LENGTH_9)}`;
+};
+
+const PORT = process.env.PORT ?? DEFAULT_PORT;
+const NODE_ENV = process.env.NODE_ENV ?? 'development';
 
 /**
  * Initialize Koa application with middleware
@@ -63,7 +72,7 @@ function setupRoutes(app: Koa, unifiedGameServer?: UnifiedGameServer): void {
     ctx.body = {
       status: 'healthy',
       timestamp: new Date().toISOString(),
-      version: process.env.npm_package_version || '1.0.0',
+      version: process.env.npm_package_version ?? '1.0.0',
       environment: NODE_ENV,
     };
   });
@@ -107,7 +116,7 @@ function setupWebSocketServer(server: any, unifiedGameServer: UnifiedGameServer)
   });
 
   wss.on('connection', async (ws, _request) => {
-    const connectionId = `conn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const connectionId = generateConnectionId();
     console.log(`🔌 WebSocket connection established: ${connectionId}`);
     
     // Integrate with UnifiedGameServer
@@ -196,7 +205,7 @@ async function startServer(): Promise<void> {
     });
 
     // Graceful shutdown handling
-    const gracefulShutdown = (signal: string) => {
+    const gracefulShutdown = (signal: string): void => {
       console.log(`\n🛑 Received ${signal}, shutting down gracefully...`);
       
       wss.clients.forEach(client => {
