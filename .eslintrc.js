@@ -77,5 +77,11 @@ module.exports = {
     'no-param-reassign': 'warn',
     'prefer-destructuring': ['warn', { object: true, array: false }],
     'no-nested-ternary': 'warn',
+    
+    // Sixth batch: Advanced code quality and consistency
+    'consistent-return': 'warn',
+    'default-case': 'warn',
+    'no-fallthrough': 'error',
+    'radix': 'error',
   },
 };
