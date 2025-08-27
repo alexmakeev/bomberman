@@ -68,19 +68,6 @@ services:
           memory: 256M
           cpus: '0.25'
 
-  # Production Nginx with SSL
-  nginx:
-    ports:
-      - "443:443"
-    volumes:
-      - ./nginx/ssl:/etc/nginx/ssl:ro
-      - ./nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/default.prod.conf:/etc/nginx/conf.d/default.conf:ro
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-          cpus: '0.25'
 
   # Remove development tools in production
   redis-commander:

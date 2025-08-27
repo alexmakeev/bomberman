@@ -22,7 +22,7 @@ docker-compose logs -f app
 ```
 
 The application will be available at:
-- **Game**: http://localhost:8080
+- **Game**: http://localhost:8080 (localhost-only for security)
 - **Redis Commander**: http://localhost:8081 (username: admin, password: redis_password)
 - **pgAdmin**: http://localhost:8082 (admin@bomberman.local / admin_password)
 
@@ -43,8 +43,7 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 | Service | Purpose | Port | Network Access |
 |---------|---------|------|----------------|
-| `app` | Node.js game server | 8080 | Public |
-| `nginx` | Reverse proxy & static files | 80, 443 | Public |
+| `app` | Node.js game server + static files | 8080 | Localhost only |
 | `postgres` | Persistent database | 5432 | Internal |
 | `redis` | Real-time state & pub/sub | 6379 | Internal |
 
@@ -144,15 +143,13 @@ curl http://localhost:8080/health
 Services communicate using Docker's internal network (`bomberman-network`):
 - Application connects to `postgres:5432`
 - Application connects to `redis:6379`
-- Nginx proxies to `app:8080`
+- Application serves static files directly
 
 ### Port Mapping
 
 | Internal Port | External Port | Service | Purpose |
 |---------------|---------------|---------|---------|
-| 8080 | 8080 | app | HTTP API & WebSocket |
-| 80 | 80 | nginx | HTTP proxy |
-| 443 | 443 | nginx | HTTPS proxy |
+| 8080 | 127.0.0.1:8080 | app | HTTP API, WebSocket & Static Files |
 | 5432 | 5432 | postgres | Database (dev only) |
 | 6379 | 6379 | redis | Redis (dev only) |
 | 8081 | 8081 | redis-commander | Redis UI (dev only) |
@@ -256,9 +253,10 @@ docker-compose exec redis redis-cli monitor
 - Use appropriate eviction policies
 
 **Application:**
-- Scale with multiple replicas in production
+- Serves both API and static files directly
 - Monitor WebSocket connections
 - Adjust rate limiting based on load
+- Use external reverse proxy (Caddy) for production routing
 
 ## Security Considerations
 
@@ -266,22 +264,17 @@ docker-compose exec redis redis-cli monitor
 
 1. **Change default passwords** in `.env`
 2. **Use strong JWT secrets** (32+ characters)
-3. **Enable HTTPS** with proper SSL certificates
-4. **Restrict database access** (remove port exposure)
+3. **App bound to localhost only** - use external reverse proxy for HTTPS
+4. **Restrict database access** (remove port exposure in production)
 5. **Use Docker secrets** for sensitive data
 6. **Regular security updates** for base images
 
 ### Network Security
 
-```yaml
-# Production network isolation
-networks:
-  bomberman-network:
-    driver: bridge
-    internal: true  # No external access
-  web:
-    driver: bridge  # Only nginx exposed
-```
+- Application bound to 127.0.0.1:8080 for localhost-only access
+- Use external reverse proxy (Caddy/Nginx) for HTTPS termination
+- Internal Docker network for service communication
+- Database and Redis not exposed to host network in production
 
 ## Scaling
 
@@ -294,9 +287,8 @@ services:
     deploy:
       replicas: 3
     
-# Load balancer configuration
-nginx:
-  # Configure upstream servers
+# External load balancer (Caddy) configuration
+# Configure upstream servers pointing to localhost:8080
 ```
 
 ### Resource Limits
@@ -311,4 +303,9 @@ services:
           cpus: '0.5'
 ```
 
-This Docker setup provides a complete, production-ready environment for the Bomberman multiplayer game with proper service isolation, data persistence, and monitoring capabilities.
+This simplified Docker setup provides a secure, production-ready environment for the Bomberman multiplayer game with:
+- Localhost-only application binding for security
+- Direct static file serving from Node.js
+- Proper service isolation and data persistence
+- Ready for external reverse proxy integration (Caddy/Nginx)
+- Monitoring capabilities through development tools
