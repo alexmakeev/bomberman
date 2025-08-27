@@ -29,10 +29,10 @@ import type { EntityId } from '../types/common';
 import type { UniversalEvent } from '../types/events';
 import type { Room, RoomSettings } from '../types/room';
 import type { Game } from '../types/game';
-import { createEventBusImpl } from './EventBusImpl';
-import { createGameEventHandlerImpl } from './GameEventHandlerImpl';
-import { createUserNotificationHandlerImpl } from './UserNotificationHandlerImpl';
-import { createUserActionHandlerImpl } from './UserActionHandlerImpl';
+import { createEventBusImpl } from '../EventBusImpl';
+import { createGameEventHandlerImpl } from '../GameEventHandlerImpl';
+import { createUserNotificationHandlerImpl } from '../UserNotificationHandlerImpl';
+import { createUserActionHandlerImpl } from '../UserActionHandlerImpl';
 
 /**
  * Stub implementation of UnifiedGameServer
