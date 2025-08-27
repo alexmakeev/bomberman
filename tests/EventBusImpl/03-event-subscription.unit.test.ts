@@ -20,7 +20,7 @@ describe('EventBusImpl - Event Subscription', () => {
     handlerCallCount = 0;
     lastReceivedEvent = null;
     
-    mockHandler = jest.fn((event: UniversalEvent) => {
+    mockHandler = vi.fn((event: UniversalEvent) => {
       handlerCallCount++;
       lastReceivedEvent = event;
     });

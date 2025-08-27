@@ -140,7 +140,7 @@ describe('GameEventHandlerImpl - Initialization', () => {
       const moveResult = gameEventHandler.publishPlayerMove(mockData);
       expect(moveResult).toBeInstanceOf(Promise);
 
-      const subscriptionResult = gameEventHandler.subscribeToGame('game-1', jest.fn());
+      const subscriptionResult = gameEventHandler.subscribeToGame('game-1', vi.fn());
       expect(subscriptionResult).toBeInstanceOf(Promise);
 
       const stateResult = gameEventHandler.getCurrentGameState('game-1');
