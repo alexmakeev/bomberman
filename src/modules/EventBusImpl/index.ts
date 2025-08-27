@@ -6,17 +6,21 @@
 import type { 
   EventBus,
   EventBusConfig,
+  EventBusStatus,
   EventHandler,
   EventMiddleware,
   EventPublishResult,
   SubscriptionResult,
-} from '../interfaces/core/EventBus';
+} from '../../interfaces/core/EventBus';
 import type { 
   EventCategory,
   EventSubscription,
+  EventTarget,
   UniversalEvent,
-} from '../types/events';
-import type { EntityId } from '../types/common';
+  EventPriority,
+  DeliveryMode,
+} from '../../types/events';
+import type { EntityId } from '../../types/common';
 
 /**
  * Stub implementation of EventBus
@@ -87,6 +91,33 @@ class EventBusImpl implements EventBus {
     };
   }
 
+  async emit<TData = any>(
+    category: EventCategory, 
+    type: string, 
+    data: TData, 
+    targets: EventTarget[],
+    options?: Partial<UniversalEvent<TData>>
+  ): Promise<EventPublishResult> {
+    const event: UniversalEvent<TData> = {
+      eventId: options?.eventId || `event-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      category,
+      type,
+      sourceId: options?.sourceId || 'eventbus',
+      targets,
+      data,
+      metadata: {
+        priority: options?.metadata?.priority || EventPriority.NORMAL,
+        deliveryMode: options?.metadata?.deliveryMode || DeliveryMode.FIRE_AND_FORGET,
+        tags: options?.metadata?.tags || [],
+        ...options?.metadata,
+      },
+      timestamp: options?.timestamp || new Date(),
+      version: options?.version || '1.0.0',
+    };
+    
+    return this.publish(event);
+  }
+
   async subscribe<TData>(
     subscription: EventSubscription,
     handler: EventHandler<TData>,
@@ -138,6 +169,19 @@ class EventBusImpl implements EventBus {
 
   getSubscriptionCount(): number {
     return this._subscriptions.size;
+  }
+
+  getStatus(): EventBusStatus {
+    return {
+      running: this._isRunning,
+      activeSubscriptions: this._subscriptions.size,
+      eventsPerSecond: 0, // TODO: Implement actual metrics tracking
+      queueDepth: 0, // TODO: Implement queue tracking
+      memoryUsage: 0, // TODO: Implement memory tracking
+      errorRate: 0, // TODO: Implement error rate tracking
+      redisConnections: 0, // TODO: Implement Redis connection tracking
+      webSocketConnections: 0, // TODO: Implement WebSocket connection tracking
+    };
   }
 
   getEventCategories(): EventCategory[] {
