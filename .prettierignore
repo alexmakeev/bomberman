@@ -1,0 +1,36 @@
+# Compiled output
+dist/
+build/
+
+# Dependencies
+node_modules/
+
+# Docker and infrastructure
+database/
+nginx/
+redis/
+logs/
+
+# Documentation (preserve formatting)
+docs/
+*.md
+README*
+
+# Configuration files that need specific formatting
+package*.json
+tsconfig*.json
+.eslintrc.js
+
+# Environment files
+.env*
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/

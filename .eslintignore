@@ -1,0 +1,48 @@
+# Compiled output
+dist/
+build/
+
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.*
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Client code (separate linting)
+client/
+
+# Docker and infrastructure
+database/
+nginx/
+redis/
+logs/
+
+# Documentation
+docs/
+
+# Type definitions (don't lint .d.ts files)
+**/*.d.ts
+
+# Configuration files
+*.config.js
+*.config.ts
+webpack.config.js
+vite.config.js
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Git
+.git/

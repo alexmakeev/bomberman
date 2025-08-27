@@ -161,7 +161,7 @@ Comprehensive documentation is available in the `docs/` directory:
 
 ## 🚀 Getting Started
 
-> **Note**: Implementation is currently in the design and planning phase. The following setup instructions will be available once development begins.
+The TypeScript infrastructure and unified event system are now implemented with Docker containerization support.
 
 ### Prerequisites
 - Node.js 18+ and npm/yarn
@@ -180,8 +180,34 @@ npm install
 # Start development environment
 docker-compose up -d
 
-# Run development server
+# Run development server (with TypeScript compilation)
 npm run dev
+```
+
+### Development Commands
+```bash
+# Development  
+npm run dev              # Start full development environment (server + client)
+npm run dev:server       # Start server with hot reload
+npm run dev:client       # Start client development server
+
+# Building
+npm run build            # Build both server and client for production
+npm run build:server     # Build TypeScript server code
+npm run build:client     # Build Vue.js client application
+
+# Quality Assurance
+npm run typecheck        # TypeScript type checking
+npm run lint             # ESLint code quality check
+npm run lint:fix         # Auto-fix linting issues
+npm run test             # Run test suite
+npm run test:coverage    # Run tests with coverage
+
+# Docker Operations
+npm run docker:build     # Build Docker image
+npm run docker:up        # Start all services with Docker Compose
+npm run docker:down      # Stop all Docker services
+npm run docker:prod      # Start production Docker environment
 ```
 
 ### Production Deployment
@@ -190,7 +216,7 @@ npm run dev
 npm run build
 
 # Deploy with Docker
-docker-compose -f docker-compose.prod.yml up -d
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
 
 ## 🎯 Game Mechanics Deep Dive

@@ -474,3 +474,33 @@ The current stack eliminates internal reverse proxy complexity by:
 - **External proxy readiness** for production HTTPS termination via Caddy or other reverse proxies
 - **Reduced infrastructure overhead** while maintaining all functionality
 - **Single-service simplicity** for development and debugging
+
+## TypeScript Development Setup
+
+### TypeScript Configuration
+- **Strict mode enabled** with comprehensive type checking
+- **Path mapping** configured for clean imports (@types/*, @interfaces/*, etc.)
+- **Build configuration** separates development and production builds
+- **ES2022 target** with modern JavaScript features
+- **Declaration files** generated for API consumption
+
+### Code Quality Tools
+- **ESLint** configured for TypeScript with essential rules
+- **Prettier** for consistent code formatting
+- **Husky** git hooks for automated quality checks
+- **tsconfig-paths** for development time path resolution
+
+### Module Architecture
+- **Type definitions** in `src/types/` (separate from implementations)
+- **Interface definitions** in `src/interfaces/` (API contracts)
+- **Stub implementations** in `src/modules/` (actual business logic)
+- **Unified exports** through `src/index.d.ts` for easy consumption
+
+### Development Commands
+```bash
+npm run dev:server     # Start development server with hot reload
+npm run build:server   # Build TypeScript to JavaScript
+npm run typecheck      # Type checking without output
+npm run lint           # ESLint code quality check
+npm run lint:fix       # Auto-fix linting issues
+```
