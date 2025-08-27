@@ -8,13 +8,13 @@ import type {
   EventBusConfig,
   EventHandler,
   EventMiddleware,
-  SubscriptionResult,
   EventPublishResult,
+  SubscriptionResult,
 } from '../interfaces/core/EventBus';
 import type { 
-  UniversalEvent,
-  EventSubscription,
   EventCategory,
+  EventSubscription,
+  UniversalEvent,
 } from '../types/events';
 import type { EntityId } from '../types/common';
 

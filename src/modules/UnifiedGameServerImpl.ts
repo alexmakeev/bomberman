@@ -4,10 +4,10 @@
  */
 
 import type { 
+  ConnectionInfo,
+  ServerStatus,
   UnifiedGameServer,
   UnifiedGameServerConfig,
-  ServerStatus,
-  ConnectionInfo,
 } from '../interfaces/core/UnifiedGameServer';
 import type { EventBus } from '../interfaces/core/EventBus';
 import type { GameEventHandler } from '../interfaces/specialized/GameEventHandler';

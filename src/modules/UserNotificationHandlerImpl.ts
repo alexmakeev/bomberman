@@ -35,7 +35,7 @@ class UserNotificationHandlerImpl implements UserNotificationHandler {
     return notifications.map(() => ({ success: true, deliveredAt: new Date() }));
   }
 
-  async createTemplate(template: any): Promise<EntityId> {
+  async createTemplate(_template: any): Promise<EntityId> {
     const templateId = `template_${Date.now()}`;
     console.log(`📝 Template created: ${templateId}`);
     // TODO: Store template, validate structure
