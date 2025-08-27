@@ -4,13 +4,17 @@
 sequenceDiagram
     participant Gamer
     participant GameClient
-    participant GameEngine
+    participant GameServer
+    participant Redis
+    participant PostgreSQL
     participant BossAI
     participant Teammates
 
-    Note over Gamer,Teammates: Boss Encounter
-    GameEngine->>GameClient: Boss spawns in maze
-    GameEngine->>Teammates: Boss appears for all players
+    Note over Gamer,PostgreSQL: Boss Encounter
+    GameServer->>Redis: Spawn boss in game state
+    Redis->>Redis: Publish boss spawn event
+    Redis->>GameClient: Boss spawns in maze via pub/sub
+    Redis->>Teammates: Boss appears for all players via pub/sub
     GameClient-->>Gamer: Boss enemy visible
     GameClient-->>Gamer: Show boss health bar
 
@@ -20,31 +24,35 @@ sequenceDiagram
         Teammates->>GameEngine: Position strategically
         
         Gamer->>GameClient: Place bomb near boss
-        GameClient->>GameEngine: Bomb created
-        GameEngine->>GameEngine: Bomb explosion
-        GameEngine->>BossAI: Apply damage to boss
+        GameClient->>GameServer: Bomb placement request
+        GameServer->>Redis: Create bomb in game state
+        Redis->>Redis: Process bomb explosion
+        Redis->>BossAI: Apply damage to boss
+        Redis->>Redis: Publish boss damage event
         
         BossAI->>BossAI: Check health status
         alt Boss damaged but alive
             BossAI->>BossAI: Update attack pattern
-            BossAI->>GameEngine: Execute boss attack
+            BossAI->>Redis: Execute boss attack
+            Redis->>Redis: Publish boss attack event
             
             alt Normal phase
-                GameEngine->>GameClient: Boss normal attack
+                Redis->>GameClient: Boss normal attack via pub/sub
                 GameClient-->>Gamer: Dodge boss attack
             else Rage phase (low health)
                 BossAI->>BossAI: Enter rage mode
-                GameEngine->>GameClient: Boss aggressive attacks
+                Redis->>GameClient: Boss aggressive attacks via pub/sub
                 GameClient-->>Gamer: More intense attack patterns
             end
             
-            GameEngine-->>GameClient: Update boss health display
+            Redis->>GameClient: Update boss health via pub/sub
             GameClient-->>Gamer: Show reduced boss health
         end
 
         alt Poor team coordination
-            BossAI->>GameEngine: Boss attacks isolated player
-            GameEngine->>GameClient: Player takes damage
+            BossAI->>Redis: Boss attacks isolated player
+            Redis->>Redis: Update player health
+            Redis->>GameClient: Player takes damage via pub/sub
             GameClient-->>Gamer: Player eliminated
             Note over Gamer: Respawn and rejoin battle
         end
@@ -52,30 +60,34 @@ sequenceDiagram
         opt Multiple health phases
             BossAI->>BossAI: Health threshold reached
             BossAI->>BossAI: Change to next phase
-            BossAI->>GameEngine: New attack patterns
-            GameEngine-->>GameClient: Boss behavior changes
+            BossAI->>Redis: New attack patterns
+            Redis->>Redis: Publish boss phase change
+            Redis->>GameClient: Boss behavior changes via pub/sub
             GameClient-->>Gamer: Adapt to new patterns
         end
     end
 
     alt Victory - Boss defeated
         BossAI->>BossAI: Health reaches zero
-        BossAI->>GameEngine: Boss defeated
-        GameEngine->>GameEngine: Calculate team statistics
-        GameEngine-->>GameClient: Victory achieved
-        GameEngine-->>Teammates: Victory notification
+        BossAI->>Redis: Boss defeated
+        Redis->>Redis: Publish victory event
+        GameServer->>PostgreSQL: Save boss battle statistics
+        Redis->>GameClient: Victory achieved via pub/sub
+        Redis->>Teammates: Victory notification via pub/sub
         GameClient-->>Gamer: Show victory screen with stats
         
         Note over Gamer,Teammates: Damage dealt, survival time, teamwork score
     else Defeat - Team eliminated
-        GameEngine->>GameEngine: All players eliminated
-        GameEngine-->>GameClient: Game over
+        Redis->>Redis: All players eliminated
+        Redis->>Redis: Publish game over event
+        GameServer->>PostgreSQL: Save defeat statistics
+        Redis->>GameClient: Game over via pub/sub
         GameClient-->>Gamer: Show defeat screen
         
         opt Boss escapes
-            BossAI->>GameEngine: Boss retreats after timeout
-            GameEngine->>BossAI: Spawn new boss after delay
-            Note over GameEngine: New boss spawns after time delay
+            BossAI->>Redis: Boss retreats after timeout
+            Redis->>Redis: Schedule new boss spawn
+            Note over Redis: New boss spawns after time delay
         end
     end
 ```

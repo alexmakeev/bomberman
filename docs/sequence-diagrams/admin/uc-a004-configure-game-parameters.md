@@ -5,14 +5,16 @@ sequenceDiagram
     participant Admin
     participant AdminDashboard
     participant ConfigService
-    participant Database
+    participant PostgreSQL
+    participant Redis
     participant GameServer
-    participant ActiveGame
 
     Admin->>AdminDashboard: Access configuration panel
     AdminDashboard->>ConfigService: Get current settings
-    ConfigService->>Database: Query configuration
-    Database-->>ConfigService: Current config values
+    ConfigService->>PostgreSQL: Query persistent configuration
+    ConfigService->>Redis: Get active configuration cache
+    PostgreSQL-->>ConfigService: Stored config values
+    Redis-->>ConfigService: Active config cache
     ConfigService-->>AdminDashboard: Configuration data
     AdminDashboard-->>Admin: Show current settings
 
@@ -24,19 +26,22 @@ sequenceDiagram
     ConfigService->>ConfigService: Check parameter bounds
     
     alt Valid configuration
-        ConfigService->>Database: Store new configuration
-        Database-->>ConfigService: Save confirmation
+        ConfigService->>PostgreSQL: Store new configuration
+        ConfigService->>Redis: Update configuration cache
+        PostgreSQL-->>ConfigService: Save confirmation
+        Redis-->>ConfigService: Cache updated
         ConfigService->>GameServer: Apply new settings
         
-        GameServer->>ActiveGame: Update game parameters
-        Note over GameServer,ActiveGame: Active games receive updates
+        GameServer->>Redis: Update active game parameters
+        Redis->>Redis: Publish configuration change event
+        Note over Redis: Active games receive updates via pub/sub
         
         ConfigService-->>AdminDashboard: Success confirmation
         AdminDashboard-->>Admin: Show "Settings saved"
         
         alt Games in progress
-            GameServer->>GameServer: Queue changes for new games
-            Note over GameServer: Changes apply to new games only
+            Redis->>Redis: Queue changes for new games
+            Note over Redis: Changes apply to new games only
         end
     else Invalid configuration
         ConfigService-->>AdminDashboard: Validation errors

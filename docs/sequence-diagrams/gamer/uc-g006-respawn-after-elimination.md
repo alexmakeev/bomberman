@@ -5,54 +5,58 @@ sequenceDiagram
     participant Gamer
     participant GameClient
     participant GameServer
-    participant GameEngine
-    participant OngoingGame
+    participant Redis
+    participant PostgreSQL
+    participant OtherPlayers
 
-    Note over Gamer,OngoingGame: Player Elimination
-    GameEngine->>GameClient: Player eliminated event
+    Note over Gamer,PostgreSQL: Player Elimination
+    GameServer->>Redis: Update player health = 0
+    Redis->>Redis: Publish player death event
+    Redis->>GameClient: Player eliminated via pub/sub
     GameClient-->>Gamer: Show elimination screen
     GameClient->>GameClient: Start 10-second countdown
     
     loop Countdown Timer
         GameClient-->>Gamer: Display countdown (10, 9, 8...)
         GameClient->>GameServer: Request game spectator view
-        GameServer->>OngoingGame: Get current game state
-        OngoingGame-->>GameServer: Ongoing game data
+        GameServer->>Redis: Get current game state
+        Redis-->>GameServer: Live game data
         GameServer-->>GameClient: Spectator view data
         GameClient-->>Gamer: Show eliminated player view of ongoing game
         
         alt Game ends during countdown
-            OngoingGame->>GameServer: Game over event
-            GameServer->>GameClient: Game ended
+            Redis->>Redis: Publish game over event
+            Redis->>GameClient: Game ended via pub/sub
             GameClient-->>Gamer: Join next round option
         end
     end
 
-    Note over Gamer,OngoingGame: Respawn Process
+    Note over Gamer,PostgreSQL: Respawn Process
     GameClient->>GameServer: Respawn request
-    GameServer->>GameEngine: Find spawn location
+    GameServer->>Redis: Check game state for spawn locations
     
-    GameEngine->>GameEngine: Check corner positions
+    Redis-->>GameServer: Available corner positions
     alt Corners available
-        GameEngine->>GameEngine: Select random corner
-        GameEngine-->>GameServer: Spawn location confirmed
+        GameServer->>GameServer: Select random corner
+        GameServer->>Redis: Update player position (spawn)
     else All corners occupied
-        GameEngine->>GameEngine: Find nearest safe spawn point
-        GameEngine-->>GameServer: Alternative spawn location
+        GameServer->>GameServer: Find nearest safe spawn point
+        GameServer->>Redis: Update player position (alternative)
     end
     
-    GameServer->>GameEngine: Respawn player
-    GameEngine->>GameEngine: Create player at spawn point
+    GameServer->>Redis: Set player health = 100
+    Redis->>Redis: Publish player respawn event
     
     alt Retain power-ups (game rules)
-        GameEngine->>GameEngine: Restore previous abilities
-        GameEngine-->>GameServer: Player respawned with power-ups
+        GameServer->>Redis: Restore previous abilities
+        Redis->>Redis: Publish ability restoration
     else Power-ups lost (game rules)
-        GameEngine->>GameEngine: Reset to basic abilities
-        GameEngine-->>GameServer: Player respawned with default stats
+        GameServer->>Redis: Reset to basic abilities
+        Redis->>Redis: Publish ability reset
     end
     
-    GameServer-->>GameClient: Respawn successful
+    Redis->>OtherPlayers: Respawn notification via pub/sub
+    GameServer->>PostgreSQL: Log respawn event
+    Redis->>GameClient: Player respawned via pub/sub
     GameClient-->>Gamer: Resume active gameplay
-    GameClient->>OngoingGame: Rejoin active game
 ```

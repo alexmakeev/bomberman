@@ -1,6 +1,8 @@
 /**
  * WebSocket message protocols and real-time communication types.
- * Defines message formats for client-server communication.
+ * Integrates Redis pub/sub messaging with WebSocket client connections using the unified EventBus system.
+ * Defines message formats for client-server communication and event distribution.
+ * Built on top of the reusable EventBus infrastructure for maximum code reuse.
  */
 
 import { EntityId, Timestamp, Position, Direction, AnimationState } from './common';
@@ -8,6 +10,17 @@ import { Room, RoomSettings, RoomPlayer, ChatMessage } from './room';
 import { Game, GameState, PlayerGameState, Bomb, PowerUp, Monster, Boss, Gate, ObjectiveStatus } from './game';
 import { Player, DeviceInfo } from './player';
 import { AdminAction, SystemMetrics } from './admin';
+import { 
+  UniversalEvent, 
+  EventCategory, 
+  EventTarget, 
+  EventFilter, 
+  EventSubscription,
+  EventPublishResult,
+  EventHandler,
+  DeliveryMode,
+  EventPriority
+} from './events';
 
 /**
  * WebSocket message types
@@ -75,7 +88,13 @@ export enum MessageType {
   ADMIN_ACTION = 'admin_action',
   ADMIN_WARNING = 'admin_warning',
   SYSTEM_MESSAGE = 'system_message',
-  MAINTENANCE_MODE = 'maintenance_mode'
+  MAINTENANCE_MODE = 'maintenance_mode',
+
+  // Redis Pub/Sub Events
+  REDIS_EVENT = 'redis_event',
+  CHANNEL_SUBSCRIBE = 'channel_subscribe',
+  CHANNEL_UNSUBSCRIBE = 'channel_unsubscribe',
+  CHANNEL_MESSAGE = 'channel_message'
 }
 
 /**
@@ -89,9 +108,23 @@ export enum MessagePriority {
 }
 
 /**
- * Base WebSocket message format
+ * WebSocket message format - now extends UniversalEvent
  */
-export interface WebSocketMessage {
+export interface WebSocketMessage<TData = any> extends UniversalEvent<TData> {
+  /** WebSocket-specific message type */
+  messageType: MessageType;
+  /** Requires acknowledgment */
+  ack?: boolean;
+  /** Protocol version */
+  protocolVersion: string;
+  /** Connection identifier */
+  connectionId?: EntityId;
+}
+
+/**
+ * Simplified WebSocket message for backward compatibility
+ */
+export interface LegacyWebSocketMessage {
   /** Unique message identifier */
   id: EntityId;
   /** Message category */
@@ -738,6 +771,273 @@ export interface MessageMetadata {
   ttl?: number;
   /** Retry attempts */
   retryCount: number;
+}
+
+// WebSocket-EventBus Integration Types
+
+/**
+ * WebSocket channel mapping to EventBus categories
+ * Maps WebSocket-specific channels to universal event categories
+ */
+export enum WebSocketChannelCategory {
+  // Map to EventCategory.GAME_STATE
+  GAME_STATE = 'game_state',
+  GAME_ACTIONS = 'game_actions',
+  
+  // Map to EventCategory.ROOM_MANAGEMENT  
+  ROOM_EVENTS = 'room_events',
+  ROOM_CHAT = 'room_chat',
+  
+  // Map to EventCategory.USER_NOTIFICATION
+  PLAYER_NOTIFICATIONS = 'player_notifications',
+  
+  // Map to EventCategory.ADMIN_ACTION
+  ADMIN_ACTIONS = 'admin_actions',
+  
+  // Map to EventCategory.SYSTEM_STATUS
+  SYSTEM_EVENTS = 'system_events',
+  
+  // Map to EventCategory.PERFORMANCE
+  PERFORMANCE_EVENTS = 'performance_events'
+}
+
+/**
+ * Redis channel naming patterns - now integrated with EventBus
+ */
+export class ChannelPatterns {
+  /** Generate channel for event category and entity */
+  static forEntity(category: EventCategory, entityType: string, entityId: EntityId): string {
+    return `${category}:${entityType}:${entityId}`;
+  }
+  
+  /** Generate channel for global category */
+  static forCategory(category: EventCategory): string {
+    return `${category}:global`;
+  }
+  
+  /** Generate channel for user-specific events */
+  static forUser(userId: EntityId, category: EventCategory): string {
+    return `user:${userId}:${category}`;
+  }
+  
+  /** Generate channel for room-specific events */
+  static forRoom(roomId: EntityId, category: EventCategory): string {
+    return `room:${roomId}:${category}`;
+  }
+  
+  /** Generate channel for game-specific events */
+  static forGame(gameId: EntityId, category: EventCategory): string {
+    return `game:${gameId}:${category}`;
+  }
+}
+
+/**
+ * WebSocket-EventBus event message - extends UniversalEvent
+ */
+export interface WebSocketEventMessage<TData = any> extends UniversalEvent<TData> {
+  /** Redis channel name */
+  channel: string;
+  /** WebSocket connection identifiers to deliver to */
+  connectionIds?: EntityId[];
+  /** Delivery mode override */
+  deliveryMode?: DeliveryMode;
+  /** Priority override */
+  priority?: EventPriority;
+}
+
+/**
+ * Legacy Redis event message format (for backward compatibility)
+ */
+export interface RedisEventMessage {
+  /** Event identifier */
+  eventId: EntityId;
+  /** Event category */
+  type: string;
+  /** Redis channel name */
+  channel: string;
+  /** Event timestamp */
+  timestamp: Timestamp;
+  /** Event originator */
+  sourceId: EntityId;
+  /** Target entities (optional) */
+  targetIds?: EntityId[];
+  /** Event payload */
+  data: any;
+  /** Time to live in Redis (seconds) */
+  ttl?: number;
+  /** Event version for compatibility */
+  version: string;
+}
+
+/**
+ * WebSocket-EventBus subscription - extends EventSubscription
+ */
+export interface WebSocketSubscription extends EventSubscription {
+  /** WebSocket connection ID */
+  connectionId: EntityId;
+  /** Redis channel pattern (derived from EventBus subscription) */
+  channel: string;
+  /** WebSocket-specific delivery options */
+  websocketOptions: WebSocketDeliveryOptions;
+}
+
+/**
+ * WebSocket delivery options
+ */
+export interface WebSocketDeliveryOptions {
+  /** Compress messages */
+  compression: boolean;
+  /** Use binary encoding */
+  binaryEncoding: boolean;
+  /** Batch multiple events */
+  enableBatching: boolean;
+  /** Maximum batch size */
+  maxBatchSize: number;
+  /** Batch timeout (milliseconds) */
+  batchTimeoutMs: number;
+  /** Delivery acknowledgment required */
+  requireAck: boolean;
+}
+
+/**
+ * Subscription filtering options
+ */
+export interface SubscriptionFilter {
+  /** Filter field name */
+  field: string;
+  /** Filter operator */
+  operator: FilterOperator;
+  /** Filter value */
+  value: any;
+}
+
+/**
+ * Filter operators for subscription filtering
+ */
+export enum FilterOperator {
+  EQUALS = 'equals',
+  NOT_EQUALS = 'not_equals',
+  CONTAINS = 'contains',
+  STARTS_WITH = 'starts_with',
+  IN_ARRAY = 'in_array',
+  GREATER_THAN = 'greater_than',
+  LESS_THAN = 'less_than'
+}
+
+/**
+ * WebSocket subscription request
+ */
+export interface ChannelSubscribeMessage {
+  /** Player requesting subscription */
+  playerId: EntityId;
+  /** Channel pattern to subscribe to */
+  channel: string;
+  /** Optional filters */
+  filters?: SubscriptionFilter[];
+  /** Auto-unsubscribe timeout */
+  ttl?: number;
+}
+
+/**
+ * WebSocket subscription response
+ */
+export interface ChannelSubscribeResponse {
+  /** Subscription successful */
+  success: boolean;
+  /** Subscription identifier */
+  subscriptionId?: EntityId;
+  /** Redis channel actually subscribed to */
+  actualChannel?: string;
+  /** Error message */
+  error?: string;
+}
+
+/**
+ * WebSocket unsubscribe request
+ */
+export interface ChannelUnsubscribeMessage {
+  /** Player requesting unsubscribe */
+  playerId: EntityId;
+  /** Subscription to cancel */
+  subscriptionId?: EntityId;
+  /** Channel pattern to unsubscribe from */
+  channel?: string;
+  /** Unsubscribe from all channels */
+  unsubscribeAll?: boolean;
+}
+
+/**
+ * Redis event forwarded to WebSocket client
+ */
+export interface ChannelEventMessage {
+  /** Source subscription */
+  subscriptionId: EntityId;
+  /** Original Redis event */
+  event: RedisEventMessage;
+  /** Filtered data (if filters applied) */
+  filteredData?: any;
+  /** Client-specific metadata */
+  clientMetadata?: any;
+}
+
+/**
+ * WebSocket to Redis event publishing
+ */
+export interface PublishEventMessage {
+  /** Publishing player */
+  playerId: EntityId;
+  /** Target Redis channel */
+  channel: string;
+  /** Event type */
+  eventType: RedisEventType;
+  /** Event payload */
+  data: any;
+  /** Target specific entities */
+  targetIds?: EntityId[];
+  /** Event TTL in Redis */
+  ttl?: number;
+}
+
+/**
+ * WebSocket-Redis bridge connection status
+ */
+export interface WebSocketRedisStatus {
+  /** WebSocket connection ID */
+  connectionId: EntityId;
+  /** Associated player ID */
+  playerId: EntityId;
+  /** Active subscriptions */
+  activeSubscriptions: ChannelSubscription[];
+  /** Redis connection healthy */
+  redisConnected: boolean;
+  /** Last Redis event timestamp */
+  lastEventAt?: Timestamp;
+  /** Messages published to Redis */
+  publishedCount: number;
+  /** Messages received from Redis */
+  receivedCount: number;
+  /** Connection latency to Redis (ms) */
+  redisLatency: number;
+}
+
+/**
+ * Real-time event routing configuration
+ */
+export interface EventRoutingConfig {
+  /** Route game events through Redis */
+  useRedisForGameEvents: boolean;
+  /** Route room events through Redis */
+  useRedisForRoomEvents: boolean;
+  /** Route admin events through Redis */
+  useRedisForAdminEvents: boolean;
+  /** Enable event filtering */
+  enableEventFiltering: boolean;
+  /** Maximum subscriptions per connection */
+  maxSubscriptionsPerConnection: number;
+  /** Default event TTL in Redis (seconds) */
+  defaultEventTTL: number;
+  /** Redis cluster mode enabled */
+  redisClusterMode: boolean;
 }
 
 // Import and re-export types from other modules for convenience

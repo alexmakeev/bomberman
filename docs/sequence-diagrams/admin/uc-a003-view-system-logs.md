@@ -5,7 +5,8 @@ sequenceDiagram
     participant Admin
     participant AdminDashboard
     participant LoggingService
-    participant Database
+    participant PostgreSQL
+    participant Redis
     participant FileSystem
 
     Admin->>AdminDashboard: Request system logs
@@ -13,13 +14,15 @@ sequenceDiagram
     Admin->>AdminDashboard: Set filters (date, level, component)
     
     AdminDashboard->>LoggingService: Query logs with filters
-    LoggingService->>Database: Search log entries
-    LoggingService->>FileSystem: Read log files
+    LoggingService->>PostgreSQL: Search persistent log entries
+    LoggingService->>Redis: Get recent real-time logs
+    LoggingService->>FileSystem: Read archived log files
     
-    Database-->>LoggingService: Database logs
-    FileSystem-->>LoggingService: File-based logs
+    PostgreSQL-->>LoggingService: Historical log data
+    Redis-->>LoggingService: Recent activity logs
+    FileSystem-->>LoggingService: Archived logs
     
-    LoggingService->>LoggingService: Merge and filter logs
+    LoggingService->>LoggingService: Merge PostgreSQL, Redis, and file logs
     LoggingService-->>AdminDashboard: Filtered log entries
     AdminDashboard-->>Admin: Display logs with timestamps
 

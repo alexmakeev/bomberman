@@ -35,11 +35,74 @@ The system is organized into distinct modules with clear separation of concerns:
 - **ConfigManager** - Game parameters, validation
 
 ### Infrastructure
-- **Database** - Persistent storage, room/player data
+- **PostgreSQL** - Persistent storage, player data, statistics, audit logs
+- **Redis** - Real-time state, pub/sub messaging, session cache
 - **WebSocketManager** - Connection handling, broadcasting
 - **AuthService** - Authentication, session management
 - **ValidationService** - Input validation, security
-- **CacheManager** - Performance optimization, temporary storage
+
+---
+
+## Dual-Storage Architecture
+
+The system implements a sophisticated dual-storage architecture that separates concerns between real-time game state and persistent data storage:
+
+### PostgreSQL - Persistent Data Layer
+
+**Primary Responsibilities:**
+- **Player Management**: User accounts, authentication credentials, profiles
+- **Historical Data**: Game statistics, match history, achievements  
+- **Audit Logging**: Administrative actions, security events, system logs
+- **Configuration**: Game parameters, system settings, feature flags
+- **Analytics**: Long-term metrics, reporting data, performance statistics
+- **Session Management**: Long-term session tracking, device registration
+
+**Data Characteristics:**
+- ACID compliance for critical data integrity
+- Complex relational queries for analytics and reporting
+- Optimized for write durability and read consistency
+- Scheduled maintenance windows for optimization
+- Backup and disaster recovery capabilities
+
+### Redis - Real-Time State Layer
+
+**Primary Responsibilities:**
+- **Game State**: Active room data, player positions, bomb states
+- **Pub/Sub Messaging**: Real-time event distribution to connected clients
+- **Session Cache**: Active WebSocket connections, temporary authentication
+- **Leaderboards**: Live rankings, current match scores
+- **Rate Limiting**: Anti-spam protection, action throttling
+- **Temporary Storage**: TTL-based cleanup of expired game sessions
+
+**Data Characteristics:**
+- In-memory performance for sub-millisecond responses
+- Pub/Sub for instant message distribution
+- TTL (Time-To-Live) for automatic cleanup
+- Atomic operations for consistent state updates
+- Horizontal scaling through clustering
+
+### Data Flow Integration
+
+**Game Session Lifecycle:**
+1. Player authentication validated against PostgreSQL
+2. Session created in Redis with TTL
+3. Real-time game state managed in Redis
+4. Game statistics aggregated and saved to PostgreSQL
+5. Redis state expires automatically after game completion
+
+**Administrative Operations:**
+- **Monitoring**: Real-time data from Redis, historical trends from PostgreSQL
+- **Configuration**: Changes stored in PostgreSQL, cached in Redis
+- **Reporting**: PostgreSQL analytics combined with Redis live data
+- **Logging**: Real-time logs in Redis, persistent storage in PostgreSQL
+
+**Synchronization Patterns:**
+- **Event Sourcing**: Critical events logged to PostgreSQL for audit trails
+- **Cache-Aside**: PostgreSQL data cached in Redis for performance
+- **Write-Through**: Important state changes written to both systems
+- **TTL Cleanup**: Redis automatically expires temporary data
+
+This architecture ensures both high-performance real-time gameplay and reliable persistent data management.
 
 ---
 
@@ -989,14 +1052,14 @@ interface ReportGenerator {
 
 ## Infrastructure Modules
 
-### Database
+### PostgreSQL
 
-Persistent storage system for all game data with performance optimization.
+Persistent storage system for durable game data, analytics, and audit trails.
 
 ```typescript
-interface Database {
+interface PostgreSQL {
   // Connection Management
-  connect(connectionString: string, options: DatabaseOptions): Promise<Connection>;
+  connect(connectionString: string, options: PostgreSQLOptions): Promise<Connection>;
   disconnect(): Promise<void>;
   getConnectionStatus(): ConnectionStatus;
   
@@ -1007,45 +1070,126 @@ interface Database {
   deletePlayer(playerId: string): Promise<void>;
   findPlayersByName(namePattern: string): Promise<Player[]>;
   
-  // Game Data Operations
-  saveGameState(gameState: GameState): Promise<void>;
-  loadGameState(gameId: string): Promise<GameState | null>;
-  archiveCompletedGame(gameId: string): Promise<void>;
+  // Authentication & Sessions
+  validatePlayerCredentials(playerId: string, passwordHash: string): Promise<boolean>;
+  createPlayerSession(session: PlayerSessionRecord): Promise<void>;
+  getPlayerSessions(playerId: string): Promise<PlayerSessionRecord[]>;
+  deactivateSession(sessionId: string): Promise<void>;
+  
+  // Game History & Statistics
+  saveGameResults(gameId: string, results: GameResult): Promise<void>;
   getGameHistory(playerId: string, limit: number): Promise<GameRecord[]>;
-  
-  // Room Data Operations
-  createRoom(room: Room): Promise<void>;
-  updateRoom(roomId: string, updates: Partial<Room>): Promise<void>;
-  deleteRoom(roomId: string): Promise<void>;
-  getActiveRooms(): Promise<Room[]>;
-  
-  // Statistics Operations
   recordPlayerStatistics(playerId: string, stats: PlayerStats): Promise<void>;
   getPlayerStatistics(playerId: string): Promise<PlayerLifetimeStats>;
-  updateSystemMetrics(metrics: SystemMetrics): Promise<void>;
-  getSystemMetricsHistory(timeRange: DateRange): Promise<SystemMetrics[]>;
+  aggregateSystemMetrics(timeRange: DateRange): Promise<SystemMetrics[]>;
   
-  // Query Operations
-  executeQuery<T>(query: string, parameters: any[]): Promise<T[]>;
-  executeTransaction(operations: DatabaseOperation[]): Promise<TransactionResult>;
-  executeBatch(operations: BatchOperation[]): Promise<BatchResult>;
+  // Audit & Logging
+  logAdminAction(adminId: string, action: AdminAction, context: any): Promise<void>;
+  logSecurityEvent(event: SecurityEvent): Promise<void>;
+  logSystemEvent(level: LogLevel, category: string, message: string, data?: any): Promise<void>;
+  queryAuditLogs(filter: AuditLogFilter): Promise<AuditLogEntry[]>;
   
-  // Performance Operations
+  // Configuration Management
+  saveSystemConfig(section: string, settings: ConfigSettings): Promise<void>;
+  getSystemConfig(section?: string): Promise<SystemConfiguration>;
+  getConfigHistory(section: string): Promise<ConfigurationChange[]>;
+  
+  // Analytics & Reporting
+  generatePlayerAnalytics(timeRange: DateRange): Promise<PlayerAnalytics>;
+  generateUsageReport(reportType: ReportType, params: ReportParameters): Promise<ReportData>;
+  calculateLifetimeStatistics(): Promise<LifetimeStatistics>;
+  
+  // Data Management
+  archiveOldGames(olderThan: Date): Promise<ArchiveResult>;
+  cleanupExpiredData(): Promise<CleanupResult>;
   optimizeDatabase(): Promise<OptimizationResult>;
-  rebuildIndexes(): Promise<IndexResult>;
-  analyzeQueryPerformance(): Promise<PerformanceAnalysis>;
-  
-  // Backup & Recovery
   createBackup(): Promise<BackupResult>;
-  restoreFromBackup(backupId: string): Promise<RestoreResult>;
   verifyDataIntegrity(): Promise<IntegrityResult>;
 }
 ```
 
-**Expects**: Database queries, connection parameters, data objects
-**Behavior**: Stores and retrieves data, maintains consistency, optimizes performance
-**Returns**: Query results, operation confirmations, performance metrics
-**Errors**: Connection failures, query errors, constraint violations, corruption
+**Expects**: Complex queries, historical data, audit events, analytics requests
+**Behavior**: Stores persistent data with ACID guarantees, supports complex analytics
+**Returns**: Query results, aggregated statistics, historical reports
+**Errors**: Connection failures, constraint violations, transaction rollbacks
+
+### Redis
+
+High-performance in-memory storage for real-time game state and messaging.
+
+```typescript
+interface Redis {
+  // Connection Management
+  connect(config: RedisConfig): Promise<RedisClient>;
+  disconnect(): Promise<void>;
+  getConnectionStatus(): RedisConnectionStatus;
+  
+  // Game State Operations
+  setGameState(gameId: string, state: GameState, ttl?: number): Promise<void>;
+  getGameState(gameId: string): Promise<GameState | null>;
+  updateGameState(gameId: string, updates: Partial<GameState>): Promise<void>;
+  deleteGameState(gameId: string): Promise<void>;
+  listActiveGames(): Promise<string[]>;
+  
+  // Room Management
+  createRoom(roomId: string, roomData: RoomState, ttl?: number): Promise<void>;
+  updateRoom(roomId: string, updates: Partial<RoomState>): Promise<void>;
+  getRoomState(roomId: string): Promise<RoomState | null>;
+  addPlayerToRoom(roomId: string, player: RoomPlayer): Promise<void>;
+  removePlayerFromRoom(roomId: string, playerId: string): Promise<void>;
+  
+  // Pub/Sub Messaging
+  publish(channel: string, message: any): Promise<number>;
+  subscribe(channel: string, callback: MessageCallback): Promise<void>;
+  unsubscribe(channel: string): Promise<void>;
+  publishGameEvent(gameId: string, event: GameEvent): Promise<void>;
+  publishRoomEvent(roomId: string, event: RoomEvent): Promise<void>;
+  
+  // Session Management
+  createSession(sessionId: string, sessionData: SessionData, ttl: number): Promise<void>;
+  getSession(sessionId: string): Promise<SessionData | null>;
+  refreshSession(sessionId: string, newTTL: number): Promise<void>;
+  deleteSession(sessionId: string): Promise<void>;
+  getActiveSessions(playerId: string): Promise<SessionData[]>;
+  
+  // Player State Management
+  setPlayerState(playerId: string, state: PlayerGameState): Promise<void>;
+  getPlayerState(playerId: string): Promise<PlayerGameState | null>;
+  updatePlayerAbilities(playerId: string, abilities: PlayerAbilities): Promise<void>;
+  setPlayerPosition(playerId: string, position: Position): Promise<void>;
+  
+  // Real-Time Features
+  incrementScore(playerId: string, points: number): Promise<number>;
+  updateLeaderboard(leaderboardId: string, playerId: string, score: number): Promise<void>;
+  getLeaderboard(leaderboardId: string, limit: number): Promise<LeaderboardEntry[]>;
+  setExpiration(key: string, seconds: number): Promise<void>;
+  
+  // Rate Limiting
+  checkRateLimit(identifier: string, action: string, limit: number, window: number): Promise<RateLimitResult>;
+  incrementActionCount(identifier: string, action: string, window: number): Promise<number>;
+  
+  // Atomic Operations
+  executeTransaction(commands: RedisCommand[]): Promise<TransactionResult>;
+  executeLuaScript(script: string, keys: string[], args: any[]): Promise<any>;
+  
+  // Cache Operations
+  set(key: string, value: any, ttl?: number): Promise<void>;
+  get(key: string): Promise<any>;
+  delete(key: string): Promise<void>;
+  exists(key: string): Promise<boolean>;
+  expire(key: string, seconds: number): Promise<void>;
+  
+  // Performance & Monitoring
+  getMemoryUsage(): Promise<RedisMemoryInfo>;
+  getPerformanceStats(): Promise<RedisPerformanceStats>;
+  flushExpiredKeys(): Promise<number>;
+}
+```
+
+**Expects**: Real-time data updates, pub/sub events, TTL-based operations
+**Behavior**: Provides ultra-fast data access, automatic expiration, event distribution
+**Returns**: Immediate responses, pub/sub confirmations, cache hit/miss status
+**Errors**: Memory limits, connection timeouts, serialization failures
 
 ### WebSocketManager
 

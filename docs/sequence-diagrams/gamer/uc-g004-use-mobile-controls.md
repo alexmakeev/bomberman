@@ -6,15 +6,16 @@ sequenceDiagram
     participant MobileDevice
     participant GameClient
     participant TouchHandler
-    participant GameEngine
+    participant GameServer
+    participant Redis
 
-    Note over Gamer,GameEngine: Mobile Detection
+    Note over Gamer,Redis: Mobile Detection
     GameClient->>MobileDevice: Detect device type
     MobileDevice-->>GameClient: Mobile device confirmed
     GameClient->>GameClient: Enable mobile UI mode
     GameClient-->>Gamer: Show virtual controls
 
-    Note over Gamer,GameEngine: Touch Input Handling
+    Note over Gamer,Redis: Touch Input Handling
     loop Game Input Loop
         Gamer->>MobileDevice: Touch virtual joystick
         MobileDevice->>TouchHandler: Raw touch events
@@ -23,7 +24,9 @@ sequenceDiagram
         alt Valid touch in joystick area
             TouchHandler->>TouchHandler: Convert to movement vector
             TouchHandler->>GameClient: Movement input
-            GameClient->>GameEngine: Player movement
+            GameClient->>GameServer: Player movement action
+            GameServer->>Redis: Update player position
+            Redis->>Redis: Publish position change
             
             alt Haptic feedback available
                 TouchHandler->>MobileDevice: Trigger haptic feedback
@@ -43,7 +46,9 @@ sequenceDiagram
             
             alt Cooldown expired
                 TouchHandler->>GameClient: Place bomb action
-                GameClient->>GameEngine: Create bomb
+                GameClient->>GameServer: Bomb placement request
+                GameServer->>Redis: Create bomb in game state
+                Redis->>Redis: Publish bomb placed event
                 TouchHandler->>TouchHandler: Start cooldown timer
             else Rapid tapping (cooldown active)
                 TouchHandler->>TouchHandler: Prevent bomb spam
@@ -51,7 +56,7 @@ sequenceDiagram
         end
     end
 
-    Note over Gamer,GameEngine: UI Scaling
+    Note over Gamer,Redis: UI Scaling & Real-time Updates
     GameClient->>MobileDevice: Get screen dimensions
     MobileDevice-->>GameClient: Screen size info
     
@@ -62,5 +67,7 @@ sequenceDiagram
         GameClient->>GameClient: Minimize UI elements
     end
     
-    GameClient-->>Gamer: Scaled interface
+    Note over Redis: Real-time state synchronization
+    Redis->>GameClient: Game state updates via pub/sub
+    GameClient-->>Gamer: Scaled interface with live updates
 ```

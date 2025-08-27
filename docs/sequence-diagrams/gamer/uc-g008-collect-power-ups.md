@@ -4,20 +4,21 @@
 sequenceDiagram
     participant Gamer
     participant GameClient
-    participant GameEngine
-    participant PowerUpSystem
+    participant GameServer
+    participant Redis
+    participant PostgreSQL
     participant OtherPlayer
 
     Note over Gamer,OtherPlayer: Power-up Discovery
     Gamer->>GameClient: Place bomb near wall
-    GameClient->>GameEngine: Bomb explosion
-    GameEngine->>GameEngine: Destroy wall
-    GameEngine->>PowerUpSystem: Check for hidden power-up
+    GameClient->>GameServer: Bomb explosion request
+    GameServer->>Redis: Update game state (bomb explosion)
+    Redis->>Redis: Destroy wall, check for power-up spawn
     
     alt Power-up revealed
-        PowerUpSystem->>PowerUpSystem: Spawn power-up at location
-        PowerUpSystem-->>GameEngine: Power-up created
-        GameEngine-->>GameClient: Power-up visible
+        Redis->>Redis: Spawn power-up at location
+        Redis->>Redis: Publish power-up spawn event
+        Redis->>GameClient: Power-up visible via pub/sub
         GameClient-->>Gamer: Show power-up on ground
         
         Note over Gamer,OtherPlayer: Collection Race
@@ -25,46 +26,48 @@ sequenceDiagram
         OtherPlayer->>GameEngine: Also moves toward power-up
         
         alt Gamer reaches first
-            GameClient->>GameEngine: Player collision with power-up
-            GameEngine->>PowerUpSystem: Collect power-up
-            PowerUpSystem->>PowerUpSystem: Apply enhancement
+            GameClient->>GameServer: Player collision with power-up
+            GameServer->>Redis: Collect power-up, apply enhancement
+            Redis->>Redis: Update player abilities
             
             alt Bomb capacity increase
-                PowerUpSystem->>PowerUpSystem: Increase max bombs
-                PowerUpSystem-->>GameEngine: Player can place more bombs
+                Redis->>Redis: Increase max bombs for player
+                Redis->>Redis: Publish ability update
             else Blast range increase
-                PowerUpSystem->>PowerUpSystem: Increase explosion radius
-                PowerUpSystem-->>GameEngine: Bombs have larger range
+                Redis->>Redis: Increase explosion radius for player
+                Redis->>Redis: Publish ability update
             end
             
-            GameEngine->>PowerUpSystem: Remove power-up from world
-            PowerUpSystem-->>GameEngine: Power-up consumed
-            GameEngine-->>GameClient: Update player stats
+            Redis->>Redis: Remove power-up from world
+            Redis->>Redis: Publish power-up consumed event
+            Redis->>GameClient: Update player stats via pub/sub
+            GameServer->>PostgreSQL: Log power-up collection event
             GameClient-->>Gamer: Show visual indicator of enhancement
             
             alt Maximum power reached
-                PowerUpSystem-->>GameClient: Max power notification
+                Redis->>GameClient: Max power notification via pub/sub
                 GameClient-->>Gamer: Show "Max power" message
             end
         else Other player collects first
-            OtherPlayer->>GameEngine: Collect power-up
-            GameEngine->>PowerUpSystem: Power-up taken
-            PowerUpSystem-->>GameEngine: Power-up no longer available
-            GameEngine-->>GameClient: Power-up disappeared
+            OtherPlayer->>GameServer: Collect power-up
+            GameServer->>Redis: Power-up taken by other player
+            Redis->>Redis: Remove power-up, update other player
+            Redis->>GameClient: Power-up disappeared via pub/sub
             GameClient-->>Gamer: Power-up no longer visible
         end
     else No power-up found
-        PowerUpSystem-->>GameEngine: No power-up at location
-        GameEngine-->>GameClient: Wall destroyed, no bonus
+        Redis-->>GameServer: No power-up spawned at location
+        GameServer-->>GameClient: Wall destroyed, no bonus
         Note over Gamer: Continue with current abilities
     end
 
     alt Power-up lost on death
         Note over Gamer: Player dies and respawns
-        GameEngine->>PowerUpSystem: Player eliminated
-        PowerUpSystem->>PowerUpSystem: Reduce player abilities
-        PowerUpSystem-->>GameEngine: Reset to reduced stats
-        GameEngine-->>GameClient: Update player with fewer abilities
+        GameServer->>Redis: Player eliminated
+        Redis->>Redis: Reset player abilities to base stats
+        Redis->>Redis: Publish ability reset event
+        Redis->>GameClient: Update player with fewer abilities via pub/sub
+        GameServer->>PostgreSQL: Log power-up loss event
         GameClient-->>Gamer: Respawn with reduced power
     end
 ```

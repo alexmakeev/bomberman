@@ -5,19 +5,22 @@ sequenceDiagram
     participant Gamer
     participant GameClient
     participant MinimapRenderer
-    participant GameEngine
+    participant GameServer
+    participant Redis
     participant Teammates
 
     Note over Gamer,Teammates: Minimap Display
     GameClient->>MinimapRenderer: Initialize minimap
-    MinimapRenderer->>GameEngine: Request world state
-    GameEngine-->>MinimapRenderer: Maze layout, entities
+    MinimapRenderer->>GameServer: Request world state
+    GameServer->>Redis: Get current game state
+    Redis-->>GameServer: Maze layout, entities
+    GameServer-->>MinimapRenderer: World state data
     MinimapRenderer->>MinimapRenderer: Render minimap
     MinimapRenderer-->>GameClient: Minimap ready
     GameClient-->>Gamer: Display minimap in corner
 
     loop Real-time Updates
-        GameEngine->>MinimapRenderer: World state changes
+        Redis->>MinimapRenderer: World state changes via pub/sub
         MinimapRenderer->>MinimapRenderer: Update minimap
         
         Note over MinimapRenderer: Show visible entities
@@ -34,7 +37,7 @@ sequenceDiagram
         GameClient-->>Gamer: Refresh minimap display
         
         alt Network lag
-            GameEngine-->>MinimapRenderer: Delayed state update
+            Redis-->>MinimapRenderer: Delayed state update
             MinimapRenderer->>MinimapRenderer: Interpolate positions
             Note over MinimapRenderer: Smooth updates despite lag
         end
@@ -50,8 +53,9 @@ sequenceDiagram
         alt No voice chat available
             Note over Gamer,Teammates: Use movement patterns for communication
             Gamer->>GameClient: Move in specific pattern
-            GameClient->>GameEngine: Send movement
-            GameEngine->>Teammates: Broadcast player movement
+            GameClient->>GameServer: Send movement
+            GameServer->>Redis: Update player position
+            Redis->>Teammates: Broadcast player movement via pub/sub
             Teammates->>Teammates: Interpret movement signals
         end
     end

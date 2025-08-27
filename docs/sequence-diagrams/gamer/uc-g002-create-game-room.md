@@ -5,25 +5,29 @@ sequenceDiagram
     participant Gamer
     participant GameClient
     participant GameServer
-    participant RoomManager
-    participant GameRoom
+    participant Redis
+    participant PostgreSQL
 
     Gamer->>GameClient: Select "Create Room"
     GameClient-->>Gamer: Show room creation form
     Gamer->>GameClient: Enter name & room settings
     
     GameClient->>GameServer: Create room request
-    GameServer->>RoomManager: Generate unique room ID
-    RoomManager->>RoomManager: Create room URL
-    RoomManager->>GameRoom: Initialize new room
+    GameServer->>PostgreSQL: Validate player session
+    PostgreSQL-->>GameServer: Session valid
+    GameServer->>GameServer: Generate unique room ID & URL
+    GameServer->>Redis: Create room state in cache
+    Redis->>Redis: Set TTL for room lifecycle
     
     alt Room creation successful
-        GameRoom->>GameRoom: Set player as host
-        GameRoom-->>RoomManager: Room created
-        RoomManager-->>GameServer: Room details
+        GameServer->>Redis: Set player as room host
+        Redis->>Redis: Add host to room state
+        GameServer->>PostgreSQL: Log room creation event
         GameServer-->>GameClient: Room created with URL
         GameClient-->>Gamer: Show shareable room URL
         
+        Note over Redis: Real-time room state management
+        Redis->>Redis: Initialize lobby state
         GameClient-->>Gamer: Display room lobby as host
         
         opt Share room URL
@@ -37,16 +41,15 @@ sequenceDiagram
             end
         end
     else Room creation failed
-        RoomManager-->>GameServer: Creation error
-        GameServer-->>GameClient: Error response
+        GameServer-->>GameClient: Creation error
         GameClient-->>Gamer: Show error, suggest retry
     end
 
     alt Connection lost during creation
         GameServer-->>GameClient: Connection timeout
         GameClient->>GameServer: Attempt host reconnection
-        GameServer->>RoomManager: Verify host status
-        RoomManager-->>GameServer: Host reconnection success
+        GameServer->>Redis: Verify host status in room
+        Redis-->>GameServer: Host reconnection success
         GameServer-->>GameClient: Reconnected as host
     end
 ```

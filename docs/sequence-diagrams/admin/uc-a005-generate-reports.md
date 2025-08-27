@@ -5,9 +5,9 @@ sequenceDiagram
     participant Admin
     participant AdminDashboard
     participant ReportService
-    participant Database
+    participant PostgreSQL
+    participant Redis
     participant FileSystem
-    participant AuditLog
 
     Admin->>AdminDashboard: Access reports section
     AdminDashboard-->>Admin: Show report options
@@ -15,19 +15,21 @@ sequenceDiagram
     Note over Admin: player activity, room statistics, performance metrics
     
     AdminDashboard->>ReportService: Generate report request
-    ReportService->>Database: Query player data
-    ReportService->>Database: Query room statistics
-    ReportService->>Database: Query performance metrics
+    ReportService->>PostgreSQL: Query historical player data
+    ReportService->>PostgreSQL: Query aggregated room statistics
+    ReportService->>PostgreSQL: Query performance metrics
+    ReportService->>Redis: Get current active session data
     
-    Database-->>ReportService: Player activity data
-    Database-->>ReportService: Room statistics
-    Database-->>ReportService: Performance data
+    PostgreSQL-->>ReportService: Historical player activity
+    PostgreSQL-->>ReportService: Room usage statistics
+    PostgreSQL-->>ReportService: Performance metrics
+    Redis-->>ReportService: Real-time session data
     
-    ReportService->>ReportService: Process and aggregate data
+    ReportService->>ReportService: Merge PostgreSQL historical and Redis real-time data
     
     alt Sufficient data
         ReportService->>ReportService: Generate report
-        ReportService->>AuditLog: Log report generation
+        ReportService->>PostgreSQL: Log report generation in audit log
         ReportService-->>AdminDashboard: Report ready
         AdminDashboard-->>Admin: Show report preview
         
