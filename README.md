@@ -49,61 +49,92 @@ Transform the traditional competitive Bomberman experience into a **cooperative 
 - **TypeScript** for type-safe development and better code maintainability
 - **HTML5 Canvas** for high-performance 2D game rendering
 - **PWA technologies** (Service Workers, Web App Manifest) for native app experience
-- **WebSocket client** for real-time communication with game server
+- **WebSocket client** integrated with unified EventBus system
 
 #### **Backend (Server)**
 - **Node.js** with **Koa.js** framework for lightweight, fast server
 - **TypeScript** for consistent full-stack type safety
-- **WebSocket server** for real-time multiplayer communication
-- **Vuex/Pinia** for centralized state management (shared between client/server)
-- **Database integration** for persistent player data and statistics
+- **Unified EventBus** architecture for maximum code reuse across all event types
+- **WebSocket server** with event-driven message routing
+- **Specialized event handlers** for games, notifications, user actions, and admin events
 
 #### **Infrastructure**
 - **Docker containerization** for consistent deployment environments
-- **Redis** for session management and real-time data caching
-- **PostgreSQL/MongoDB** for persistent game data and user statistics
+- **Redis** for real-time event distribution and pub/sub messaging
+- **PostgreSQL** for persistent game data, user statistics, and audit logs
 - **Nginx** for load balancing and static asset serving
+- **Dual-storage architecture** optimized for both real-time and persistent data
 
 ### System Architecture
 
 ```mermaid
 graph TB
-    Client[Vue.js Client<br/>Canvas Renderer<br/>PWA Support]
-    Server[Node.js/Koa Server<br/>WebSocket Handler<br/>Game Engine]
-    Database[(Database<br/>Player Data<br/>Game Stats)]
-    Cache[(Redis Cache<br/>Sessions<br/>Real-time State)]
+    Client[Vue.js PWA Client<br/>Canvas Renderer<br/>EventBus Integration]
     
-    Client <-->|WebSocket<br/>Real-time Sync| Server
-    Server -->|Persistent Data| Database
-    Server <-->|Fast Access| Cache
-    Client -->|PWA Install<br/>Service Worker| Browser[Browser<br/>Mobile/Desktop]
+    subgraph "Unified Event System"
+        Server[UnifiedGameServer<br/>Event Orchestration]
+        EventBus[EventBus Core<br/>Pub/Sub Infrastructure]
+        GameHandler[GameEventHandler<br/>Real-time Game Events]
+        NotifyHandler[NotificationHandler<br/>Multi-channel Delivery]
+        ActionHandler[UserActionHandler<br/>Analytics & Tracking]
+    end
+    
+    subgraph "Data Layer"
+        Redis[(Redis<br/>Real-time State<br/>Pub/Sub Distribution)]
+        PostgreSQL[(PostgreSQL<br/>Persistent Storage<br/>Analytics)]
+    end
+    
+    Client <-->|WebSocket<br/>Event Messages| Server
+    Server --> EventBus
+    EventBus --> GameHandler
+    EventBus --> NotifyHandler  
+    EventBus --> ActionHandler
+    
+    GameHandler <--> Redis
+    NotifyHandler <--> Redis
+    ActionHandler <--> PostgreSQL
+    
+    Server --> PostgreSQL
+    Client -->|PWA Install| Browser[Browser<br/>Mobile/Desktop]
 ```
 
 ### Core Modules
 
-#### **Game Engine**
-- **Physics simulation**: Collision detection, movement, explosion calculations
-- **AI systems**: Monster behavior, pathfinding, boss mechanics
-- **State management**: Authoritative server state with client prediction
-- **Game logic**: Bomb timers, power-ups, victory conditions
+#### **Unified EventBus System**
+- **Universal Event Infrastructure**: Single pub/sub system for all event types
+- **Specialized Handlers**: Game events, user notifications, user actions, admin events
+- **Event Routing**: Context-aware delivery with filtering and priorities
+- **Performance Optimization**: Batching, compression, intelligent caching
 
-#### **Multiplayer System**
-- **Room management**: Create, join, and manage game sessions
-- **Player synchronization**: Real-time position and action updates
-- **Latency compensation**: Client-side prediction and server reconciliation
-- **Connection handling**: Automatic reconnection and error recovery
+#### **GameEventHandler**
+- **Real-time Game Events**: Player actions, bomb explosions, power-ups, boss battles
+- **State Synchronization**: Authoritative server state with delta updates
+- **Team Coordination**: Cooperative gameplay events and friendly fire warnings
+- **AI Systems**: Monster behavior, pathfinding, boss mechanics
+
+#### **UserNotificationHandler**
+- **Multi-channel Delivery**: In-game, WebSocket, email, push notifications
+- **Notification Templates**: Reusable notification formats with variables
+- **User Preferences**: Channel preferences, quiet hours, frequency limits
+- **Engagement Analytics**: Read receipts, click-through rates, user behavior
+
+#### **UserActionHandler**
+- **Comprehensive Tracking**: All user interactions and behavior analysis
+- **Analytics Pipeline**: Pattern detection, conversion funnels, A/B testing
+- **Personalization**: Action recommendations and user segmentation
+- **Anomaly Detection**: Unusual behavior patterns and security monitoring
 
 #### **Progressive Web App**
 - **Service Worker**: Asset caching and offline functionality
 - **Installation prompts**: Native app installation experience
-- **Background sync**: Offline data synchronization when connection restored
-- **Push notifications**: Game invitations and updates
+- **EventBus Integration**: Offline event queuing and synchronization
+- **Push notifications**: Real-time game invitations and updates
 
 #### **Admin Dashboard**
-- **Real-time monitoring**: Active games, player statistics, server performance
-- **Content moderation**: Chat filtering, player management, room oversight
-- **Analytics**: Usage patterns, performance metrics, player engagement
-- **Configuration**: Game parameters, feature flags, system settings
+- **Real-time Monitoring**: Unified metrics across all event types
+- **Event-driven Moderation**: Automated responses to user actions
+- **Advanced Analytics**: Cross-system insights and performance metrics
+- **Dynamic Configuration**: Real-time system parameter adjustments
 
 ## 📖 Project Documentation
 
@@ -114,9 +145,11 @@ Comprehensive documentation is available in the `docs/` directory:
 - [`docs/use-cases/admin.md`](docs/use-cases/admin.md) - Administrative use cases and workflows
 
 ### **System Design**
-- [`docs/sequence-diagrams/`](docs/sequence-diagrams/) - Detailed interaction flows for all use cases
+- [`docs/sequence-diagrams/`](docs/sequence-diagrams/) - Detailed interaction flows with unified EventBus integration
+- [`docs/architecture/unified-event-system.md`](docs/architecture/unified-event-system.md) - Complete EventBus architecture documentation
 - [`docs/schema/`](docs/schema/) - Complete data models and entity definitions
-- [`docs/modules.md`](docs/modules.md) - Module architecture and interface specifications
+- [`docs/modules.md`](docs/modules.md) - Module architecture with dual-storage system
+- [`docs/tech-stack.md`](docs/tech-stack.md) - Complete technology stack with Redis/PostgreSQL integration
 
 ### **Data Models**
 - [`docs/schema/game.md`](docs/schema/game.md) - Game state, bombs, power-ups, maze entities

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-A cooperative multiplayer Bomberman game built with WebSockets that allows friends to play together in real-time. Players work as a team to complete objectives while avoiding accidental friendly fire. The game features room-based multiplayer, cross-platform support (desktop/mobile browsers), PWA capabilities, and classic 8-bit pixel art graphics.
+A cooperative multiplayer Bomberman game built with a **unified event system architecture** that allows friends to play together in real-time. Players work as a team to complete objectives while avoiding accidental friendly fire. The game features an advanced EventBus infrastructure that handles game events, user notifications, user actions, and admin events through a single reusable pub/sub system. Supports room-based multiplayer, cross-platform play (desktop/mobile browsers), PWA capabilities, and classic 8-bit pixel art graphics.
 
 ## Game Features
 
@@ -45,23 +45,29 @@ A cooperative multiplayer Bomberman game built with WebSockets that allows frien
 
 ## Architecture
 
+### Unified Event System
+- **EventBus Core**: Single pub/sub infrastructure for all event types
+- **GameEventHandler**: Real-time game events with performance optimization
+- **UserNotificationHandler**: Multi-channel delivery with templates and analytics
+- **UserActionHandler**: Comprehensive tracking with personalization and anomaly detection
+- **UnifiedGameServer**: Orchestrates all event handlers with WebSocket integration
+
 ### Frontend
 - HTML5 Canvas for game rendering
-- WebSocket client for real-time communication
-- PWA manifest and service worker
+- WebSocket client integrated with EventBus system
+- PWA manifest and service worker with offline event queuing
 - Responsive design for mobile/desktop
 
 ### Backend
-- WebSocket server for real-time multiplayer
-- Room management system
-- Game state synchronization
-- Player session handling
+- UnifiedGameServer with event-driven architecture
+- Specialized event handlers extending base EventBus
+- Dual-storage system: Redis for real-time, PostgreSQL for persistence
+- Context-aware auto-subscription system
 
-### Game Engine
-- Client-side rendering with server authority
-- Delta compression for network efficiency
-- Collision detection and physics
-- AI monster behavior
+### Data Storage
+- **Redis**: Real-time state, pub/sub messaging, session management
+- **PostgreSQL**: Persistent data, analytics, audit logs, user management
+- **Dual-storage pipeline**: Automatic conversion from real-time to persistent data
 
 ## Development Commands
 
@@ -69,12 +75,20 @@ A cooperative multiplayer Bomberman game built with WebSockets that allows frien
 
 ## Key Directories
 
-*Directory structure to be established:*
+Current directory structure:
+- `/src/types/` - TypeScript type definitions for the unified event system
+- `/src/interfaces/core/` - Core interfaces (EventBus, UnifiedGameServer)
+- `/src/interfaces/specialized/` - Specialized event handlers
+- `/docs/architecture/` - System architecture documentation
+- `/docs/sequence-diagrams/` - Updated interaction flows with EventBus integration
+- `/docs/schema/` - Data model specifications
+- `/docs/` - Comprehensive game design and API documentation
+
+*To be added during implementation:*
 - `/client/` - Frontend game client
 - `/server/` - WebSocket server and game logic
 - `/shared/` - Common game constants and utilities
 - `/assets/` - 8-bit sprites and audio files
-- `/docs/` - Game design and API documentation
 
 ## Technical Requirements
 
