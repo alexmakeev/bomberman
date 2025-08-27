@@ -25,7 +25,7 @@ sequenceDiagram
             TouchHandler->>GameClient: Movement input
             GameClient->>GameEngine: Player movement
             
-            opt Haptic feedback available
+            alt Haptic feedback available
                 TouchHandler->>MobileDevice: Trigger haptic feedback
                 MobileDevice-->>Gamer: Vibration feedback
             else No haptic support
