@@ -5,8 +5,8 @@
 
 import { EventBusImpl } from '../../src/modules/EventBusImpl';
 import type { EventBusConfig, SubscriptionResult } from '../../src/interfaces/core/EventBus';
-import type { EventSubscription, EventHandler, UniversalEvent } from '../../src/types/events';
-import { EventCategory, EventPriority, DeliveryMode, TargetType, FilterOperator } from '../../src/types/events';
+import type { EventSubscription, EventHandler, UniversalEvent } from '../../src/types/events.d.ts';
+import { EventCategory, EventPriority, DeliveryMode, TargetType, FilterOperator } from '../../src/types/events.d.ts';
 
 describe('EventBusImpl - Event Subscription', () => {
   let eventBus: EventBusImpl;

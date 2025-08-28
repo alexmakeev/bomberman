@@ -4,7 +4,7 @@
  */
 
 import { EntityId } from '../../types/common';
-import { UniversalEvent, EventCategory, GameEventData } from '../../types/events';
+import { UniversalEvent, EventCategory, GameEventData } from '../../types/events.d.ts';
 import { EventBus, EventHandler, SubscriptionResult, EventPublishResult } from '../core/EventBus';
 import { Game, GameState, PlayerGameState } from '../../types/game';
 import { Position, Direction } from '../../types/common';

@@ -5,8 +5,8 @@
 
 import { EventBusImpl } from '../../src/modules/EventBusImpl';
 import type { EventBusConfig, EventPublishResult } from '../../src/interfaces/core/EventBus';
-import { EventCategory, EventPriority, DeliveryMode, TargetType } from '../../src/types/events';
-import type { UniversalEvent } from '../../src/types/events';
+import { EventCategory, EventPriority, DeliveryMode, TargetType } from '../../src/types/events.d.ts';
+import type { UniversalEvent } from '../../src/types/events.d.ts';
 
 describe('EventBusImpl - Event Publishing', () => {
   let eventBus: EventBusImpl;

@@ -12,14 +12,18 @@ import type {
   EventPublishResult,
   SubscriptionResult,
 } from '../../interfaces/core/EventBus';
+import { 
+  EventPriority,
+  DeliveryMode,
+  FilterOperator,
+} from '../../types/events.d.ts';
 import type { 
   EventCategory,
   EventSubscription,
   EventTarget,
   UniversalEvent,
-  EventPriority,
-  DeliveryMode,
-} from '../../types/events';
+  EventFilter,
+} from '../../types/events.d.ts';
 import type { EntityId } from '../../types/common';
 
 /**
@@ -119,18 +123,28 @@ class EventBusImpl implements EventBus {
   }
 
   async subscribe<TData>(
-    subscription: EventSubscription,
+    subscription: Omit<EventSubscription, 'subscriptionId' | 'createdAt'>,
     handler: EventHandler<TData>,
   ): Promise<SubscriptionResult> {
     if (!this._isRunning) {
       throw new Error('EventBus is not running');
     }
 
-    this._subscriptions.set(subscription.subscriptionId, subscription);
+    // Generate unique subscription ID and create complete subscription
+    const subscriptionId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const createdAt = new Date();
+    
+    const completeSubscription: EventSubscription = {
+      ...subscription,
+      subscriptionId,
+      createdAt,
+    };
+
+    this._subscriptions.set(subscriptionId, completeSubscription);
     
     // Register handler for each category/type combination
-    for (const category of subscription.categories) {
-      const eventTypes = subscription.eventTypes ?? ['*'];
+    for (const category of completeSubscription.categories) {
+      const eventTypes = completeSubscription.eventTypes ?? ['*'];
       for (const eventType of eventTypes) {
         const key = `${category}:${eventType}`;
         const existingHandlers = this._handlers.get(key) ?? [];
@@ -138,15 +152,16 @@ class EventBusImpl implements EventBus {
       }
     }
 
-    console.log(`📩 Subscription created: ${subscription.subscriptionId}`);
+    console.log(`📩 Subscription created: ${subscriptionId}`);
 
     return {
       success: true,
-      subscriptionId: subscription.subscriptionId,
-      channels: subscription.categories.map(cat => `${cat}:*`),
+      subscriptionId,
+      subscription: completeSubscription,
+      channels: completeSubscription.categories.map(cat => `${cat}:*`),
       metadata: {
-        subscribedAt: new Date(),
-        channelCount: subscription.categories.length,
+        subscribedAt: createdAt,
+        channelCount: completeSubscription.categories.length,
       },
     };
   }
@@ -160,6 +175,26 @@ class EventBusImpl implements EventBus {
     // TODO: Remove specific handlers for this subscription
     this._subscriptions.delete(subscriptionId);
     console.log(`📩 Unsubscribed: ${subscriptionId}`);
+  }
+
+  async unsubscribeAll(subscriberId: EntityId): Promise<void> {
+    const subscriptionsToRemove = Array.from(this._subscriptions.values())
+      .filter(sub => sub.subscriberId === subscriberId);
+    
+    for (const subscription of subscriptionsToRemove) {
+      await this.unsubscribe(subscription.subscriptionId);
+    }
+    
+    console.log(`📩 Unsubscribed all for: ${subscriberId}`);
+  }
+
+  getActiveSubscriptions(): EventSubscription[] {
+    return Array.from(this._subscriptions.values());
+  }
+
+  getSubscriptionsForSubscriber(subscriberId: EntityId): EventSubscription[] {
+    return Array.from(this._subscriptions.values())
+      .filter(sub => sub.subscriberId === subscriberId);
   }
 
   async addMiddleware(middleware: EventMiddleware): Promise<void> {
@@ -182,6 +217,50 @@ class EventBusImpl implements EventBus {
       redisConnections: 0, // TODO: Implement Redis connection tracking
       webSocketConnections: 0, // TODO: Implement WebSocket connection tracking
     };
+  }
+
+  async on<TData = any>(
+    subscriptionId: EntityId,
+    categories: EventCategory | EventCategory[],
+    handler: EventHandler<TData>,
+    filters?: EventFilter[]
+  ): Promise<SubscriptionResult> {
+    const categoriesArray = Array.isArray(categories) ? categories : [categories];
+    
+    const subscription: EventSubscription = {
+      subscriptionId,
+      subscriberId: subscriptionId,
+      categories: categoriesArray,
+      eventTypes: ['*'], // Listen to all event types within categories
+      filters: filters || [],
+      metadata: {
+        createdAt: new Date(),
+        subscriptionType: 'category_based',
+      },
+    };
+
+    return this.subscribe(subscription, handler);
+  }
+
+  async onEvent<TData = any>(
+    subscriptionId: EntityId,
+    eventType: string,
+    handler: EventHandler<TData>
+  ): Promise<SubscriptionResult> {
+    // For specific event types, we'll subscribe to all categories but filter by type
+    const subscription: EventSubscription = {
+      subscriptionId,
+      subscriberId: subscriptionId,
+      categories: ['*' as EventCategory], // Listen to all categories
+      eventTypes: [eventType], // But only this specific event type
+      filters: [],
+      metadata: {
+        createdAt: new Date(),
+        subscriptionType: 'event_type_based',
+      },
+    };
+
+    return this.subscribe(subscription, handler);
   }
 
   getEventCategories(): EventCategory[] {

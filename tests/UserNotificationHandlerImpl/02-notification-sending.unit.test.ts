@@ -19,7 +19,7 @@ import type {
   NotificationPriority
 } from '../../src/interfaces/specialized/UserNotificationHandler';
 import type { EventBus, EventBusConfig } from '../../src/interfaces/core/EventBus';
-import { NotificationType } from '../../src/types/events';
+import { NotificationType } from '../../src/types/events.d.ts';
 
 describe('UserNotificationHandlerImpl - Notification Sending', () => {
   let eventBus: EventBus;

@@ -9,7 +9,7 @@ import {
   EventCategory, 
   UserActionData, 
   ActionContext 
-} from '../../types/events';
+} from '../../types/events.d.ts';
 import { EventBus, EventHandler, SubscriptionResult, EventPublishResult } from '../core/EventBus';
 
 /**

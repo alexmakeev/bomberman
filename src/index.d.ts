@@ -7,7 +7,7 @@
 
 // Export all type definitions from the unified event system
 export * from './types/common';
-export * from './types/events';
+export * from './types/events.d.ts';
 export * from './types/game';
 export * from './types/player';
 export * from './types/room';

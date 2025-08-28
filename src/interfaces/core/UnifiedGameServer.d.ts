@@ -22,7 +22,7 @@ import {
   EventHandler,
   EventSubscription,
   EventTarget
-} from '../../types/events';
+} from '../../types/events.d.ts';
 import { EventBus } from './EventBus';
 import { GameEventHandler } from '../specialized/GameEventHandler';
 import { UserNotificationHandler } from '../specialized/UserNotificationHandler';

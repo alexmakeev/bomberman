@@ -5,7 +5,7 @@
 
 import { EventBusImpl } from '../../src/modules/EventBusImpl';
 import type { EventBusConfig } from '../../src/interfaces/core/EventBus';
-import { EventCategory, EventPriority, DeliveryMode } from '../../src/types/events';
+import { EventCategory, EventPriority, DeliveryMode } from '../../src/types/events.d.ts';
 
 describe('EventBusImpl - Initialization', () => {
   let eventBus: EventBusImpl;

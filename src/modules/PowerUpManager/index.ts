@@ -114,7 +114,7 @@ class PowerUpManagerImpl {
         playerPowerUps.blastRadius = Math.min(playerPowerUps.blastRadius + 1, 10);
         break;
       case POWER_UP_TYPES.SPEED_BOOST:
-        playerPowerUps.speedMultiplier = Math.min(playerPowerUps.speedMultiplier + 0.2, 2.0);
+        playerPowerUps.speedMultiplier = Math.min(Math.round((playerPowerUps.speedMultiplier + 0.2) * 10) / 10, 2.0);
         break;
       case POWER_UP_TYPES.BOMB_KICK:
         playerPowerUps.canKickBombs = true;

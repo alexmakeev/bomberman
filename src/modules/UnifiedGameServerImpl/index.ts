@@ -26,7 +26,7 @@ import type { GameEventHandler } from '../interfaces/specialized/GameEventHandle
 import type { UserNotificationHandler } from '../interfaces/specialized/UserNotificationHandler';
 import type { UserActionHandler } from '../interfaces/specialized/UserActionHandler';
 import type { EntityId } from '../types/common';
-import type { UniversalEvent } from '../types/events';
+import type { UniversalEvent } from '../../types/events.d.ts';
 import type { Room, RoomSettings } from '../types/room';
 import type { Game } from '../types/game';
 import { createEventBusImpl } from '../EventBusImpl';

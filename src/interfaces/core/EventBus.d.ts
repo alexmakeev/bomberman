@@ -23,7 +23,7 @@ import {
   EventStream,
   EventFilter,
   EventTarget
-} from '../../types/events';
+} from '../../types/events.d.ts';
 
 /**
  * Event bus operational status

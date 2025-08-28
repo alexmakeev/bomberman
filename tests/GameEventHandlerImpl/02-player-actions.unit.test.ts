@@ -13,7 +13,7 @@ import { GameEventHandlerImpl } from '../../src/modules/GameEventHandlerImpl';
 import { EventBusImpl } from '../../src/modules/EventBusImpl';
 import type { GameEventHandler, PlayerMoveEventData, BombPlaceEventData, PowerUpCollectEventData } from '../../src/interfaces/specialized/GameEventHandler';
 import type { EventBus, EventBusConfig, EventPublishResult } from '../../src/interfaces/core/EventBus';
-import { Direction } from '../../src/types/common';
+import { Direction } from '../../src/types/common.d.ts';
 
 describe('GameEventHandlerImpl - Player Actions', () => {
   let eventBus: EventBus;
