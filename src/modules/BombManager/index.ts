@@ -9,7 +9,7 @@ import type { EntityId } from '../../types/common';
 // Constants for bomb mechanics
 const DEFAULT_BOMB_TIMER = 3000; // 3 seconds
 const DEFAULT_BLAST_RADIUS = 1;
-const MAX_BOMBS_PER_PLAYER = 1;
+const MAX_BOMBS_PER_PLAYER = 1; // Default bomb limit per player per game
 const EXPLOSION_DURATION = 500; // 0.5 seconds
 
 /**
@@ -69,7 +69,7 @@ class BombManagerImpl {
   readonly eventBus: EventBus;
   private readonly _activeBombs = new Map<EntityId, Bomb>();
   private readonly _activeExplosions = new Map<EntityId, Explosion>();
-  private readonly _playerBombCounts = new Map<EntityId, number>();
+  private readonly _playerBombCounts = new Map<string, number>(); // Key: "gameId:playerId"
   private readonly _explosionTimers = new Map<EntityId, NodeJS.Timeout>();
 
   constructor(eventBus: EventBus) {
@@ -85,8 +85,9 @@ class BombManagerImpl {
   async placeBomb(gameId: EntityId, playerId: EntityId, position: { x: number; y: number }): Promise<BombPlacementResult> {
     console.log(`💣 Bomb placement request: ${playerId} at (${position.x}, ${position.y})`);
     
-    // Check player bomb limit
-    const currentBombs = this._playerBombCounts.get(playerId) || 0;
+    // Check player bomb limit per game
+    const bombCountKey = `${gameId}:${playerId}`;
+    const currentBombs = this._playerBombCounts.get(bombCountKey) || 0;
     if (currentBombs >= MAX_BOMBS_PER_PLAYER) {
       return { success: false, reason: 'max_bombs_reached', error: 'Player has reached maximum bomb limit' };
     }
@@ -110,7 +111,7 @@ class BombManagerImpl {
     };
 
     this._activeBombs.set(bombId, bomb);
-    this._playerBombCounts.set(playerId, currentBombs + 1);
+    this._playerBombCounts.set(bombCountKey, currentBombs + 1);
 
     // Schedule explosion
     const timer = setTimeout(() => {
@@ -160,8 +161,9 @@ class BombManagerImpl {
 
     // Clean up bomb
     this._activeBombs.delete(bombId);
-    const currentCount = this._playerBombCounts.get(bomb.playerId) || 1;
-    this._playerBombCounts.set(bomb.playerId, currentCount - 1);
+    const bombCountKey = `${bomb.gameId}:${bomb.playerId}`;
+    const currentCount = this._playerBombCounts.get(bombCountKey) || 1;
+    this._playerBombCounts.set(bombCountKey, currentCount - 1);
 
     // Clear explosion timer
     const timer = this._explosionTimers.get(bombId);
@@ -190,8 +192,9 @@ class BombManagerImpl {
     this._activeBombs.delete(bombId);
     
     // Update player bomb count
-    const currentCount = this._playerBombCounts.get(bomb.playerId) || 1;
-    this._playerBombCounts.set(bomb.playerId, currentCount - 1);
+    const bombCountKey = `${bomb.gameId}:${bomb.playerId}`;
+    const currentCount = this._playerBombCounts.get(bombCountKey) || 1;
+    this._playerBombCounts.set(bombCountKey, currentCount - 1);
 
     // Cancel explosion timer
     const timer = this._explosionTimers.get(bombId);
@@ -212,8 +215,19 @@ class BombManagerImpl {
     return Array.from(this._activeExplosions.values()).filter(explosion => explosion.gameId === gameId);
   }
 
-  async getPlayerBombCount(playerId: EntityId): Promise<number> {
-    return this._playerBombCounts.get(playerId) || 0;
+  async getPlayerBombCount(playerId: EntityId, gameId?: EntityId): Promise<number> {
+    if (gameId) {
+      const bombCountKey = `${gameId}:${playerId}`;
+      return this._playerBombCounts.get(bombCountKey) || 0;
+    }
+    // If no gameId provided, return total across all games (for backward compatibility)
+    let total = 0;
+    for (const [key, count] of this._playerBombCounts.entries()) {
+      if (key.endsWith(`:${playerId}`)) {
+        total += count;
+      }
+    }
+    return total;
   }
 
   async cleanup(gameId: EntityId): Promise<void> {
@@ -230,8 +244,9 @@ class BombManagerImpl {
         this._activeBombs.delete(bombId);
         
         // Update player bomb count
-        const currentCount = this._playerBombCounts.get(bomb.playerId) || 1;
-        this._playerBombCounts.set(bomb.playerId, Math.max(0, currentCount - 1));
+        const bombCountKey = `${bomb.gameId}:${bomb.playerId}`;
+        const currentCount = this._playerBombCounts.get(bombCountKey) || 1;
+        this._playerBombCounts.set(bombCountKey, Math.max(0, currentCount - 1));
       }
     }
 

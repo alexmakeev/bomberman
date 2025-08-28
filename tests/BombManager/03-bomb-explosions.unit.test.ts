@@ -217,10 +217,11 @@ describe('BombManager - Bomb Explosions', () => {
 
     it('should generate unique explosion IDs', async () => {
       const gameId = 'test-game-unique';
-      const playerId = 'player-1';
+      const player1 = 'player-1';
+      const player2 = 'player-2';
 
-      const placement1 = await bombManager.placeBomb(gameId, playerId, { x: 1, y: 1 });
-      const placement2 = await bombManager.placeBomb(gameId, playerId, { x: 2, y: 2 });
+      const placement1 = await bombManager.placeBomb(gameId, player1, { x: 1, y: 1 });
+      const placement2 = await bombManager.placeBomb(gameId, player2, { x: 2, y: 2 });
 
       const explosion1 = await bombManager.explodeBomb(placement1.bombId);
       const explosion2 = await bombManager.explodeBomb(placement2.bombId);

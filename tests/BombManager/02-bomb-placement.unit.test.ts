@@ -182,16 +182,16 @@ describe('BombManager - Bomb Placement', () => {
       const result1 = await bombManager.placeBomb(game1, playerId, { x: 1, y: 1 });
       expect(result1.success).toBe(true);
 
-      // Place bomb in game 2 (should work even though player has bomb in game 1)
+      // Place bomb in game 2 (should work because bomb limits are per-game)
       const result2 = await bombManager.placeBomb(game2, playerId, { x: 1, y: 1 });
-      expect(result2.success).toBe(false); // Currently implementation tracks globally, not per-game
+      expect(result2.success).toBe(true); // Implementation now tracks per-game
 
       // Verify bomb isolation per game
       const bombs1 = await bombManager.getBombsInGame(game1);
       const bombs2 = await bombManager.getBombsInGame(game2);
       
       expect(bombs1).toHaveLength(1);
-      expect(bombs2).toHaveLength(0);
+      expect(bombs2).toHaveLength(1); // Now should have 1 bomb in game 2
     });
 
     it('should generate unique bomb IDs', async () => {
