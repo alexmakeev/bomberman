@@ -396,7 +396,16 @@ describe('System Integration: WebSocket-Redis Pub/Sub Bridge', () => {
         host: 'non-existent-redis',
         port: 9999,
         connectTimeout: 100,
-        lazyConnect: true
+        lazyConnect: true,
+        retryDelayOnFailover: 100,
+        maxRetriesPerRequest: 1,
+        // Suppress expected connection error warnings in test output
+        silentError: true
+      });
+      
+      // Suppress expected error events during testing
+      brokenRedisClient.on('error', () => {
+        // Expected error - Redis host intentionally non-existent for testing
       });
 
       // Simulate Redis failure scenario

@@ -501,7 +501,16 @@ describe('UC-A001: Monitor Game Rooms - Admin Dashboard Integration', () => {
         host: 'non-existent-redis-host',
         port: 9999,
         connectTimeout: 100,
-        lazyConnect: true
+        lazyConnect: true,
+        retryDelayOnFailover: 100,
+        maxRetriesPerRequest: 1,
+        // Suppress expected connection error warnings in test output
+        silentError: true
+      });
+      
+      // Suppress expected error events during testing
+      brokenRedisClient.on('error', () => {
+        // Expected error - Redis host intentionally non-existent for testing
       });
 
       // Step: Redis connection timeout
