@@ -71,6 +71,35 @@ export class UnifiedGameServerImpl implements UnifiedGameServer {
       return; // Gracefully handle multiple start calls
     }
 
+    // Initialize EventBus with default config if not already initialized
+    if (!this.eventBus.getStatus().running) {
+      const defaultEventBusConfig = {
+        defaultTTL: 300000,
+        maxEventSize: KILOBYTES_64 * BYTES_PER_KB,
+        enablePersistence: this._config?.eventBus?.enablePersistence ?? false,
+        enableTracing: this._config?.eventBus?.enableTracing ?? true,
+        defaultRetry: {
+          maxAttempts: 3,
+          baseDelayMs: 1000,
+          backoffMultiplier: 2,
+          maxDelayMs: 10000,
+        },
+        monitoring: {
+          enableMetrics: true,
+          metricsIntervalMs: 30000,
+          enableSampling: false,
+          samplingRate: 0,
+          alertThresholds: {
+            maxLatencyMs: 1000,
+            maxErrorRate: 10,
+            maxQueueDepth: 1000,
+            maxMemoryBytes: MEGABYTES_512 * BYTES_PER_KB * BYTES_PER_KB,
+          },
+        },
+      };
+      await this.eventBus.initialize(this._config?.eventBus || defaultEventBusConfig);
+    }
+
     this._isRunning = true;
     this._startTime = new Date();
     console.log('🚀 UnifiedGameServer started');
@@ -80,6 +109,11 @@ export class UnifiedGameServerImpl implements UnifiedGameServer {
   async stop(): Promise<void> {
     if (!this._isRunning) {
       return;
+    }
+
+    // Shutdown EventBus
+    if (this.eventBus.getStatus().running) {
+      await this.eventBus.shutdown();
     }
 
     this._isRunning = false;
@@ -187,9 +221,16 @@ export class UnifiedGameServerImpl implements UnifiedGameServer {
     return game;
   }
 
-  async publishEvent<TData>(event: UniversalEvent<TData>): Promise<void> {
-    await this.eventBus.publish(event);
+  async publishEvent<TData>(event: UniversalEvent<TData>): Promise<{ success: boolean; eventId: string }> {
+    const result = await this.eventBus.publish(event);
     console.log(`📤 Event published: ${event.category}/${event.type}`);
+    return result;
+  }
+
+  // WebSocket client publishing method (from interface)
+  async publishEventFromClient<TData>(connectionId: EntityId, event: UniversalEvent<TData>): Promise<{ success: boolean; eventId: string }> {
+    // TODO: Add permission checks based on connectionId
+    return this.publishEvent(event);
   }
 }
 

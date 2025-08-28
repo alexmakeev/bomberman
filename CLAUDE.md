@@ -125,3 +125,4 @@ Current directory structure:
 - IMPORTANT! Claude behaviour: After each step, initiated by the user is completed, do the commit, where at the very beginning put summary of user request for the step (like a title of the comment message) and push it to repo.
 - IMPORTANT! when I ask any kind of code/files change - reflect all changes at doc folder files, so, all docs will be up to date.
 - instead of commenting unused code - implement stubs, some times it will need to create a new file. In this project we keep types separately from modules code, so, put stabs into ./src/modules and needed module file(s)
+- When you write any code try to makec comments with references to docs/schemas/types - behave as you would behave if you know that one day you will not remember what you did and why

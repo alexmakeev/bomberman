@@ -4,6 +4,9 @@
  * Ref: docs/sequence-diagrams/gamer/uc-g003-play-cooperative-game.md
  */
 
+// Load environment variables for integration testing
+import 'dotenv/config';
+
 import { beforeAll, afterAll, beforeEach, afterEach, describe, it, expect, vi } from 'vitest';
 import { Client } from 'pg';
 import Redis from 'ioredis';

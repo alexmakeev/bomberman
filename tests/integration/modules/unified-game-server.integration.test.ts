@@ -4,6 +4,9 @@
  * Ref: docs/architecture/server-architecture.md, docs/architecture/event-system.md
  */
 
+// Load environment variables for integration testing
+import 'dotenv/config';
+
 import { beforeAll, afterAll, beforeEach, afterEach, describe, it, expect, vi } from 'vitest';
 import { Client } from 'pg';
 import Redis from 'ioredis';
@@ -138,6 +141,9 @@ describe('UnifiedGameServer Integration - Full Stack', () => {
 
   describe('Server Initialization and Event System Integration', () => {
     it('should initialize all event handlers with EventBus integration', async () => {
+      // Small delay to ensure uptime > 0
+      await new Promise(resolve => setTimeout(resolve, 1));
+      
       const status = gameServer.getStatus();
       
       expect(status.isRunning).toBe(true);
@@ -186,7 +192,7 @@ describe('UnifiedGameServer Integration - Full Stack', () => {
       expect(result.eventId).toBe(gameEvent.eventId);
 
       // Verify specialized handlers are accessible
-      expect(typeof gameServer.gameEvents.publishGameStart).toBe('function');
+      expect(typeof gameServer.gameEvents.publishGameStarted).toBe('function');
       expect(typeof gameServer.notifications.sendNotification).toBe('function');
       expect(typeof gameServer.userActions.trackAction).toBe('function');
     });

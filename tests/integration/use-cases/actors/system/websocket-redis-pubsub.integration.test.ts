@@ -4,6 +4,9 @@
  * Ref: docs/sequence-diagrams/technical/websocket-redis-pubsub-integration.md
  */
 
+// Load environment variables for integration testing
+import 'dotenv/config';
+
 import { beforeAll, afterAll, beforeEach, afterEach, describe, it, expect, vi } from 'vitest';
 import { Client } from 'pg';
 import Redis from 'ioredis';
