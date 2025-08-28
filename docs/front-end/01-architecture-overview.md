@@ -1,6 +1,8 @@
-# Frontend Architecture - Cooperative Multiplayer Bomberman
+# Frontend Architecture Overview
 
-Comprehensive architecture for Vue 3 + TypeScript + Pinia frontend with mobile-first responsive design and cross-platform input handling.
+> **Navigation**: [🏠 Frontend Docs](README.md) → **Architecture Overview** → [Component Structure →](02-component-structure.md) - Cooperative Multiplayer Bomberman
+
+Comprehensive architecture for the cooperative multiplayer Bomberman game frontend, built with Vue 3, TypeScript, and mobile-first design principles.
 
 ## Architecture Overview
 
@@ -925,5 +927,9 @@ This comprehensive frontend architecture provides:
 5. **PWA Capabilities** for installation and offline support
 6. **TypeScript Integration** for type safety
 7. **Comprehensive Testing Strategy** preparation
+
+---
+
+**Next Steps**: Continue with [Component Structure & Interfaces →](02-component-structure.md) to understand the Vue 3 component hierarchy and TypeScript interfaces.
 
 The architecture follows Vue 3 best practices, implements the cooperative gameplay requirements, and provides excellent user experience across all devices and screen sizes.

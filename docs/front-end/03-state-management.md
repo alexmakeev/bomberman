@@ -1,4 +1,6 @@
-# Pinia Stores Architecture
+# State Management with Pinia
+
+> **Navigation**: [← Components](02-component-structure.md) → **State Management** → [Responsive Design →](04-responsive-design.md)
 
 Comprehensive state management architecture using Pinia for the cooperative multiplayer Bomberman game, with TypeScript support and performance optimizations.
 
@@ -1430,3 +1432,7 @@ This comprehensive Pinia store architecture provides:
 8. **Real-time Synchronization** with server-side events
 
 The stores work together to provide seamless cooperative multiplayer gameplay across all devices.
+
+---
+
+**Next Steps**: Continue with [Responsive Design & Mobile-First Layouts →](04-responsive-design.md) to understand the CSS architecture and adaptive layouts.

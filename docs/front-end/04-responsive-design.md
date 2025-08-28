@@ -1,4 +1,6 @@
-# Mobile-First Responsive Layouts
+# Responsive Design & Mobile-First Layouts
+
+> **Navigation**: [← State Management](03-state-management.md) → **Responsive Design** → [Input System →](05-input-system.md)
 
 Comprehensive responsive design system for the cooperative multiplayer Bomberman game, prioritizing mobile experience with adaptive desktop layouts.
 
@@ -1109,3 +1111,7 @@ This comprehensive responsive layout system provides:
 7. **Cross-Platform Compatibility** supporting all device types and orientations
 
 The system ensures excellent user experience across all devices while maintaining the cooperative gameplay focus and 8-bit aesthetic.
+
+---
+
+**Next Steps**: Continue with [Touch Controls & Unified Input System →](05-input-system.md) to understand cross-platform input handling.

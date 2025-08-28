@@ -1,4 +1,6 @@
-# Touch Controls & Input System
+# Touch Controls & Unified Input System
+
+> **Navigation**: [← Responsive Design](04-responsive-design.md) → **Input System** → [🏠 Frontend Docs](README.md)
 
 Mobile-first input system unifying touch gestures and keyboard controls for cross-platform Bomberman gameplay.
 
@@ -738,3 +740,7 @@ This comprehensive touch controls and input system provides:
 7. **Configurable Settings**: User-customizable input sensitivity and behaviors
 
 The system is designed to integrate seamlessly with Vue 3 components and Pinia stores, following the mobile-first responsive architecture.
+
+---
+
+**Documentation Complete**: You've reached the end of the frontend architecture documentation. Return to [🏠 Frontend Docs](README.md) or begin implementation with the TDD approach.

@@ -1,5 +1,7 @@
 # Vue Component Structure & Interfaces
 
+> **Navigation**: [← Architecture](01-architecture-overview.md) → **Component Structure** → [State Management →](03-state-management.md) & Interfaces
+
 Comprehensive component organization for the cooperative multiplayer Bomberman frontend with TypeScript interfaces and testing strategy.
 
 ## Component Tree Structure
@@ -709,5 +711,9 @@ This comprehensive component structure provides:
 5. **TypeScript Integration** with proper type definitions
 6. **Component Organization** following Vue 3 best practices
 7. **Cooperative Gameplay Support** with team-oriented UI components
+
+---
+
+**Next Steps**: Continue with [State Management with Pinia →](03-state-management.md) to understand reactive data flow and store architecture.
 
 The structure supports both mobile and desktop gameplay while maintaining clean separation of concerns and comprehensive testing capabilities.
