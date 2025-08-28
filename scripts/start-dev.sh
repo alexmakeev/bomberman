@@ -5,14 +5,19 @@
 
 set -e
 
-echo "🎮 Bomberman Unified Development Server Manager"
-echo "=============================================="
+# Only show header for non-status commands
+if [ "${1:-}" != "status" ]; then
+    echo "🎮 Bomberman Unified Development Server Manager"
+    echo "=============================================="
+fi
 
 # Configuration
 FRONTEND_PORT=3000
 BACKEND_PORT=8080
 FRONTEND_COMMAND="npm run dev:client"
 BACKEND_COMMAND="npm run dev:server"
+FRONTEND_LOG="front.log"
+BACKEND_LOG="back.log"
 
 # Function to check if port is in use
 check_port() {
@@ -109,20 +114,44 @@ check_docker_services() {
     return 0
 }
 
+# Function to clean log files
+clean_logs() {
+    local mode=$1
+    
+    case $mode in
+        front)
+            echo "🧹 Cleaning frontend log file..."
+            > "$FRONTEND_LOG"
+            ;;
+        back)
+            echo "🧹 Cleaning backend log file..."
+            > "$BACKEND_LOG"
+            ;;
+        full)
+            echo "🧹 Cleaning all log files..."
+            > "$FRONTEND_LOG"
+            > "$BACKEND_LOG"
+            ;;
+    esac
+}
+
 # Function to start a server in background
 start_server() {
     local server_type=$1
     local port=$2
     local command=$3
+    local log_file=$4
     
     echo "🚀 Starting $server_type server..."
     echo "Command: $command"
+    echo "📝 Logs: $log_file"
     
-    # Start in background
-    nohup $command >/dev/null 2>&1 &
+    # Start in background with logging
+    nohup $command >> "$log_file" 2>&1 &
     local pid=$!
     
     echo "🎯 $server_type server started with PID: $pid"
+    echo "💡 View logs with: tail -f $log_file"
     return 0
 }
 
@@ -149,47 +178,52 @@ wait_for_server() {
     return 0
 }
 
-# Function to show server status
-show_server_status() {
-    local server_type=$1
-    local port=$2
+# Function to get server status symbol
+get_server_status() {
+    local port=$1
     
-    echo "📊 $server_type Server (Port $port):"
     if check_port $port; then
-        echo "🟢 Server is running on port $port"
-        echo "📋 Process details:"
-        lsof -ti:$port | xargs ps -o pid,ppid,cmd -p 2>/dev/null || true
-        echo "🌐 URL: http://localhost:$port"
-        
-        # Test if server is responding
-        if curl -s "http://localhost:$port" >/dev/null 2>&1 || curl -s "http://localhost:$port/health" >/dev/null 2>&1; then
-            echo "✅ Server is responding to requests"
+        # Test if server is responding with 200 status
+        if curl -s -o /dev/null -w "%{http_code}" "http://localhost:$port" 2>/dev/null | grep -q "200"; then
+            echo "🟢"
         else
-            echo "⚠️  Server is not responding (may still be starting)"
+            echo "🟡"
         fi
     else
-        echo "🔴 No server running on port $port"
+        echo "🔴"
     fi
-    echo ""
 }
 
 # Function to show full status
 show_status() {
-    echo "📊 Development Environment Status"
-    echo "--------------------------------"
+    echo "Bomberman Servers Status"
     
-    # Always show both server statuses
-    show_server_status "Frontend" $FRONTEND_PORT
-    show_server_status "Backend" $BACKEND_PORT
+    # Get status symbols
+    local fe_status=$(get_server_status $FRONTEND_PORT)
+    local be_status=$(get_server_status $BACKEND_PORT)
     
-    # Show Docker services
-    echo "🐳 Docker Services:"
+    echo "${fe_status} Frontend :$FRONTEND_PORT ${be_status} Backend :$BACKEND_PORT"
+    
+    # Docker services status (one line)
     if docker info >/dev/null 2>&1; then
-        docker compose ps --format "table {{.Name}}\t{{.Status}}\t{{.Ports}}" 2>/dev/null || echo "No services running"
+        local postgres_status=$(docker ps --filter "name=bomberman-postgres" --format "{{.Status}}" | grep -o "healthy\|Up" | head -1)
+        local redis_status=$(docker ps --filter "name=bomberman-redis" --format "{{.Status}}" | grep -o "healthy\|Up" | head -1)
+        
+        local pg_symbol="🔴"
+        local redis_symbol="🔴"
+        
+        if [ "$postgres_status" = "healthy" ] || [ "$postgres_status" = "Up" ]; then
+            pg_symbol="🟢"
+        fi
+        
+        if [ "$redis_status" = "healthy" ] || [ "$redis_status" = "Up" ]; then
+            redis_symbol="🟢"
+        fi
+        
+        echo "${pg_symbol} PostgreSQL ${redis_symbol} Redis"
     else
-        echo "❌ Docker is not running"
+        echo "🔴 Docker 🔴 PostgreSQL 🔴 Redis"
     fi
-    echo ""
 }
 
 # Function to stop servers
@@ -216,6 +250,9 @@ stop_servers() {
 # Function to start servers
 start_servers() {
     local mode=$1
+    
+    # Clean log files first
+    clean_logs $mode
     
     # Always stop existing servers first
     echo "🧹 Cleaning up existing processes..."
@@ -245,14 +282,14 @@ start_servers() {
     # Start requested servers
     case $mode in
         front)
-            start_server "Frontend" $FRONTEND_PORT "$FRONTEND_COMMAND"
+            start_server "Frontend" $FRONTEND_PORT "$FRONTEND_COMMAND" "$FRONTEND_LOG"
             ;;
         back)
-            start_server "Backend" $BACKEND_PORT "$BACKEND_COMMAND"
+            start_server "Backend" $BACKEND_PORT "$BACKEND_COMMAND" "$BACKEND_LOG"
             ;;
         full)
-            start_server "Backend" $BACKEND_PORT "$BACKEND_COMMAND"
-            start_server "Frontend" $FRONTEND_PORT "$FRONTEND_COMMAND"
+            start_server "Backend" $BACKEND_PORT "$BACKEND_COMMAND" "$BACKEND_LOG"
+            start_server "Frontend" $FRONTEND_PORT "$FRONTEND_COMMAND" "$FRONTEND_LOG"
             ;;
     esac
     
@@ -282,15 +319,19 @@ start_servers() {
         front)
             echo "🎮 Frontend development server is running!"
             echo "💡 Frontend: http://localhost:$FRONTEND_PORT"
+            echo "📝 Frontend logs: tail -f $FRONTEND_LOG"
             ;;
         back)
             echo "🎮 Backend development server is running!"
             echo "💡 Backend: http://localhost:$BACKEND_PORT"
+            echo "📝 Backend logs: tail -f $BACKEND_LOG"
             ;;
         full)
             echo "🎮 Full development environment is running!"
             echo "💡 Frontend: http://localhost:$FRONTEND_PORT"
             echo "💡 Backend: http://localhost:$BACKEND_PORT"
+            echo "📝 Frontend logs: tail -f $FRONTEND_LOG"
+            echo "📝 Backend logs: tail -f $BACKEND_LOG"
             ;;
     esac
     
@@ -375,4 +416,7 @@ case $ACTION in
         ;;
 esac
 
-echo "✅ Operation completed!"
+# Only show completion message for non-status commands
+if [ "$ACTION" != "status" ]; then
+    echo "✅ Operation completed!"
+fi

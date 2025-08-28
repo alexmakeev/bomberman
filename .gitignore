@@ -126,6 +126,10 @@ Thumbs.db
 logs
 *.log
 
+# Development server logs
+front.log
+back.log
+
 # Runtime directories
 tmp/
 temp/
