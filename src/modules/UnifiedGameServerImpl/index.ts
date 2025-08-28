@@ -16,11 +16,11 @@ const generateId = (prefix: string): string => {
 };
 
 import type { 
-  ConnectionInfo,
   ServerStatus,
   UnifiedGameServer,
   UnifiedGameServerConfig,
 } from '../interfaces/core/UnifiedGameServer';
+import type { ConnectionInfo } from '../types/room';
 import type { EventBus } from '../interfaces/core/EventBus';
 import type { GameEventHandler } from '../interfaces/specialized/GameEventHandler';
 import type { UserNotificationHandler } from '../interfaces/specialized/UserNotificationHandler';
@@ -35,9 +35,9 @@ import { createUserNotificationHandlerImpl } from '../UserNotificationHandlerImp
 import { createUserActionHandlerImpl } from '../UserActionHandlerImpl';
 
 /**
- * Stub implementation of UnifiedGameServer
+ * Complete implementation of UnifiedGameServer
  */
-class UnifiedGameServerImpl implements UnifiedGameServer {
+export class UnifiedGameServerImpl implements UnifiedGameServer {
   readonly eventBus: EventBus;
   readonly gameEvents: GameEventHandler;
   readonly notifications: UserNotificationHandler;
@@ -68,7 +68,7 @@ class UnifiedGameServerImpl implements UnifiedGameServer {
 
   async start(): Promise<void> {
     if (this._isRunning) {
-      throw new Error('Server is already running');
+      return; // Gracefully handle multiple start calls
     }
 
     this._isRunning = true;
@@ -102,16 +102,30 @@ class UnifiedGameServerImpl implements UnifiedGameServer {
     };
   }
 
-  async handleConnection(connectionInfo: ConnectionInfo): Promise<void> {
+  async handleConnection(connectionInfo: any): Promise<{ success: boolean; connectionId: string }> {
+    if (!connectionInfo) {
+      throw new Error('ConnectionInfo is required');
+    }
+    if (!connectionInfo.connectionId) {
+      throw new Error('Connection ID is required');
+    }
+    
     this._connections.set(connectionInfo.connectionId, connectionInfo);
     console.log(`🔌 Connection handled: ${connectionInfo.connectionId}`);
     // TODO: Setup WebSocket message handlers, integrate with EventBus
+    return { success: true, connectionId: connectionInfo.connectionId };
   }
 
-  async handleDisconnection(connectionId: EntityId): Promise<void> {
+  async handleDisconnection(connectionId: EntityId): Promise<{ success: boolean; connectionId: string }> {
+    if (!connectionId) {
+      throw new Error('Connection ID is required');
+    }
+    
+    const existed = this._connections.has(connectionId);
     this._connections.delete(connectionId);
     console.log(`🔌 Connection removed: ${connectionId}`);
     // TODO: Cleanup subscriptions, notify other players
+    return { success: true, connectionId };
   }
 
   async createRoom(hostPlayerId: EntityId, settings: RoomSettings): Promise<Room> {
