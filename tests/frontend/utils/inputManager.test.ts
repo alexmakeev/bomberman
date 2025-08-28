@@ -113,12 +113,14 @@ describe('UnifiedInputManager', () => {
       inputManager.on('player-move', movementSpy)
       
       // Simulate touch start
+      const touch = {
+        identifier: 1,
+        clientX: 200,
+        clientY: 150
+      }
       const touchStartEvent = {
-        touches: [{
-          identifier: 1,
-          clientX: 200,
-          clientY: 150
-        }],
+        touches: [touch],
+        changedTouches: [touch],
         preventDefault: vi.fn()
       }
       

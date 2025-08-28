@@ -6,25 +6,25 @@
  */
 
 // Game logic utilities
-export * from './gameUtils'
+export * from './gameUtils';
 
 // Rendering utilities
-export * from './renderingUtils'
+export * from './renderingUtils';
 
 // Network communication utilities
-export * from './networkUtils'
+export * from './networkUtils';
 
 // Audio management utilities
-export * from './audioUtils'
+export * from './audioUtils';
 
 // Data persistence utilities
-export * from './storageUtils'
+export * from './storageUtils';
 
 // Input validation utilities
-export * from './validationUtils'
+export * from './validationUtils';
 
 // Input management
-export { UnifiedInputManager } from './inputManager'
+export { UnifiedInputManager } from './inputManager';
 
 // Re-export commonly used utility functions with aliases
 export {
@@ -76,8 +76,8 @@ export {
   
   // Performance
   debounce,
-  throttle
-} from './gameUtils'
+  throttle,
+} from './gameUtils';
 
 export {
   // Canvas management
@@ -107,8 +107,8 @@ export {
   
   // Particle effects
   createParticleEffect,
-  updateAndRenderParticles
-} from './renderingUtils'
+  updateAndRenderParticles,
+} from './renderingUtils';
 
 export {
   // WebSocket management
@@ -154,8 +154,8 @@ export {
   getWebSocketUrl,
   isOnline,
   addOnlineListener,
-  removeOnlineListener
-} from './networkUtils'
+  removeOnlineListener,
+} from './networkUtils';
 
 export {
   // Audio context
@@ -204,8 +204,8 @@ export {
   isAudioSupported,
   canAutoplay,
   initializeAudio,
-  requiresUserGesture
-} from './audioUtils'
+  requiresUserGesture,
+} from './audioUtils';
 
 export {
   // Storage availability
@@ -275,8 +275,8 @@ export {
   generatePlayerId,
   generateGameId,
   isValidPlayerName,
-  migrateStorageData
-} from './storageUtils'
+  migrateStorageData,
+} from './storageUtils';
 
 export {
   // Type validators
@@ -330,8 +330,8 @@ export {
   createValidationError,
   createValidationSuccess,
   combineValidationResults,
-  validateBatch
-} from './validationUtils'
+  validateBatch,
+} from './validationUtils';
 
 // Type definitions for utility functions
 export interface UtilityConfig {
@@ -381,6 +381,6 @@ export const DEFAULT_UTILITY_CONFIG: UtilityConfig = {
   maxBatchSize: 100,
   actionRateLimit: {
     maxRequests: 60,
-    windowMs: 1000
-  }
-}
+    windowMs: 1000,
+  },
+};

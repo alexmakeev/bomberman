@@ -1,0 +1,625 @@
+{
+  "config": {
+    "configFile": "/home/alexmak/bomberman/playwright.config.ts",
+    "rootDir": "/home/alexmak/bomberman/tests/front-end",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": "/home/alexmak/bomberman/tests/front-end/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 10,
+    "metadata": {
+      "actualWorkers": 2
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "open": "never"
+        }
+      ],
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/home/alexmak/bomberman/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "Desktop Chrome",
+        "name": "Desktop Chrome",
+        "testDir": "/home/alexmak/bomberman/tests/front-end",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/home/alexmak/bomberman/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "Desktop Firefox",
+        "name": "Desktop Firefox",
+        "testDir": "/home/alexmak/bomberman/tests/front-end",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/home/alexmak/bomberman/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/home/alexmak/bomberman/tests/front-end",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/home/alexmak/bomberman/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/home/alexmak/bomberman/tests/front-end",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 2,
+    "webServer": {
+      "command": "npm run dev:client",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "basic-ui.test.ts",
+      "file": "basic-ui.test.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Bomberman Frontend - Basic UI",
+          "file": "basic-ui.test.ts",
+          "line": 8,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load the home page successfully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2431,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-28T18:45:53.428Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d13466ded0b3fa9c8e8f-9e5c1f8e778973efc8a4",
+              "file": "basic-ui.test.ts",
+              "line": 20,
+              "column": 7
+            },
+            {
+              "title": "should display main navigation elements",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2411,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Found 0 buttons on the page\n"
+                        },
+                        {
+                          "text": "Found 0 links on the page\n"
+                        },
+                        {
+                          "text": "Found 0 inputs on the page\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-28T18:45:53.411Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d13466ded0b3fa9c8e8f-517ca4011dcb6856ae84",
+              "file": "basic-ui.test.ts",
+              "line": 32,
+              "column": 7
+            },
+            {
+              "title": "should handle viewport resizing (responsive design)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4575,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-28T18:45:56.339Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d13466ded0b3fa9c8e8f-3292aaef167c9d19022a",
+              "file": "basic-ui.test.ts",
+              "line": 55,
+              "column": 7
+            },
+            {
+              "title": "should not have JavaScript errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 4604,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "JavaScript errors found: []\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-28T18:45:56.384Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d13466ded0b3fa9c8e8f-8156e10149babb6779ea",
+              "file": "basic-ui.test.ts",
+              "line": 73,
+              "column": 7
+            },
+            {
+              "title": "should display page content structure",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2467,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Page structure preview: \n  <div id=\"app\" data-v-app=\"\"><div class=\"bomberman-app\"><div data-v-4ce3c322=\"\" class=\"app-layout\"><main data-v-4ce3c322=\"\" class=\"main-content\"></main></div></div></div>\n  \n  <script type=\"module\" src=\"/main.ts\"></script>\n  \n  <script>\n    // Remove loading screen when app is ready\n    window.addEventListener('load', () => {\n      const loadingScreen = document.getElementById('loading-screen');\n      if (loadingScreen) {\n        setTimeout(() => {\n          loadingScreen.style.opacity = '0';\n...\n"
+                        },
+                        {
+                          "text": "Found 0 Vue components/elements\n"
+                        },
+                        {
+                          "text": "Found 0 canvas elements\n"
+                        },
+                        {
+                          "text": "Page text content: \n  \n  \n  \n  \n  \n    // Remove loading screen when app is ready\n    window.addEventListener('load', () => {\n      const loadingScreen = document.getElementById('loading-screen');\n      if (loadingScree...\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-28T18:46:00.945Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d13466ded0b3fa9c8e8f-7d65b41f76cf1a2045a7",
+              "file": "basic-ui.test.ts",
+              "line": 99,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "game-ui.test.ts",
+      "file": "game-ui.test.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Bomberman Frontend - Game UI",
+          "file": "game-ui.test.ts",
+          "line": 8,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should navigate to game view",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3556,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Game page URL: http://localhost:3000/game\n"
+                        },
+                        {
+                          "text": "Found 0 canvas elements in game view\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-28T18:46:01.022Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "7e6694f3b7ba7fb4c6c2-454a906efe274185e865",
+              "file": "game-ui.test.ts",
+              "line": 15,
+              "column": 7
+            },
+            {
+              "title": "should display game canvas if present",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5931,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Testing route: /\n"
+                        },
+                        {
+                          "text": "Route /: Found 0 canvas elements\n"
+                        },
+                        {
+                          "text": "Testing route: /game\n"
+                        },
+                        {
+                          "text": "Route /game: Found 0 canvas elements\n"
+                        },
+                        {
+                          "text": "Testing route: /game/test-room\n"
+                        },
+                        {
+                          "text": "Route /game/test-room: Found 0 canvas elements\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-28T18:46:03.442Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "7e6694f3b7ba7fb4c6c2-74f873bd7afd0fca2273",
+              "file": "game-ui.test.ts",
+              "line": 37,
+              "column": 7
+            },
+            {
+              "title": "should handle touch/mouse interactions on canvas",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3425,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "No canvas found for interaction testing\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-28T18:46:04.596Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "7e6694f3b7ba7fb4c6c2-f47732b257a6fd3a1af8",
+              "file": "game-ui.test.ts",
+              "line": 64,
+              "column": 7
+            },
+            {
+              "title": "should check for game controls and UI elements",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 6164,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Checking UI elements on route: /\n"
+                        },
+                        {
+                          "text": "Route / elements: { buttons: \u001b[33m0\u001b[39m, inputs: \u001b[33m0\u001b[39m, canvases: \u001b[33m0\u001b[39m, links: \u001b[33m0\u001b[39m, forms: \u001b[33m0\u001b[39m, images: \u001b[33m0\u001b[39m }\n"
+                        },
+                        {
+                          "text": "Route / game keywords found: []\n"
+                        },
+                        {
+                          "text": "Checking UI elements on route: /game\n"
+                        },
+                        {
+                          "text": "Route /game elements: { buttons: \u001b[33m0\u001b[39m, inputs: \u001b[33m0\u001b[39m, canvases: \u001b[33m0\u001b[39m, links: \u001b[33m0\u001b[39m, forms: \u001b[33m0\u001b[39m, images: \u001b[33m0\u001b[39m }\n"
+                        },
+                        {
+                          "text": "Route /game game keywords found: []\n"
+                        },
+                        {
+                          "text": "Checking UI elements on route: /settings\n"
+                        },
+                        {
+                          "text": "Route /settings elements: { buttons: \u001b[33m0\u001b[39m, inputs: \u001b[33m0\u001b[39m, canvases: \u001b[33m0\u001b[39m, links: \u001b[33m0\u001b[39m, forms: \u001b[33m0\u001b[39m, images: \u001b[33m0\u001b[39m }\n"
+                        },
+                        {
+                          "text": "Route /settings game keywords found: []\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-28T18:46:08.050Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "7e6694f3b7ba7fb4c6c2-4201a2ce674479b1f8f2",
+              "file": "game-ui.test.ts",
+              "line": 93,
+              "column": 7
+            },
+            {
+              "title": "should test WebSocket connection status",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8883,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "WebSocket-related messages: [\n  \u001b[32m'[vite] connecting...'\u001b[39m,\n  \u001b[32m'[vite] connected.'\u001b[39m,\n  \u001b[32m'🔌 Initializing game services (WebSocket, stores, etc.)...'\u001b[39m\n]\n"
+                        },
+                        {
+                          "text": "All console messages (first 10):\n"
+                        },
+                        {
+                          "text": "  - Failed to load resource: the server responded with a status of 404 (Not Found)\n"
+                        },
+                        {
+                          "text": "  - [vite] connecting...\n"
+                        },
+                        {
+                          "text": "  - [vite] connected.\n"
+                        },
+                        {
+                          "text": "  - 🎯 Starting Bomberman main.ts execution...\n"
+                        },
+                        {
+                          "text": "  - ✅ Vue core imports loaded\n"
+                        },
+                        {
+                          "text": "  - ✅ App component loaded\n"
+                        },
+                        {
+                          "text": "  - ✅ Utility imports loaded\n"
+                        },
+                        {
+                          "text": "  - ✅ Global styles loaded\n"
+                        },
+                        {
+                          "text": "  - 🛣️ Creating Vue router...\n"
+                        },
+                        {
+                          "text": "  - ✅ Router created with 3 routes\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-28T18:46:09.395Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "7e6694f3b7ba7fb4c6c2-adb0c2c0227a1c3c13fa",
+              "file": "game-ui.test.ts",
+              "line": 132,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-08-28T18:45:52.697Z",
+    "duration": 25632.288,
+    "expected": 10,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

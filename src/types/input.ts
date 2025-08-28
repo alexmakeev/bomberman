@@ -5,7 +5,7 @@
  * @see docs/front-end/05-input-system.md - Input system architecture
  */
 
-import type { Direction, Position } from './game'
+import type { Direction, Position } from './game';
 
 // Core Input Types
 export type InputMethod = 'touch' | 'keyboard' | 'gamepad' | 'mouse'

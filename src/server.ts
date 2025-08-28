@@ -21,7 +21,7 @@ import { WebSocketServer } from 'ws';
 import path from 'path';
 
 // Import our type definitions
-import type { EventCategory, UniversalEvent } from './types/events.d.ts';
+import type { EventCategory, UniversalEvent } from './types/events';
 import type { UnifiedGameServer } from './interfaces/core/UnifiedGameServer';
 import { createConfiguredUnifiedGameServer } from './modules/UnifiedGameServerImpl';
 

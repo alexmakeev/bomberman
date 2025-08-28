@@ -6,13 +6,13 @@
 import { Pool, PoolClient } from 'pg';
 import Redis from 'ioredis';
 import type { 
-  DatabaseService, 
+  CacheResult, 
   DatabaseConfig, 
+  DatabaseService, 
   DatabaseStatus, 
-  QueryResult, 
-  CacheResult,
   PostgreSQLConfig,
-  RedisConfig 
+  QueryResult,
+  RedisConfig, 
 } from '../../interfaces/core/DatabaseService.d.ts';
 import type { EntityId, Result } from '../../types/common';
 
@@ -28,8 +28,8 @@ class DatabaseServiceImpl implements DatabaseService {
   private startTime?: Date;
   private queryCount = 0;
   private errorCount = 0;
-  private subscriptions = new Map<string, Set<(message: any) => void>>();
-  private patternSubscriptions = new Map<string, Set<(channel: string, message: any) => void>>();
+  private readonly subscriptions = new Map<string, Set<(message: any) => void>>();
+  private readonly patternSubscriptions = new Map<string, Set<(channel: string, message: any) => void>>();
 
   constructor() {
     console.log('🗄️ DatabaseService created');
@@ -108,7 +108,7 @@ class DatabaseServiceImpl implements DatabaseService {
       redis,
       uptime,
       totalQueries: this.queryCount,
-      errorCount: this.errorCount
+      errorCount: this.errorCount,
     };
   }
 
@@ -116,12 +116,12 @@ class DatabaseServiceImpl implements DatabaseService {
     try {
       const [pgHealth, redisHealth] = await Promise.allSettled([
         this.testPostgreSQLConnection(),
-        this.testRedisConnection()
+        this.testRedisConnection(),
       ]);
 
       return {
         postgresql: pgHealth.status === 'fulfilled' && pgHealth.value,
-        redis: redisHealth.status === 'fulfilled' && redisHealth.value
+        redis: redisHealth.status === 'fulfilled' && redisHealth.value,
       };
     } catch (error) {
       return { postgresql: false, redis: false };
@@ -137,7 +137,7 @@ class DatabaseServiceImpl implements DatabaseService {
       return {
         success: false,
         error: 'PostgreSQL not initialized',
-        executionTime: 0
+        executionTime: 0,
       };
     }
 
@@ -150,7 +150,7 @@ class DatabaseServiceImpl implements DatabaseService {
         success: true,
         data: result.rows,
         rowCount: result.rowCount || 0,
-        executionTime
+        executionTime,
       };
     } catch (error) {
       this.errorCount++;
@@ -159,7 +159,7 @@ class DatabaseServiceImpl implements DatabaseService {
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
-        executionTime
+        executionTime,
       };
     }
   }
@@ -185,7 +185,7 @@ class DatabaseServiceImpl implements DatabaseService {
             success: true,
             data: result.rows,
             rowCount: result.rowCount || 0,
-            executionTime
+            executionTime,
           };
         } catch (error) {
           this.errorCount++;
@@ -220,20 +220,20 @@ class DatabaseServiceImpl implements DatabaseService {
           success: true,
           data: { id: result.data[0].id },
           rowCount: 1,
-          executionTime: result.executionTime
+          executionTime: result.executionTime,
         };
       }
       
       return {
         success: false,
         error: 'Insert failed - no ID returned',
-        executionTime: result.executionTime
+        executionTime: result.executionTime,
       };
     } catch (error) {
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
-        executionTime: 0
+        executionTime: 0,
       };
     }
   }
@@ -312,7 +312,7 @@ class DatabaseServiceImpl implements DatabaseService {
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
-        exists: false
+        exists: false,
       };
     }
   }
@@ -336,13 +336,13 @@ class DatabaseServiceImpl implements DatabaseService {
         success: true, 
         exists: true, 
         data, 
-        ttl: ttl > 0 ? ttl : undefined 
+        ttl: ttl > 0 ? ttl : undefined, 
       };
     } catch (error) {
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
-        exists: false
+        exists: false,
       };
     }
   }
@@ -359,7 +359,7 @@ class DatabaseServiceImpl implements DatabaseService {
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
-        exists: false
+        exists: false,
       };
     }
   }
@@ -376,7 +376,7 @@ class DatabaseServiceImpl implements DatabaseService {
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
-        exists: false
+        exists: false,
       };
     }
   }
@@ -406,7 +406,7 @@ class DatabaseServiceImpl implements DatabaseService {
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
-        exists: false
+        exists: false,
       };
     }
   }
@@ -438,7 +438,7 @@ class DatabaseServiceImpl implements DatabaseService {
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
-        exists: false
+        exists: false,
       };
     }
   }
@@ -455,7 +455,7 @@ class DatabaseServiceImpl implements DatabaseService {
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
-        exists: false
+        exists: false,
       };
     }
   }
@@ -472,7 +472,7 @@ class DatabaseServiceImpl implements DatabaseService {
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
-        exists: false
+        exists: false,
       };
     }
   }
@@ -492,7 +492,7 @@ class DatabaseServiceImpl implements DatabaseService {
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
-        exists: false
+        exists: false,
       };
     }
   }
@@ -514,7 +514,7 @@ class DatabaseServiceImpl implements DatabaseService {
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
-        exists: false
+        exists: false,
       };
     }
   }
@@ -534,7 +534,7 @@ class DatabaseServiceImpl implements DatabaseService {
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
-        exists: false
+        exists: false,
       };
     }
   }
@@ -556,7 +556,7 @@ class DatabaseServiceImpl implements DatabaseService {
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
-        exists: false
+        exists: false,
       };
     }
   }
@@ -576,7 +576,7 @@ class DatabaseServiceImpl implements DatabaseService {
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
-        exists: false
+        exists: false,
       };
     }
   }
@@ -612,7 +612,7 @@ class DatabaseServiceImpl implements DatabaseService {
     try {
       const [pgMetrics, redisInfo] = await Promise.allSettled([
         this.getPostgreSQLMetrics(),
-        this.getRedisMetrics()
+        this.getRedisMetrics(),
       ]);
 
       return {
@@ -620,14 +620,14 @@ class DatabaseServiceImpl implements DatabaseService {
           averageQueryTime: 0,
           slowQueries: 0,
           totalQueries: this.queryCount,
-          activeConnections: 0
+          activeConnections: 0,
         },
         redis: redisInfo.status === 'fulfilled' ? redisInfo.value : {
           averageLatency: 0,
           commandsPerSecond: 0,
           memoryUsage: 0,
-          connectedClients: 0
-        }
+          connectedClients: 0,
+        },
       };
     } catch (error) {
       throw new Error(`Failed to get performance metrics: ${error}`);
@@ -646,7 +646,7 @@ class DatabaseServiceImpl implements DatabaseService {
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
-        exists: false
+        exists: false,
       };
     }
   }
@@ -656,7 +656,7 @@ class DatabaseServiceImpl implements DatabaseService {
     // For now, return a placeholder implementation
     return {
       success: true,
-      message: 'Backup functionality not implemented yet'
+      message: 'Backup functionality not implemented yet',
     };
   }
 
@@ -693,7 +693,7 @@ class DatabaseServiceImpl implements DatabaseService {
       ssl: config.ssl,
       max: config.maxConnections,
       connectionTimeoutMillis: this.config!.connectionTimeout,
-      idleTimeoutMillis: 30000
+      idleTimeoutMillis: 30000,
     });
 
     // Test connection
@@ -712,7 +712,7 @@ class DatabaseServiceImpl implements DatabaseService {
       connectTimeout: this.config!.connectionTimeout,
       retryDelayOnFailover: 100,
       maxRetriesPerRequest: this.config!.retryAttempts,
-      keyPrefix: config.keyPrefix
+      keyPrefix: config.keyPrefix,
     };
 
     // Main Redis client
@@ -767,14 +767,14 @@ class DatabaseServiceImpl implements DatabaseService {
         connected: true,
         latency,
         connectionCount: this.pgPool.totalCount,
-        lastError: undefined
+        lastError: undefined,
       };
     } catch (error) {
       return {
         connected: false,
         latency: 0,
         connectionCount: 0,
-        lastError: error instanceof Error ? error.message : String(error)
+        lastError: error instanceof Error ? error.message : String(error),
       };
     }
   }
@@ -793,20 +793,20 @@ class DatabaseServiceImpl implements DatabaseService {
         connected: true,
         latency,
         connectionCount: 1,
-        lastError: undefined
+        lastError: undefined,
       };
     } catch (error) {
       return {
         connected: false,
         latency: 0,
         connectionCount: 0,
-        lastError: error instanceof Error ? error.message : String(error)
+        lastError: error instanceof Error ? error.message : String(error),
       };
     }
   }
 
   private async testPostgreSQLConnection(): Promise<boolean> {
-    if (!this.pgPool) return false;
+    if (!this.pgPool) {return false;}
     try {
       const client = await this.pgPool.connect();
       client.release();
@@ -817,7 +817,7 @@ class DatabaseServiceImpl implements DatabaseService {
   }
 
   private async testRedisConnection(): Promise<boolean> {
-    if (!this.redisClient) return false;
+    if (!this.redisClient) {return false;}
     try {
       await this.redisClient.ping();
       return true;
@@ -832,7 +832,7 @@ class DatabaseServiceImpl implements DatabaseService {
       averageQueryTime: 0, // Would calculate from query history
       slowQueries: 0,      // Would query pg_stat_statements
       totalQueries: this.queryCount,
-      activeConnections: this.pgPool?.totalCount || 0
+      activeConnections: this.pgPool?.totalCount || 0,
     };
   }
 
@@ -857,7 +857,7 @@ class DatabaseServiceImpl implements DatabaseService {
         averageLatency: 0, // Would need to track this separately
         commandsPerSecond: parseInt(stats.instantaneous_ops_per_sec || '0'),
         memoryUsage: parseInt(stats.used_memory || '0'),
-        connectedClients: parseInt(stats.connected_clients || '0')
+        connectedClients: parseInt(stats.connected_clients || '0'),
       };
     } catch (error) {
       return { averageLatency: 0, commandsPerSecond: 0, memoryUsage: 0, connectedClients: 0 };
@@ -904,7 +904,7 @@ class DatabaseServiceImpl implements DatabaseService {
 
     return {
       clause: conditions.join(' AND '),
-      params
+      params,
     };
   }
 
@@ -926,7 +926,7 @@ export async function createDatabaseService(config?: Partial<DatabaseConfig>): P
       username: process.env.POSTGRES_USER || 'bomberman_user',
       password: process.env.POSTGRES_PASSWORD || '',
       ssl: false,
-      maxConnections: 10
+      maxConnections: 10,
     },
     redis: {
       host: process.env.REDIS_HOST || 'localhost',
@@ -935,18 +935,18 @@ export async function createDatabaseService(config?: Partial<DatabaseConfig>): P
       database: 0,
       keyPrefix: process.env.NODE_ENV === 'test' ? 'bomberman:test:' : 'bomberman:',
       cluster: false,
-      ttl: 3600
+      ttl: 3600,
     },
     connectionTimeout: 5000,
     retryAttempts: 3,
-    poolSize: 10
+    poolSize: 10,
   };
 
   const mergedConfig = { 
     ...defaultConfig, 
     ...config,
     postgresql: { ...defaultConfig.postgresql, ...config?.postgresql },
-    redis: { ...defaultConfig.redis, ...config?.redis }
+    redis: { ...defaultConfig.redis, ...config?.redis },
   };
 
   const service = new DatabaseServiceImpl();

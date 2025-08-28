@@ -33,11 +33,13 @@ const mockCanvas = {
   })
 }
 
+// Store original to avoid recursion
+const originalCreateElement = document.createElement
 vi.spyOn(document, 'createElement').mockImplementation((tagName) => {
   if (tagName === 'canvas') {
     return mockCanvas as any
   }
-  return document.createElement(tagName)
+  return originalCreateElement.call(document, tagName)
 })
 
 describe('GameMinimap Component', () => {

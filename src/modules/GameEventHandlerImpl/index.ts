@@ -3,17 +3,17 @@
  * Handles real-time game events with performance optimization
  */
 
-import type { GameEventHandler, 
-  GameEventType, 
-  PlayerMoveEventData, 
+import type { BombExplodeEventData, 
   BombPlaceEventData, 
-  PowerUpCollectEventData,
-  BombExplodeEventData,
+  GameEventHandler, 
+  GameEventType, 
+  GameStateUpdateEventData,
   PlayerEliminatedEventData,
-  GameStateUpdateEventData 
+  PlayerMoveEventData,
+  PowerUpCollectEventData, 
 } from '../../interfaces/specialized/GameEventHandler';
 import type { EventBus, EventPublishResult, SubscriptionResult } from '../../interfaces/core/EventBus';
-import { EventCategory, TargetType, FilterOperator } from '../../types/events.d.ts';
+import { EventCategory, FilterOperator, TargetType } from '../../types/events.d.ts';
 import type { EventTarget } from '../../types/events.d.ts';
 import type { EntityId } from '../../types/common';
 import type { Game } from '../../types/game';
@@ -130,7 +130,7 @@ class GameEventHandlerImpl implements GameEventHandler {
       EventCategory.PLAYER_ACTION,
       'player_move',
       data,
-      [{ type: TargetType.GAME, id: data.gameId }]
+      [{ type: TargetType.GAME, id: data.gameId }],
     );
   }
 
@@ -141,7 +141,7 @@ class GameEventHandlerImpl implements GameEventHandler {
       EventCategory.GAME_MECHANICS,
       'bomb_place',
       data,
-      [{ type: TargetType.GAME, id: data.gameId }]
+      [{ type: TargetType.GAME, id: data.gameId }],
     );
   }
 
@@ -152,7 +152,7 @@ class GameEventHandlerImpl implements GameEventHandler {
       EventCategory.GAME_MECHANICS,
       'powerup_collect',
       data,
-      [{ type: TargetType.GAME, id: data.gameId }]
+      [{ type: TargetType.GAME, id: data.gameId }],
     );
   }
 
@@ -163,7 +163,7 @@ class GameEventHandlerImpl implements GameEventHandler {
       EventCategory.GAME_MECHANICS,
       'bomb_explode',
       data,
-      [{ type: TargetType.GAME, id: data.gameId }]
+      [{ type: TargetType.GAME, id: data.gameId }],
     );
   }
 
@@ -174,7 +174,7 @@ class GameEventHandlerImpl implements GameEventHandler {
       EventCategory.PLAYER_ACTION,
       'player_eliminated',
       data,
-      [{ type: TargetType.GAME, id: data.gameId }]
+      [{ type: TargetType.GAME, id: data.gameId }],
     );
   }
 
@@ -185,7 +185,7 @@ class GameEventHandlerImpl implements GameEventHandler {
       EventCategory.GAME_STATE,
       'game_state_update',
       data,
-      [{ type: TargetType.GAME, id: data.gameId }]
+      [{ type: TargetType.GAME, id: data.gameId }],
     );
   }
 
@@ -197,7 +197,7 @@ class GameEventHandlerImpl implements GameEventHandler {
       EventCategory.GAME_STATE,
       'game_started',
       gameData,
-      [{ type: TargetType.GAME, id: gameId }]
+      [{ type: TargetType.GAME, id: gameId }],
     );
   }
 
@@ -207,7 +207,7 @@ class GameEventHandlerImpl implements GameEventHandler {
       EventCategory.GAME_STATE,
       'game_ended',
       result,
-      [{ type: TargetType.GAME, id: gameId }]
+      [{ type: TargetType.GAME, id: gameId }],
     );
   }
 
@@ -225,8 +225,8 @@ class GameEventHandlerImpl implements GameEventHandler {
         {
           field: 'data.gameId',
           operator: FilterOperator.EQUALS,
-          value: gameId
-        }
+          value: gameId,
+        },
       ],
       targets: [{ type: TargetType.GAME, id: gameId }],
       options: {
@@ -253,7 +253,7 @@ class GameEventHandlerImpl implements GameEventHandler {
       eventTypes: undefined,
       filters: [
         { field: 'data.gameId', operator: FilterOperator.EQUALS, value: gameId },
-        { field: 'data.playerId', operator: FilterOperator.EQUALS, value: playerId }
+        { field: 'data.playerId', operator: FilterOperator.EQUALS, value: playerId },
       ],
       targets: [{ type: TargetType.PLAYER, id: playerId }],
       options: {
@@ -275,9 +275,9 @@ class GameEventHandlerImpl implements GameEventHandler {
       subscriberId: `events-${gameId}-${Date.now()}`,
       name: `Event types subscription for ${gameId}`,
       categories: [EventCategory.GAME_STATE, EventCategory.GAME_MECHANICS, EventCategory.PLAYER_ACTION],
-      eventTypes: eventTypes,
+      eventTypes,
       filters: [
-        { field: 'data.gameId', operator: FilterOperator.EQUALS, value: gameId }
+        { field: 'data.gameId', operator: FilterOperator.EQUALS, value: gameId },
       ],
       targets: [{ type: TargetType.GAME, id: gameId }],
       options: {
@@ -302,7 +302,7 @@ class GameEventHandlerImpl implements GameEventHandler {
       eventTypes: undefined,
       filters: [
         { field: 'data.gameId', operator: FilterOperator.EQUALS, value: gameId },
-        { field: 'data.teamId', operator: FilterOperator.EQUALS, value: teamId }
+        { field: 'data.teamId', operator: FilterOperator.EQUALS, value: teamId },
       ],
       targets: [{ type: TargetType.TEAM, id: teamId }],
       options: {
@@ -326,7 +326,7 @@ class GameEventHandlerImpl implements GameEventHandler {
       EventCategory.GAME_STATE,
       eventType,
       { ...data, gameId },
-      [{ type: TargetType.GAME, id: gameId }]
+      [{ type: TargetType.GAME, id: gameId }],
     );
   }
 
@@ -337,7 +337,7 @@ class GameEventHandlerImpl implements GameEventHandler {
       EventCategory.PLAYER_ACTION,
       eventType,
       { ...data, gameId },
-      targets
+      targets,
     );
   }
 
@@ -348,7 +348,7 @@ class GameEventHandlerImpl implements GameEventHandler {
       EventCategory.GAME_MECHANICS,
       eventType,
       { ...data, gameId, center, radius },
-      [{ type: TargetType.RADIUS, id: `${center.x},${center.y}:${radius}` }]
+      [{ type: TargetType.RADIUS, id: `${center.x},${center.y}:${radius}` }],
     );
   }
 
@@ -387,7 +387,7 @@ class GameEventHandlerImpl implements GameEventHandler {
   }
 
   async setEventPriorities(eventTypePriorities: Map<any, number>): Promise<void> {
-    console.log(`🎯 Setting event priorities:`, eventTypePriorities);
+    console.log('🎯 Setting event priorities:', eventTypePriorities);
     // TODO: Implement event priority configuration
   }
 

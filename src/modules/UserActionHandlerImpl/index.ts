@@ -4,25 +4,25 @@
  */
 
 import type {
-  UserActionHandler,
-  EnhancedUserActionData,
-  UserActionType,
-  ActionResult,
-  ActionPattern,
-  ActionAnomaly,
-  ActionAnalytics,
-  UserBehaviorProfile,
-  ConversionMetrics,
-  FunnelStep,
-  SegmentCriteria,
-  UserSegment,
-  PersonalizationProfile,
-  RecommendationConfig,
-  Recommendation,
   ABTestConfig,
-  ABTestResult
+  ABTestResult,
+  ActionAnalytics,
+  ActionAnomaly,
+  ActionPattern,
+  ActionResult,
+  ConversionMetrics,
+  EnhancedUserActionData,
+  FunnelStep,
+  PersonalizationProfile,
+  Recommendation,
+  RecommendationConfig,
+  SegmentCriteria,
+  UserActionHandler,
+  UserActionType,
+  UserBehaviorProfile,
+  UserSegment,
 } from '../../interfaces/specialized/UserActionHandler.d.ts';
-import type { EventBus, EventHandler, SubscriptionResult, EventPublishResult } from '../../interfaces/core/EventBus';
+import type { EventBus, EventHandler, EventPublishResult, SubscriptionResult } from '../../interfaces/core/EventBus';
 import type { EntityId } from '../../types/common';
 
 /**
@@ -30,12 +30,12 @@ import type { EntityId } from '../../types/common';
  */
 export class UserActionHandlerImpl implements UserActionHandler {
   readonly eventBus: EventBus;
-  private actionHistory = new Map<EntityId, EnhancedUserActionData[]>();
-  private actionTimers = new Map<EntityId, { userId: EntityId; actionType: UserActionType; startTime: Date }>();
-  private userSegments = new Map<string, UserSegment>();
-  private actionPatterns = new Map<EntityId, ActionPattern[]>();
-  private personalizationProfiles = new Map<EntityId, PersonalizationProfile>();
-  private abTestConfigs = new Map<EntityId, ABTestConfig>();
+  private readonly actionHistory = new Map<EntityId, EnhancedUserActionData[]>();
+  private readonly actionTimers = new Map<EntityId, { userId: EntityId; actionType: UserActionType; startTime: Date }>();
+  private readonly userSegments = new Map<string, UserSegment>();
+  private readonly actionPatterns = new Map<EntityId, ActionPattern[]>();
+  private readonly personalizationProfiles = new Map<EntityId, PersonalizationProfile>();
+  private readonly abTestConfigs = new Map<EntityId, ABTestConfig>();
 
   constructor(eventBus: EventBus) {
     this.eventBus = eventBus;
@@ -91,8 +91,8 @@ export class UserActionHandlerImpl implements UserActionHandler {
       source: 'UserActionHandler',
       metadata: {
         actionType: actionData.actionType,
-        result: actionData.result
-      }
+        result: actionData.result,
+      },
     });
   }
 
@@ -110,7 +110,7 @@ export class UserActionHandlerImpl implements UserActionHandler {
           success: false,
           eventId: action.actionId,
           timestamp: new Date(),
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         });
       }
     }
@@ -122,7 +122,7 @@ export class UserActionHandlerImpl implements UserActionHandler {
     userId: EntityId,
     actionType: UserActionType,
     payload: any,
-    result: ActionResult
+    result: ActionResult,
   ): Promise<EventPublishResult> {
     // Validate parameters
     if (!userId) {
@@ -150,10 +150,10 @@ export class UserActionHandlerImpl implements UserActionHandler {
         location: { x: 0, y: 0 },
         gameState: {},
         roomId: undefined,
-        metadata: {}
+        metadata: {},
       },
       tags: [actionType],
-      experiments: []
+      experiments: [],
     };
     
     return this.trackAction(actionData);
@@ -165,7 +165,7 @@ export class UserActionHandlerImpl implements UserActionHandler {
     this.actionTimers.set(timerId, {
       userId,
       actionType,
-      startTime: new Date()
+      startTime: new Date(),
     });
     
     console.log(`⏱️ Started timer ${timerId} for ${actionType} by user ${userId}`);
@@ -175,7 +175,7 @@ export class UserActionHandlerImpl implements UserActionHandler {
   async endActionTimer(
     timerId: EntityId,
     payload: any,
-    result: ActionResult
+    result: ActionResult,
   ): Promise<EventPublishResult> {
     const timer = this.actionTimers.get(timerId);
     if (!timer) {
@@ -200,10 +200,10 @@ export class UserActionHandlerImpl implements UserActionHandler {
         location: { x: 0, y: 0 },
         gameState: {},
         roomId: undefined,
-        metadata: {}
+        metadata: {},
       },
       tags: [timer.actionType],
-      experiments: []
+      experiments: [],
     };
     
     this.actionTimers.delete(timerId);
@@ -217,7 +217,7 @@ export class UserActionHandlerImpl implements UserActionHandler {
   async subscribeToUserActions(
     userId: EntityId | null,
     handler: EventHandler<EnhancedUserActionData>,
-    actionTypes?: UserActionType[]
+    actionTypes?: UserActionType[],
   ): Promise<SubscriptionResult> {
     console.log(`📡 Subscribing to actions for user: ${userId || 'all'}`);
     
@@ -226,31 +226,31 @@ export class UserActionHandlerImpl implements UserActionHandler {
       eventTypes: ['USER_ACTION'],
       filters: {
         ...(userId && { userId }),
-        ...(actionTypes && { actionTypes })
-      }
+        ...(actionTypes && { actionTypes }),
+      },
     }, handler);
   }
 
   async subscribeToActionPatterns(
     patterns: ActionPattern[],
-    handler: EventHandler<ActionPattern>
+    handler: EventHandler<ActionPattern>,
   ): Promise<SubscriptionResult> {
     console.log(`🔍 Subscribing to ${patterns.length} action patterns`);
     
     return this.eventBus.subscribe({
       subscriberId: 'action_patterns',
-      eventTypes: ['ACTION_PATTERN']
+      eventTypes: ['ACTION_PATTERN'],
     }, handler);
   }
 
   async subscribeToActionAnomalies(
-    handler: EventHandler<ActionAnomaly>
+    handler: EventHandler<ActionAnomaly>,
   ): Promise<SubscriptionResult> {
-    console.log(`🚨 Subscribing to action anomalies`);
+    console.log('🚨 Subscribing to action anomalies');
     
     return this.eventBus.subscribe({
       subscriberId: 'action_anomalies',
-      eventTypes: ['ACTION_ANOMALY']
+      eventTypes: ['ACTION_ANOMALY'],
     }, handler);
   }
 
@@ -259,7 +259,7 @@ export class UserActionHandlerImpl implements UserActionHandler {
   async getActionAnalytics(
     actionTypes: UserActionType[],
     timeRange: { start: Date; end: Date },
-    segments?: string[]
+    segments?: string[],
   ): Promise<ActionAnalytics> {
     console.log(`📈 Getting analytics for ${actionTypes.length} action types`);
     
@@ -278,36 +278,36 @@ export class UserActionHandlerImpl implements UserActionHandler {
           'Thursday': 150,
           'Friday': 180,
           'Saturday': 120,
-          'Sunday': 100
-        }
+          'Sunday': 100,
+        },
       },
       segments: [],
       conversion: {
         funnelSteps: [],
         conversionRate: 0.25,
         timeToConversionMs: 300000,
-        dropOffPoints: []
+        dropOffPoints: [],
       },
       performance: {
         avgDurationMs: 250,
         p95DurationMs: 1000,
         successRate: 0.95,
         timeoutRate: 0.01,
-        retryRate: 0.05
+        retryRate: 0.05,
       },
       errors: {
         totalErrors: 50,
         errorRate: 0.05,
         errorsByType: {},
         topErrors: [],
-        errorTrends: []
-      }
+        errorTrends: [],
+      },
     };
   }
 
   async getUserBehaviorProfile(
     userId: EntityId,
-    timeRange?: { start: Date; end: Date }
+    timeRange?: { start: Date; end: Date },
   ): Promise<UserBehaviorProfile> {
     console.log(`📈 Getting behavior profile for user ${userId}`);
     
@@ -321,30 +321,30 @@ export class UserActionHandlerImpl implements UserActionHandler {
         mostActiveHour: 20,
         mostActiveDay: 'Friday',
         averageSessionLength: 1800000, // 30 minutes
-        totalPlaytime: 7200000 // 2 hours
+        totalPlaytime: 7200000, // 2 hours
       },
       preferences: {
         gameMode: 'cooperative',
         difficulty: 'medium',
-        notifications: true
+        notifications: true,
       },
       engagement: {
         lastActiveAt: new Date(),
         streakDays: 7,
         totalSessions: 25,
-        averageActionsPerSession: 40
+        averageActionsPerSession: 40,
       },
       predictions: {
         churnRisk: 0.1,
         nextAction: 'GAME_JOIN' as UserActionType,
-        lifetimeValue: 50
-      }
+        lifetimeValue: 50,
+      },
     };
   }
 
   async getConversionFunnel(
     funnelSteps: FunnelStep[],
-    timeRange: { start: Date; end: Date }
+    timeRange: { start: Date; end: Date },
   ): Promise<ConversionMetrics> {
     console.log(`📈 Analyzing conversion funnel with ${funnelSteps.length} steps`);
     
@@ -356,16 +356,16 @@ export class UserActionHandlerImpl implements UserActionHandler {
         {
           step: 'registration',
           dropOffRate: 0.3,
-          reasons: ['form_too_long', 'email_required']
-        }
-      ]
+          reasons: ['form_too_long', 'email_required'],
+        },
+      ],
     };
   }
 
   async detectActionPatterns(
     userId?: EntityId,
     minFrequency: number = 3,
-    timeRange?: { start: Date; end: Date }
+    timeRange?: { start: Date; end: Date },
   ): Promise<ActionPattern[]> {
     console.log(`🔍 Detecting action patterns for user: ${userId || 'all'}`);
     
@@ -377,8 +377,8 @@ export class UserActionHandlerImpl implements UserActionHandler {
         actionSequence: ['GAME_JOIN' as UserActionType, 'GAME_ACTION' as UserActionType, 'GAME_LEAVE' as UserActionType],
         frequency: minFrequency + 2,
         userCount: userId ? 1 : 50,
-        successRate: 0.9
-      }
+        successRate: 0.9,
+      },
     ];
   }
 
@@ -392,7 +392,7 @@ export class UserActionHandlerImpl implements UserActionHandler {
       criteria,
       userCount: 25,
       actionCount: 500,
-      engagementRate: 0.8
+      engagementRate: 0.8,
     };
     
     this.userSegments.set(name, segment);
@@ -435,13 +435,13 @@ export class UserActionHandlerImpl implements UserActionHandler {
       behaviors: {},
       segments: [],
       recommendations: [],
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
   }
 
   async updatePersonalizationProfile(
     userId: EntityId,
-    updates: Partial<PersonalizationProfile>
+    updates: Partial<PersonalizationProfile>,
   ): Promise<void> {
     console.log(`🎭 Updating personalization profile for user ${userId}`);
     
@@ -452,7 +452,7 @@ export class UserActionHandlerImpl implements UserActionHandler {
 
   async generateRecommendations(
     userId: EntityId,
-    config: RecommendationConfig
+    config: RecommendationConfig,
   ): Promise<Recommendation[]> {
     console.log(`🎯 Generating ${config.count} recommendations for user ${userId}`);
     
@@ -461,11 +461,11 @@ export class UserActionHandlerImpl implements UserActionHandler {
       id: `rec_${i + 1}`,
       type: config.types[0] || 'game_mode',
       title: `Recommendation ${i + 1}`,
-      description: `Try this new feature based on your activity`,
+      description: 'Try this new feature based on your activity',
       score: 0.8 - (i * 0.1),
       metadata: {
-        reason: 'based_on_activity'
-      }
+        reason: 'based_on_activity',
+      },
     }));
   }
 
@@ -497,12 +497,12 @@ export class UserActionHandlerImpl implements UserActionHandler {
         metrics: {
           clicks: 150,
           conversions: 20,
-          revenue: 500
-        }
+          revenue: 500,
+        },
       })),
       winningVariant: config.variants[0],
       confidence: 0.95,
-      isSignificant: true
+      isSignificant: true,
     };
   }
 
@@ -524,7 +524,7 @@ export class UserActionHandlerImpl implements UserActionHandler {
 
   async detectUserAnomalies(
     userId: EntityId,
-    timeRange?: { start: Date; end: Date }
+    timeRange?: { start: Date; end: Date },
   ): Promise<ActionAnomaly[]> {
     console.log(`🚨 Detecting anomalies for user ${userId}`);
     
@@ -540,16 +540,16 @@ export class UserActionHandlerImpl implements UserActionHandler {
         affectedActions: ['GAME_ACTION' as UserActionType],
         metadata: {
           normalRate: 10,
-          currentRate: 30
-        }
-      }
+          currentRate: 30,
+        },
+      },
     ];
   }
 
   async detectSystemAnomalies(
-    timeRange?: { start: Date; end: Date }
+    timeRange?: { start: Date; end: Date },
   ): Promise<ActionAnomaly[]> {
-    console.log(`🚨 Detecting system-wide anomalies`);
+    console.log('🚨 Detecting system-wide anomalies');
     
     return [
       {
@@ -562,9 +562,9 @@ export class UserActionHandlerImpl implements UserActionHandler {
         affectedActions: ['LOGIN' as UserActionType, 'GAME_JOIN' as UserActionType],
         metadata: {
           threshold: 0.05,
-          currentRate: 0.12
-        }
-      }
+          currentRate: 0.12,
+        },
+      },
     ];
   }
 }

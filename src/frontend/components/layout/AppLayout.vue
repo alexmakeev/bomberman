@@ -7,7 +7,9 @@
 </template>
 
 <script setup lang="ts">
+console.log('🏗️ AppLayout.vue script setup executing...')
 // Main application layout component
+console.log('✅ AppLayout ready to render')
 </script>
 
 <style scoped>

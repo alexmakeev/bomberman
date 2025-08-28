@@ -102,8 +102,8 @@ interface GameState {
  */
 class BossAIImpl {
   readonly eventBus: EventBus;
-  private bosses = new Map<EntityId, Boss>();
-  private gameIds = new Set<EntityId>();
+  private readonly bosses = new Map<EntityId, Boss>();
+  private readonly gameIds = new Set<EntityId>();
   private isShutdown = false;
   private updateInterval?: NodeJS.Timeout;
 
@@ -255,7 +255,7 @@ class BossAIImpl {
     let bestScore = -1;
 
     for (const [playerId, playerState] of gameState.players) {
-      if (playerState.health <= 0) continue;
+      if (playerState.health <= 0) {continue;}
 
       const distance = this.calculateDistance(boss.position, playerState.position);
       
@@ -302,7 +302,7 @@ class BossAIImpl {
 
     // Select attack based on distance and cooldowns
     const usableAttacks = availableAttacks.filter(attack => 
-      this.canUseAttack(bossId, attack.type)
+      this.canUseAttack(bossId, attack.type),
     );
 
     if (usableAttacks.length === 0) {
@@ -381,10 +381,10 @@ class BossAIImpl {
 
   canUseAttack(bossId: EntityId, attackType: string): boolean {
     const boss = this.bosses.get(bossId);
-    if (!boss) return false;
+    if (!boss) {return false;}
 
     const cooldownEnd = boss.attackCooldowns.get(attackType);
-    if (!cooldownEnd) return true;
+    if (!cooldownEnd) {return true;}
 
     return Date.now() >= cooldownEnd;
   }
@@ -497,7 +497,7 @@ class BossAIImpl {
           ttl: 60000,
           deliveryMode: 'exactly-once',
           compression: false,
-          tags: [`boss:${bossId}`, `victory`],
+          tags: [`boss:${bossId}`, 'victory'],
         },
         timestamp: Date.now(),
         version: '1.0.0',
@@ -509,7 +509,7 @@ class BossAIImpl {
 
   private async transitionPhase(bossId: EntityId, newPhase: number): Promise<void> {
     const boss = this.bosses.get(bossId);
-    if (!boss) return;
+    if (!boss) {return;}
 
     const oldPhase = boss.currentPhase;
     boss.currentPhase = newPhase;
@@ -562,10 +562,10 @@ class BossAIImpl {
   }
 
   private async updateAllBosses(): Promise<void> {
-    if (this.isShutdown) return;
+    if (this.isShutdown) {return;}
 
     for (const boss of this.bosses.values()) {
-      if (boss.state === 'DEAD') continue;
+      if (boss.state === 'DEAD') {continue;}
 
       // Clean up expired attack cooldowns
       const now = Date.now();
@@ -653,7 +653,7 @@ class BossAIImpl {
     const playersInRange: EntityId[] = [];
     
     for (const [playerId, playerState] of gameState.players) {
-      if (playerState.health <= 0) continue;
+      if (playerState.health <= 0) {continue;}
       
       const distance = this.calculateDistance(center, playerState.position);
       if (distance <= range) {

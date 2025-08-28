@@ -5,45 +5,45 @@
  * @see docs/front-end/03-state-management.md - Store architecture
  */
 
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-import type { NotificationMessage } from '../types/game'
+import { defineStore } from 'pinia';
+import { computed, ref } from 'vue';
+import type { NotificationMessage } from '../types/game';
 
 export const useNotificationStore = defineStore('notification', () => {
   // State - Notification Management
-  const messages = ref<NotificationMessage[]>([])
-  const toastQueue = ref<NotificationMessage[]>([])
-  const maxMessages = ref<number>(10)
-  const defaultDuration = ref<number>(5000)
+  const messages = ref<NotificationMessage[]>([]);
+  const toastQueue = ref<NotificationMessage[]>([]);
+  const maxMessages = ref<number>(10);
+  const defaultDuration = ref<number>(5000);
 
   // State - Display Settings
-  const showToasts = ref<boolean>(true)
-  const position = ref<'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'>('top-right')
-  const animationDuration = ref<number>(300)
-  const pauseOnHover = ref<boolean>(true)
+  const showToasts = ref<boolean>(true);
+  const position = ref<'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'>('top-right');
+  const animationDuration = ref<number>(300);
+  const pauseOnHover = ref<boolean>(true);
 
   // State - Internal Timers
-  const timers = ref<Map<string, NodeJS.Timeout>>(new Map())
+  const timers = ref<Map<string, NodeJS.Timeout>>(new Map());
 
   // Computed Properties
   const visibleMessages = computed(() => 
-    messages.value.slice(-maxMessages.value)
-  )
+    messages.value.slice(-maxMessages.value),
+  );
 
   const messagesByPriority = computed(() => 
     [...messages.value].sort((a, b) => {
-      const priorityOrder = { high: 3, normal: 2, low: 1 }
-      return priorityOrder[b.priority] - priorityOrder[a.priority]
-    })
-  )
+      const priorityOrder = { high: 3, normal: 2, low: 1 };
+      return priorityOrder[b.priority] - priorityOrder[a.priority];
+    }),
+  );
 
   const hasHighPriority = computed(() =>
-    messages.value.some(msg => msg.priority === 'high')
-  )
+    messages.value.some(msg => msg.priority === 'high'),
+  );
 
   const unreadCount = computed(() =>
-    messages.value.filter(msg => !msg.isRead).length
-  )
+    messages.value.filter(msg => !msg.isRead).length,
+  );
 
   // Actions - Message Management
   function addMessage(
@@ -55,10 +55,10 @@ export const useNotificationStore = defineStore('notification', () => {
       priority?: 'low' | 'normal' | 'high'
       persistent?: boolean
       actions?: Array<{ label: string; handler: () => void }>
-    } = {}
+    } = {},
   ): string {
-    const id = generateMessageId()
-    const timestamp = Date.now()
+    const id = generateMessageId();
+    const timestamp = Date.now();
     
     const notification: NotificationMessage = {
       id,
@@ -70,77 +70,77 @@ export const useNotificationStore = defineStore('notification', () => {
       priority: options.priority ?? 'normal',
       isPersistent: options.persistent ?? false,
       isRead: false,
-      actions: options.actions ?? []
-    }
+      actions: options.actions ?? [],
+    };
 
-    messages.value.push(notification)
+    messages.value.push(notification);
 
     // Auto-dismiss non-persistent messages
     if (!notification.isPersistent && notification.duration > 0) {
       const timer = setTimeout(() => {
-        removeMessage(id)
-      }, notification.duration)
+        removeMessage(id);
+      }, notification.duration);
       
-      timers.value.set(id, timer)
+      timers.value.set(id, timer);
     }
 
     // Limit total messages
     if (messages.value.length > maxMessages.value * 2) {
-      messages.value = messages.value.slice(-maxMessages.value)
+      messages.value = messages.value.slice(-maxMessages.value);
     }
 
-    return id
+    return id;
   }
 
   function removeMessage(messageId: string): void {
-    const index = messages.value.findIndex(msg => msg.id === messageId)
+    const index = messages.value.findIndex(msg => msg.id === messageId);
     if (index !== -1) {
-      messages.value.splice(index, 1)
+      messages.value.splice(index, 1);
     }
 
     // Clear timer if exists
-    const timer = timers.value.get(messageId)
+    const timer = timers.value.get(messageId);
     if (timer) {
-      clearTimeout(timer)
-      timers.value.delete(messageId)
+      clearTimeout(timer);
+      timers.value.delete(messageId);
     }
   }
 
   function markAsRead(messageId: string): void {
-    const message = messages.value.find(msg => msg.id === messageId)
+    const message = messages.value.find(msg => msg.id === messageId);
     if (message) {
-      message.isRead = true
+      message.isRead = true;
     }
   }
 
   function markAllAsRead(): void {
     messages.value.forEach(message => {
-      message.isRead = true
-    })
+      message.isRead = true;
+    });
   }
 
   function clearAll(): void {
     // Clear all timers
-    timers.value.forEach(timer => clearTimeout(timer))
-    timers.value.clear()
+    timers.value.forEach(timer => clearTimeout(timer));
+    timers.value.clear();
     
     // Clear messages
-    messages.value = []
-    toastQueue.value = []
+    messages.value = [];
+    toastQueue.value = [];
   }
 
   function clearByType(type: 'info' | 'warning' | 'error' | 'success'): void {
-    const toRemove = messages.value.filter(msg => msg.type === type)
-    toRemove.forEach(msg => removeMessage(msg.id))
+    const toRemove = messages.value.filter(msg => msg.type === type);
+    toRemove.forEach(msg => removeMessage(msg.id));
   }
 
   // Actions - Predefined Message Types
   function showInfo(title: string, message: string, duration?: number): string {
-    return addMessage('info', title, message, { duration })
+    return addMessage('info', title, message, { duration });
   }
 
   function showSuccess(title: string, message: string, duration?: number): string {
-    return addMessage('success', title, message, { duration })
+    return addMessage('success', title, message, { duration });
   }
 
   function showWarning(title: string, message: string, options: {
@@ -150,8 +150,8 @@ export const useNotificationStore = defineStore('notification', () => {
     return addMessage('warning', title, message, {
       duration: options.duration ?? 8000, // Longer for warnings
       priority: 'high',
-      persistent: options.persistent
-    })
+      persistent: options.persistent,
+    });
   }
 
   function showError(title: string, message: string, options: {
@@ -162,47 +162,47 @@ export const useNotificationStore = defineStore('notification', () => {
       duration: 0, // Errors are persistent by default
       priority: 'high',
       persistent: options.persistent ?? true,
-      actions: options.actions
-    })
+      actions: options.actions,
+    });
   }
 
   // Actions - Game-Specific Notifications
   function showPlayerJoined(playerName: string): void {
-    showInfo('Player Joined', `${playerName} joined the game`)
+    showInfo('Player Joined', `${playerName} joined the game`);
   }
 
   function showPlayerLeft(playerName: string): void {
-    showInfo('Player Left', `${playerName} left the game`)
+    showInfo('Player Left', `${playerName} left the game`);
   }
 
   function showPowerUpCollected(powerUpType: string): void {
-    showSuccess('Power-up!', `You collected ${powerUpType.replace('_', ' ')}!`, 2000)
+    showSuccess('Power-up!', `You collected ${powerUpType.replace('_', ' ')}!`, 2000);
   }
 
   function showPlayerDied(playerName: string, respawnTime: number): void {
     showWarning(
       'Player Eliminated',
-      `${playerName} was eliminated! Respawning in ${respawnTime}s`
-    )
+      `${playerName} was eliminated! Respawning in ${respawnTime}s`,
+    );
   }
 
   function showBossPhaseChange(phase: number): void {
     showWarning(
       'Boss Phase Change',
       `Boss entered phase ${phase}!`,
-      { duration: 3000 }
-    )
+      { duration: 3000 },
+    );
   }
 
   function showGameStarted(): void {
-    showSuccess('Game Started', 'Good luck and work together!', 3000)
+    showSuccess('Game Started', 'Good luck and work together!', 3000);
   }
 
   function showGameEnded(result: 'victory' | 'defeat'): void {
     if (result === 'victory') {
-      showSuccess('Victory!', 'Congratulations! You completed the level!', 0)
+      showSuccess('Victory!', 'Congratulations! You completed the level!', 0);
     } else {
-      showError('Game Over', 'Better luck next time!', { persistent: false })
+      showError('Game Over', 'Better luck next time!', { persistent: false });
     }
   }
 
@@ -217,96 +217,96 @@ export const useNotificationStore = defineStore('notification', () => {
             label: 'Retry',
             handler: () => {
               // TODO: Implement reconnection logic
-              console.log('Retrying connection...')
-            }
-          }
-        ]
-      }
-    )
+              console.log('Retrying connection...');
+            },
+          },
+        ],
+      },
+    );
   }
 
   function showConnectionRestored(): void {
-    showSuccess('Connected', 'Connection restored!', 2000)
+    showSuccess('Connected', 'Connection restored!', 2000);
   }
 
   // Actions - Settings and Configuration
   function setPosition(newPosition: typeof position.value): void {
-    position.value = newPosition
-    localStorage.setItem('bomberman-notification-position', newPosition)
+    position.value = newPosition;
+    localStorage.setItem('bomberman-notification-position', newPosition);
   }
 
   function setMaxMessages(max: number): void {
-    maxMessages.value = Math.max(1, Math.min(50, max))
-    localStorage.setItem('bomberman-max-notifications', max.toString())
+    maxMessages.value = Math.max(1, Math.min(50, max));
+    localStorage.setItem('bomberman-max-notifications', max.toString());
   }
 
   function setDefaultDuration(duration: number): void {
-    defaultDuration.value = Math.max(1000, Math.min(30000, duration))
-    localStorage.setItem('bomberman-notification-duration', duration.toString())
+    defaultDuration.value = Math.max(1000, Math.min(30000, duration));
+    localStorage.setItem('bomberman-notification-duration', duration.toString());
   }
 
   function toggleToasts(): void {
-    showToasts.value = !showToasts.value
-    localStorage.setItem('bomberman-show-toasts', showToasts.value.toString())
+    showToasts.value = !showToasts.value;
+    localStorage.setItem('bomberman-show-toasts', showToasts.value.toString());
   }
 
   function setPauseOnHover(enabled: boolean): void {
-    pauseOnHover.value = enabled
-    localStorage.setItem('bomberman-notification-pause-hover', enabled.toString())
+    pauseOnHover.value = enabled;
+    localStorage.setItem('bomberman-notification-pause-hover', enabled.toString());
   }
 
   // Actions - Timer Management
   function pauseTimer(messageId: string): void {
-    const timer = timers.value.get(messageId)
+    const timer = timers.value.get(messageId);
     if (timer) {
-      clearTimeout(timer)
-      timers.value.delete(messageId)
+      clearTimeout(timer);
+      timers.value.delete(messageId);
     }
   }
 
   function resumeTimer(messageId: string): void {
-    const message = messages.value.find(msg => msg.id === messageId)
+    const message = messages.value.find(msg => msg.id === messageId);
     if (message && !message.isPersistent && message.duration > 0) {
       const timer = setTimeout(() => {
-        removeMessage(messageId)
-      }, message.duration)
+        removeMessage(messageId);
+      }, message.duration);
       
-      timers.value.set(messageId, timer)
+      timers.value.set(messageId, timer);
     }
   }
 
   // Actions - Persistence
   function loadSettings(): void {
     // TODO: Implement settings loading from localStorage
-    const savedPosition = localStorage.getItem('bomberman-notification-position')
+    const savedPosition = localStorage.getItem('bomberman-notification-position');
     if (savedPosition) {
-      position.value = savedPosition as typeof position.value
+      position.value = savedPosition as typeof position.value;
     }
 
-    const savedMax = localStorage.getItem('bomberman-max-notifications')
+    const savedMax = localStorage.getItem('bomberman-max-notifications');
     if (savedMax) {
-      maxMessages.value = parseInt(savedMax)
+      maxMessages.value = parseInt(savedMax);
     }
 
-    const savedDuration = localStorage.getItem('bomberman-notification-duration')
+    const savedDuration = localStorage.getItem('bomberman-notification-duration');
     if (savedDuration) {
-      defaultDuration.value = parseInt(savedDuration)
+      defaultDuration.value = parseInt(savedDuration);
     }
 
-    const savedShowToasts = localStorage.getItem('bomberman-show-toasts')
+    const savedShowToasts = localStorage.getItem('bomberman-show-toasts');
     if (savedShowToasts) {
-      showToasts.value = savedShowToasts === 'true'
+      showToasts.value = savedShowToasts === 'true';
     }
 
-    const savedPauseOnHover = localStorage.getItem('bomberman-notification-pause-hover')
+    const savedPauseOnHover = localStorage.getItem('bomberman-notification-pause-hover');
     if (savedPauseOnHover) {
-      pauseOnHover.value = savedPauseOnHover === 'true'
+      pauseOnHover.value = savedPauseOnHover === 'true';
     }
   }
 
   // Utility Functions
   function generateMessageId(): string {
-    return `msg_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
+    return `msg_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
   }
 
   // Return store interface
@@ -364,6 +364,6 @@ export const useNotificationStore = defineStore('notification', () => {
     resumeTimer,
 
     // Actions - Persistence
-    loadSettings
-  }
-})
+    loadSettings,
+  };
+});

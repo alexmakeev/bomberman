@@ -5,7 +5,7 @@
  * @see docs/front-end/01-architecture-overview.md - Data persistence layer
  */
 
-import type { Player, GameSettings, UISettings, AudioSettings, GameStatistics } from '../types/game'
+import type { AudioSettings, GameSettings, GameStatistics, Player, UISettings } from '../types/game';
 
 // Storage Keys
 const STORAGE_KEYS = {
@@ -18,106 +18,106 @@ const STORAGE_KEYS = {
   RECENT_ROOMS: 'bomberman_recent_rooms',
   SAVED_GAMES: 'bomberman_saved_games',
   ACHIEVEMENTS: 'bomberman_achievements',
-  PREFERENCES: 'bomberman_preferences'
-} as const
+  PREFERENCES: 'bomberman_preferences',
+} as const;
 
 // Error Handling
 export class StorageError extends Error {
   constructor(message: string, public operation: string, public key?: string) {
-    super(message)
-    this.name = 'StorageError'
+    super(message);
+    this.name = 'StorageError';
   }
 }
 
 // Storage Availability Checks
 export function isLocalStorageAvailable(): boolean {
   try {
-    const testKey = '__storage_test__'
-    localStorage.setItem(testKey, 'test')
-    localStorage.removeItem(testKey)
-    return true
+    const testKey = '__storage_test__';
+    localStorage.setItem(testKey, 'test');
+    localStorage.removeItem(testKey);
+    return true;
   } catch {
-    return false
+    return false;
   }
 }
 
 export function isSessionStorageAvailable(): boolean {
   try {
-    const testKey = '__storage_test__'
-    sessionStorage.setItem(testKey, 'test')
-    sessionStorage.removeItem(testKey)
-    return true
+    const testKey = '__storage_test__';
+    sessionStorage.setItem(testKey, 'test');
+    sessionStorage.removeItem(testKey);
+    return true;
   } catch {
-    return false
+    return false;
   }
 }
 
 export function isIndexedDBAvailable(): boolean {
-  return 'indexedDB' in window && indexedDB !== null
+  return 'indexedDB' in window && indexedDB !== null;
 }
 
 // Generic Storage Operations
 export function setStorageItem<T>(key: string, value: T, useSession: boolean = false): void {
   try {
-    const storage = useSession ? sessionStorage : localStorage
+    const storage = useSession ? sessionStorage : localStorage;
     const serialized = JSON.stringify({
       value,
       timestamp: Date.now(),
-      version: 1
-    })
-    storage.setItem(key, serialized)
+      version: 1,
+    });
+    storage.setItem(key, serialized);
   } catch (error) {
     throw new StorageError(
       `Failed to save ${key}: ${error instanceof Error ? error.message : 'Unknown error'}`,
       'set',
-      key
-    )
+      key,
+    );
   }
 }
 
 export function getStorageItem<T>(key: string, defaultValue: T, useSession: boolean = false): T {
   try {
-    const storage = useSession ? sessionStorage : localStorage
-    const item = storage.getItem(key)
+    const storage = useSession ? sessionStorage : localStorage;
+    const item = storage.getItem(key);
     
-    if (!item) return defaultValue
+    if (!item) {return defaultValue;}
     
-    const parsed = JSON.parse(item)
+    const parsed = JSON.parse(item);
     
     // Validate structure
     if (!parsed || typeof parsed !== 'object' || !parsed.hasOwnProperty('value')) {
-      return defaultValue
+      return defaultValue;
     }
     
-    return parsed.value as T
+    return parsed.value as T;
   } catch (error) {
-    console.warn(`Failed to load ${key}:`, error)
-    return defaultValue
+    console.warn(`Failed to load ${key}:`, error);
+    return defaultValue;
   }
 }
 
 export function removeStorageItem(key: string, useSession: boolean = false): void {
   try {
-    const storage = useSession ? sessionStorage : localStorage
-    storage.removeItem(key)
+    const storage = useSession ? sessionStorage : localStorage;
+    storage.removeItem(key);
   } catch (error) {
     throw new StorageError(
       `Failed to remove ${key}: ${error instanceof Error ? error.message : 'Unknown error'}`,
       'remove',
-      key
-    )
+      key,
+    );
   }
 }
 
 export function clearStorage(useSession: boolean = false): void {
   try {
-    const storage = useSession ? sessionStorage : localStorage
-    storage.clear()
+    const storage = useSession ? sessionStorage : localStorage;
+    storage.clear();
   } catch (error) {
     throw new StorageError(
       `Failed to clear storage: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      'clear'
-    )
+      'clear',
+    );
   }
 }
 
@@ -144,23 +144,23 @@ export function getDefaultPlayerProfile(): PlayerProfile {
     bestScore: 0,
     achievements: [],
     createdAt: Date.now(),
-    lastActive: Date.now()
-  }
+    lastActive: Date.now(),
+  };
 }
 
 export function savePlayerProfile(profile: PlayerProfile): void {
-  profile.lastActive = Date.now()
-  setStorageItem(STORAGE_KEYS.PLAYER_PROFILE, profile)
+  profile.lastActive = Date.now();
+  setStorageItem(STORAGE_KEYS.PLAYER_PROFILE, profile);
 }
 
 export function loadPlayerProfile(): PlayerProfile {
-  return getStorageItem(STORAGE_KEYS.PLAYER_PROFILE, getDefaultPlayerProfile())
+  return getStorageItem(STORAGE_KEYS.PLAYER_PROFILE, getDefaultPlayerProfile());
 }
 
 export function updatePlayerStats(stats: Partial<PlayerProfile>): void {
-  const profile = loadPlayerProfile()
-  Object.assign(profile, stats, { lastActive: Date.now() })
-  savePlayerProfile(profile)
+  const profile = loadPlayerProfile();
+  Object.assign(profile, stats, { lastActive: Date.now() });
+  savePlayerProfile(profile);
 }
 
 // Game Settings
@@ -173,16 +173,16 @@ export function getDefaultGameSettings(): GameSettings {
     respawnTime: 10,
     friendlyFire: false,
     powerUpSpawnRate: 0.3,
-    monsterSpawnRate: 0.2
-  }
+    monsterSpawnRate: 0.2,
+  };
 }
 
 export function saveGameSettings(settings: GameSettings): void {
-  setStorageItem(STORAGE_KEYS.GAME_SETTINGS, settings)
+  setStorageItem(STORAGE_KEYS.GAME_SETTINGS, settings);
 }
 
 export function loadGameSettings(): GameSettings {
-  return getStorageItem(STORAGE_KEYS.GAME_SETTINGS, getDefaultGameSettings())
+  return getStorageItem(STORAGE_KEYS.GAME_SETTINGS, getDefaultGameSettings());
 }
 
 // UI Settings
@@ -195,16 +195,16 @@ export function getDefaultUISettings(): UISettings {
     musicVolume: 0.5,
     hapticFeedback: true,
     touchControlsEnabled: true,
-    theme: 'auto'
-  }
+    theme: 'auto',
+  };
 }
 
 export function saveUISettings(settings: UISettings): void {
-  setStorageItem(STORAGE_KEYS.UI_SETTINGS, settings)
+  setStorageItem(STORAGE_KEYS.UI_SETTINGS, settings);
 }
 
 export function loadUISettings(): UISettings {
-  return getStorageItem(STORAGE_KEYS.UI_SETTINGS, getDefaultUISettings())
+  return getStorageItem(STORAGE_KEYS.UI_SETTINGS, getDefaultUISettings());
 }
 
 // Audio Settings
@@ -214,16 +214,16 @@ export function getDefaultAudioSettings(): AudioSettings {
     soundEffectsVolume: 0.8,
     musicVolume: 0.5,
     muteAll: false,
-    spatialAudio: false
-  }
+    spatialAudio: false,
+  };
 }
 
 export function saveAudioSettings(settings: AudioSettings): void {
-  setStorageItem(STORAGE_KEYS.AUDIO_SETTINGS, settings)
+  setStorageItem(STORAGE_KEYS.AUDIO_SETTINGS, settings);
 }
 
 export function loadAudioSettings(): AudioSettings {
-  return getStorageItem(STORAGE_KEYS.AUDIO_SETTINGS, getDefaultAudioSettings())
+  return getStorageItem(STORAGE_KEYS.AUDIO_SETTINGS, getDefaultAudioSettings());
 }
 
 // Game Statistics
@@ -237,22 +237,22 @@ export function getDefaultGameStatistics(): GameStatistics {
     monstersKilled: 0,
     powerUpsCollected: 0,
     deaths: 0,
-    assists: 0
-  }
+    assists: 0,
+  };
 }
 
 export function saveGameStatistics(stats: GameStatistics): void {
-  setStorageItem(STORAGE_KEYS.GAME_STATISTICS, stats)
+  setStorageItem(STORAGE_KEYS.GAME_STATISTICS, stats);
 }
 
 export function loadGameStatistics(): GameStatistics {
-  return getStorageItem(STORAGE_KEYS.GAME_STATISTICS, getDefaultGameStatistics())
+  return getStorageItem(STORAGE_KEYS.GAME_STATISTICS, getDefaultGameStatistics());
 }
 
 export function updateGameStatistics(updates: Partial<GameStatistics>): void {
-  const stats = loadGameStatistics()
-  Object.assign(stats, updates)
-  saveGameStatistics(stats)
+  const stats = loadGameStatistics();
+  Object.assign(stats, updates);
+  saveGameStatistics(stats);
 }
 
 // Recent Rooms
@@ -265,28 +265,28 @@ export interface RecentRoom {
 }
 
 export function addRecentRoom(room: RecentRoom): void {
-  const recent = getStorageItem<RecentRoom[]>(STORAGE_KEYS.RECENT_ROOMS, [])
+  const recent = getStorageItem<RecentRoom[]>(STORAGE_KEYS.RECENT_ROOMS, []);
   
   // Remove existing entry for this room
-  const filtered = recent.filter(r => r.id !== room.id)
+  const filtered = recent.filter(r => r.id !== room.id);
   
   // Add to front
-  filtered.unshift(room)
+  filtered.unshift(room);
   
   // Keep only last 10
-  const trimmed = filtered.slice(0, 10)
+  const trimmed = filtered.slice(0, 10);
   
-  setStorageItem(STORAGE_KEYS.RECENT_ROOMS, trimmed)
+  setStorageItem(STORAGE_KEYS.RECENT_ROOMS, trimmed);
 }
 
 export function getRecentRooms(): RecentRoom[] {
-  return getStorageItem<RecentRoom[]>(STORAGE_KEYS.RECENT_ROOMS, [])
+  return getStorageItem<RecentRoom[]>(STORAGE_KEYS.RECENT_ROOMS, []);
 }
 
 export function removeRecentRoom(roomId: string): void {
-  const recent = getRecentRooms()
-  const filtered = recent.filter(r => r.id !== roomId)
-  setStorageItem(STORAGE_KEYS.RECENT_ROOMS, filtered)
+  const recent = getRecentRooms();
+  const filtered = recent.filter(r => r.id !== roomId);
+  setStorageItem(STORAGE_KEYS.RECENT_ROOMS, filtered);
 }
 
 // Saved Games (for offline play)
@@ -300,28 +300,28 @@ export interface SavedGame {
 }
 
 export function saveGame(game: SavedGame): void {
-  const saved = getStorageItem<SavedGame[]>(STORAGE_KEYS.SAVED_GAMES, [])
+  const saved = getStorageItem<SavedGame[]>(STORAGE_KEYS.SAVED_GAMES, []);
   
   // Remove existing save with same ID
-  const filtered = saved.filter(g => g.id !== game.id)
+  const filtered = saved.filter(g => g.id !== game.id);
   
   // Add new save
-  filtered.unshift(game)
+  filtered.unshift(game);
   
   // Keep only last 5 saves
-  const trimmed = filtered.slice(0, 5)
+  const trimmed = filtered.slice(0, 5);
   
-  setStorageItem(STORAGE_KEYS.SAVED_GAMES, trimmed)
+  setStorageItem(STORAGE_KEYS.SAVED_GAMES, trimmed);
 }
 
 export function loadSavedGames(): SavedGame[] {
-  return getStorageItem<SavedGame[]>(STORAGE_KEYS.SAVED_GAMES, [])
+  return getStorageItem<SavedGame[]>(STORAGE_KEYS.SAVED_GAMES, []);
 }
 
 export function deleteSavedGame(gameId: string): void {
-  const saved = loadSavedGames()
-  const filtered = saved.filter(g => g.id !== gameId)
-  setStorageItem(STORAGE_KEYS.SAVED_GAMES, filtered)
+  const saved = loadSavedGames();
+  const filtered = saved.filter(g => g.id !== gameId);
+  setStorageItem(STORAGE_KEYS.SAVED_GAMES, filtered);
 }
 
 // Achievements
@@ -335,36 +335,36 @@ export interface Achievement {
 }
 
 export function saveAchievements(achievements: Achievement[]): void {
-  setStorageItem(STORAGE_KEYS.ACHIEVEMENTS, achievements)
+  setStorageItem(STORAGE_KEYS.ACHIEVEMENTS, achievements);
 }
 
 export function loadAchievements(): Achievement[] {
-  return getStorageItem<Achievement[]>(STORAGE_KEYS.ACHIEVEMENTS, [])
+  return getStorageItem<Achievement[]>(STORAGE_KEYS.ACHIEVEMENTS, []);
 }
 
 export function unlockAchievement(achievementId: string): void {
-  const achievements = loadAchievements()
-  const achievement = achievements.find(a => a.id === achievementId)
+  const achievements = loadAchievements();
+  const achievement = achievements.find(a => a.id === achievementId);
   
   if (achievement && !achievement.unlockedAt) {
-    achievement.unlockedAt = Date.now()
-    saveAchievements(achievements)
+    achievement.unlockedAt = Date.now();
+    saveAchievements(achievements);
   }
 }
 
 export function updateAchievementProgress(achievementId: string, progress: number): void {
-  const achievements = loadAchievements()
-  const achievement = achievements.find(a => a.id === achievementId)
+  const achievements = loadAchievements();
+  const achievement = achievements.find(a => a.id === achievementId);
   
   if (achievement) {
-    achievement.progress = progress
+    achievement.progress = progress;
     
     // Auto-unlock if progress reaches max
     if (achievement.maxProgress && progress >= achievement.maxProgress && !achievement.unlockedAt) {
-      achievement.unlockedAt = Date.now()
+      achievement.unlockedAt = Date.now();
     }
     
-    saveAchievements(achievements)
+    saveAchievements(achievements);
   }
 }
 
@@ -393,62 +393,62 @@ export function getDefaultPreferences(): UserPreferences {
     colorScheme: 'auto',
     reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     highContrast: window.matchMedia('(prefers-contrast: high)').matches,
-    fontSize: 'medium'
-  }
+    fontSize: 'medium',
+  };
 }
 
 export function savePreferences(preferences: UserPreferences): void {
-  setStorageItem(STORAGE_KEYS.PREFERENCES, preferences)
+  setStorageItem(STORAGE_KEYS.PREFERENCES, preferences);
 }
 
 export function loadPreferences(): UserPreferences {
-  return getStorageItem(STORAGE_KEYS.PREFERENCES, getDefaultPreferences())
+  return getStorageItem(STORAGE_KEYS.PREFERENCES, getDefaultPreferences());
 }
 
 // Storage Cleanup and Maintenance
 export function cleanupOldData(maxAge: number = 30 * 24 * 60 * 60 * 1000): void { // 30 days
-  const cutoffTime = Date.now() - maxAge
+  const cutoffTime = Date.now() - maxAge;
   
   try {
     // Clean up recent rooms
-    const recentRooms = getRecentRooms()
-    const validRooms = recentRooms.filter(room => room.lastJoined > cutoffTime)
+    const recentRooms = getRecentRooms();
+    const validRooms = recentRooms.filter(room => room.lastJoined > cutoffTime);
     if (validRooms.length !== recentRooms.length) {
-      setStorageItem(STORAGE_KEYS.RECENT_ROOMS, validRooms)
+      setStorageItem(STORAGE_KEYS.RECENT_ROOMS, validRooms);
     }
     
     // Clean up saved games
-    const savedGames = loadSavedGames()
-    const validGames = savedGames.filter(game => game.timestamp > cutoffTime)
+    const savedGames = loadSavedGames();
+    const validGames = savedGames.filter(game => game.timestamp > cutoffTime);
     if (validGames.length !== savedGames.length) {
-      setStorageItem(STORAGE_KEYS.SAVED_GAMES, validGames)
+      setStorageItem(STORAGE_KEYS.SAVED_GAMES, validGames);
     }
   } catch (error) {
-    console.warn('Failed to cleanup old data:', error)
+    console.warn('Failed to cleanup old data:', error);
   }
 }
 
 export function getStorageUsage(): { used: number; quota: number } {
   if (!isLocalStorageAvailable()) {
-    return { used: 0, quota: 0 }
+    return { used: 0, quota: 0 };
   }
   
-  let used = 0
+  let used = 0;
   
   try {
-    for (let key in localStorage) {
+    for (const key in localStorage) {
       if (localStorage.hasOwnProperty(key)) {
-        used += localStorage[key].length + key.length
+        used += localStorage[key].length + key.length;
       }
     }
   } catch (error) {
-    console.warn('Failed to calculate storage usage:', error)
+    console.warn('Failed to calculate storage usage:', error);
   }
   
   // Estimate quota (usually 5-10MB for localStorage)
-  const quota = 10 * 1024 * 1024 // 10MB estimate
+  const quota = 10 * 1024 * 1024; // 10MB estimate
   
-  return { used, quota }
+  return { used, quota };
 }
 
 export function exportUserData(): string {
@@ -462,61 +462,61 @@ export function exportUserData(): string {
     achievements: loadAchievements(),
     preferences: loadPreferences(),
     exportedAt: Date.now(),
-    version: 1
-  }
+    version: 1,
+  };
   
-  return JSON.stringify(data, null, 2)
+  return JSON.stringify(data, null, 2);
 }
 
 export function importUserData(jsonData: string): void {
   try {
-    const data = JSON.parse(jsonData)
+    const data = JSON.parse(jsonData);
     
     // Validate data structure
     if (!data || typeof data !== 'object' || !data.version) {
-      throw new Error('Invalid data format')
+      throw new Error('Invalid data format');
     }
     
     // Import each section
-    if (data.playerProfile) savePlayerProfile(data.playerProfile)
-    if (data.gameSettings) saveGameSettings(data.gameSettings)
-    if (data.uiSettings) saveUISettings(data.uiSettings)
-    if (data.audioSettings) saveAudioSettings(data.audioSettings)
-    if (data.gameStatistics) saveGameStatistics(data.gameStatistics)
-    if (data.recentRooms) setStorageItem(STORAGE_KEYS.RECENT_ROOMS, data.recentRooms)
-    if (data.achievements) saveAchievements(data.achievements)
-    if (data.preferences) savePreferences(data.preferences)
+    if (data.playerProfile) {savePlayerProfile(data.playerProfile);}
+    if (data.gameSettings) {saveGameSettings(data.gameSettings);}
+    if (data.uiSettings) {saveUISettings(data.uiSettings);}
+    if (data.audioSettings) {saveAudioSettings(data.audioSettings);}
+    if (data.gameStatistics) {saveGameStatistics(data.gameStatistics);}
+    if (data.recentRooms) {setStorageItem(STORAGE_KEYS.RECENT_ROOMS, data.recentRooms);}
+    if (data.achievements) {saveAchievements(data.achievements);}
+    if (data.preferences) {savePreferences(data.preferences);}
     
   } catch (error) {
     throw new StorageError(
       `Failed to import user data: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      'import'
-    )
+      'import',
+    );
   }
 }
 
 // Utility Functions
 export function generatePlayerId(): string {
-  return `player_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
+  return `player_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 }
 
 export function generateGameId(): string {
-  return `game_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
+  return `game_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 }
 
 export function isValidPlayerName(name: string): boolean {
-  return name.length >= 2 && name.length <= 20 && /^[a-zA-Z0-9_-]+$/.test(name)
+  return name.length >= 2 && name.length <= 20 && /^[a-zA-Z0-9_-]+$/.test(name);
 }
 
 // Storage Migration
 export function migrateStorageData(): void {
   try {
     // Check if migration is needed
-    const migrationKey = 'bomberman_storage_version'
-    const currentVersion = getStorageItem(migrationKey, 0)
-    const targetVersion = 1
+    const migrationKey = 'bomberman_storage_version';
+    const currentVersion = getStorageItem(migrationKey, 0);
+    const targetVersion = 1;
     
-    if (currentVersion >= targetVersion) return
+    if (currentVersion >= targetVersion) {return;}
     
     // Perform migrations
     if (currentVersion < 1) {
@@ -525,8 +525,8 @@ export function migrateStorageData(): void {
     }
     
     // Update version
-    setStorageItem(migrationKey, targetVersion)
+    setStorageItem(migrationKey, targetVersion);
   } catch (error) {
-    console.warn('Storage migration failed:', error)
+    console.warn('Storage migration failed:', error);
   }
 }

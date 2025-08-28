@@ -4,24 +4,24 @@
  */
 
 import type { 
-  UserNotificationHandler,
-  EnhancedNotificationData,
-  NotificationTemplate,
-  NotificationDeliveryResult,
   ChannelDeliveryResult,
-  NotificationPreferences,
-  UserFilter,
-  NotificationHistoryFilter,
-  PaginationOptions,
-  PaginatedNotifications,
-  CustomChannelConfig,
   ChannelTestResult,
-  StatisticsFilter,
+  CustomChannelConfig,
   DeliveryStatistics,
+  DeliveryStatus,
   EngagementMetrics,
+  EnhancedNotificationData,
   NotificationChannel,
+  NotificationDeliveryResult,
+  NotificationHistoryFilter,
+  NotificationPreferences,
   NotificationPriority,
-  DeliveryStatus
+  NotificationTemplate,
+  PaginatedNotifications,
+  PaginationOptions,
+  StatisticsFilter,
+  UserFilter,
+  UserNotificationHandler,
 } from '../../interfaces/specialized/UserNotificationHandler.d.ts';
 import type { EventBus, EventHandler, SubscriptionResult } from '../../interfaces/core/EventBus';
 import type { EntityId } from '../../types/common';
@@ -31,14 +31,14 @@ import type { EntityId } from '../../types/common';
  */
 export class UserNotificationHandlerImpl implements UserNotificationHandler {
   readonly eventBus: EventBus;
-  private templates = new Map<EntityId, NotificationTemplate>();
-  private userPreferences = new Map<EntityId, NotificationPreferences>();
-  private channels = new Map<NotificationChannel, CustomChannelConfig>();
-  private notificationHistory = new Map<EntityId, EnhancedNotificationData[]>();
-  private deliveryStats = {
+  private readonly templates = new Map<EntityId, NotificationTemplate>();
+  private readonly userPreferences = new Map<EntityId, NotificationPreferences>();
+  private readonly channels = new Map<NotificationChannel, CustomChannelConfig>();
+  private readonly notificationHistory = new Map<EntityId, EnhancedNotificationData[]>();
+  private readonly deliveryStats = {
     totalSent: 0,
     totalDelivered: 0,
-    totalFailed: 0
+    totalFailed: 0,
   };
 
   constructor(eventBus: EventBus) {
@@ -78,7 +78,7 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
       channel,
       status: 'delivered' as DeliveryStatus,
       deliveredAt,
-      metadata: {}
+      metadata: {},
     }));
     
     this.deliveryStats.totalSent++;
@@ -89,7 +89,7 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
       success: true,
       channelResults,
       deliveredAt,
-      deliveryTimeMs: Date.now() - startTime
+      deliveryTimeMs: Date.now() - startTime,
     };
   }
 
@@ -97,7 +97,7 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
     templateId: EntityId,
     userId: EntityId,
     variables: Record<string, any>,
-    overrides?: Partial<EnhancedNotificationData>
+    overrides?: Partial<EnhancedNotificationData>,
   ): Promise<NotificationDeliveryResult> {
     const template = this.templates.get(templateId);
     if (!template) {
@@ -118,14 +118,14 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
       requireAck: false,
       dismissible: true,
       category: template.category,
-      ...overrides
+      ...overrides,
     };
     
     return this.sendNotification(notification);
   }
 
   async sendBulkNotifications(
-    notifications: EnhancedNotificationData[]
+    notifications: EnhancedNotificationData[],
   ): Promise<NotificationDeliveryResult[]> {
     console.log(`📢 Sending bulk notifications: ${notifications.length} notifications`);
     
@@ -141,7 +141,7 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
           success: false,
           channelResults: [],
           deliveredAt: new Date(),
-          deliveryTimeMs: 0
+          deliveryTimeMs: 0,
         });
       }
     }
@@ -151,9 +151,9 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
 
   async broadcastNotification(
     notification: Omit<EnhancedNotificationData, 'userId'>,
-    filters?: UserFilter[]
+    filters?: UserFilter[],
   ): Promise<NotificationDeliveryResult[]> {
-    console.log(`📢 Broadcasting notification to all users`);
+    console.log('📢 Broadcasting notification to all users');
     
     // In a real implementation, this would query the user database
     // For testing, we'll create notifications for a few mock users
@@ -162,7 +162,7 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
     
     const notifications: EnhancedNotificationData[] = filteredUserIds.map(userId => ({
       ...notification,
-      userId
+      userId,
     }));
     
     return this.sendBulkNotifications(notifications);
@@ -174,7 +174,7 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
     const templateId = `template_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const completeTemplate: NotificationTemplate = {
       ...template,
-      templateId
+      templateId,
     };
     
     this.templates.set(templateId, completeTemplate);
@@ -185,7 +185,7 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
 
   async updateTemplate(
     templateId: EntityId,
-    updates: Partial<NotificationTemplate>
+    updates: Partial<NotificationTemplate>,
   ): Promise<void> {
     const template = this.templates.get(templateId);
     if (!template) {
@@ -216,7 +216,7 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
   async subscribeToUserNotifications(
     userId: EntityId,
     handler: EventHandler<EnhancedNotificationData>,
-    types?: import('../../types/events.d.ts').NotificationType[]
+    types?: import('../../types/events.d.ts').NotificationType[],
   ): Promise<SubscriptionResult> {
     console.log(`📡 Subscribing to notifications for user ${userId}`);
     
@@ -225,25 +225,25 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
       eventTypes: ['USER_NOTIFICATION'],
       filters: {
         userId,
-        ...(types && { types })
-      }
+        ...(types && { types }),
+      },
     }, handler);
   }
 
   async subscribeToDeliveryEvents(
-    handler: EventHandler<NotificationDeliveryResult>
+    handler: EventHandler<NotificationDeliveryResult>,
   ): Promise<SubscriptionResult> {
-    console.log(`📡 Subscribing to delivery events`);
+    console.log('📡 Subscribing to delivery events');
     
     return this.eventBus.subscribe({
       subscriberId: 'notification_delivery_events',
-      eventTypes: ['NOTIFICATION_DELIVERY']
+      eventTypes: ['NOTIFICATION_DELIVERY'],
     }, handler);
   }
 
   async subscribeToEntityNotifications(
     entityId: EntityId,
-    handler: EventHandler<EnhancedNotificationData>
+    handler: EventHandler<EnhancedNotificationData>,
   ): Promise<SubscriptionResult> {
     console.log(`📡 Subscribing to notifications for entity ${entityId}`);
     
@@ -251,8 +251,8 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
       subscriberId: `entity_notifications_${entityId}`,
       eventTypes: ['USER_NOTIFICATION'],
       filters: {
-        relatedEntityId: entityId
-      }
+        relatedEntityId: entityId,
+      },
     }, handler);
   }
 
@@ -279,7 +279,7 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
           maxPerHour: 50,
           maxPerDay: 200,
           enableBatching: true,
-          batchTimeoutMinutes: 5
+          batchTimeoutMinutes: 5,
         },
         blockedSources: [],
         groupingPreferences: {
@@ -287,8 +287,8 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
           groupByCategory: true,
           groupBySource: false,
           maxGroupSize: 10,
-          groupTimeoutMinutes: 10
-        }
+          groupTimeoutMinutes: 10,
+        },
       };
       
       this.userPreferences.set(userId, defaultPreferences);
@@ -301,7 +301,7 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
 
   async updateUserPreferences(
     userId: EntityId,
-    updates: Partial<NotificationPreferences>
+    updates: Partial<NotificationPreferences>,
   ): Promise<void> {
     const current = await this.getUserPreferences(userId);
     const updated = { ...current, ...updates };
@@ -330,7 +330,7 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
 
   async getUnreadNotifications(
     userId: EntityId,
-    limit: number = 50
+    limit: number = 50,
   ): Promise<EnhancedNotificationData[]> {
     console.log(`📬 Getting unread notifications for user ${userId}`);
     
@@ -342,7 +342,7 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
   async getNotificationHistory(
     userId: EntityId,
     filters?: NotificationHistoryFilter,
-    pagination?: PaginationOptions
+    pagination?: PaginationOptions,
   ): Promise<PaginatedNotifications> {
     console.log(`📋 Getting notification history for user ${userId}`);
     
@@ -378,7 +378,7 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
       pageCount: Math.ceil(userHistory.length / pageSize),
       currentPage: page,
       hasNext: endIndex < userHistory.length,
-      hasPrevious: page > 1
+      hasPrevious: page > 1,
     };
   }
 
@@ -391,7 +391,7 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
 
   async sendToChannel(
     channel: NotificationChannel,
-    notification: EnhancedNotificationData
+    notification: EnhancedNotificationData,
   ): Promise<ChannelDeliveryResult> {
     console.log(`📤 Sending to channel ${channel}:`, notification.notificationId);
     
@@ -405,7 +405,7 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
       channel,
       status: 'delivered' as DeliveryStatus,
       deliveredAt: new Date(),
-      metadata: {}
+      metadata: {},
     };
   }
 
@@ -420,8 +420,8 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
       success: true,
       latencyMs: Date.now() - startTime,
       metadata: {
-        testTime: new Date().toISOString()
-      }
+        testTime: new Date().toISOString(),
+      },
     };
   }
 
@@ -429,9 +429,9 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
 
   async getDeliveryStatistics(
     timeRange: { start: Date; end: Date },
-    filters?: StatisticsFilter
+    filters?: StatisticsFilter,
   ): Promise<DeliveryStatistics> {
-    console.log(`📊 Getting delivery statistics for range:`, timeRange);
+    console.log('📊 Getting delivery statistics for range:', timeRange);
     
     return {
       totalSent: this.deliveryStats.totalSent,
@@ -441,15 +441,15 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
         this.deliveryStats.totalDelivered / this.deliveryStats.totalSent : 0,
       averageDeliveryTimeMs: 50, // Simulated average
       channelStatistics: {} as Record<NotificationChannel, import('../../interfaces/specialized/UserNotificationHandler.d.ts').ChannelStatistics>,
-      typeStatistics: {} as Record<import('../../types/events.d.ts').NotificationType, import('../../interfaces/specialized/UserNotificationHandler.d.ts').TypeStatistics>
+      typeStatistics: {} as Record<import('../../types/events.d.ts').NotificationType, import('../../interfaces/specialized/UserNotificationHandler.d.ts').TypeStatistics>,
     };
   }
 
   async getEngagementMetrics(
     userId?: EntityId,
-    timeRange?: { start: Date; end: Date }
+    timeRange?: { start: Date; end: Date },
   ): Promise<EngagementMetrics> {
-    console.log(`📈 Getting engagement metrics for user:`, userId);
+    console.log('📈 Getting engagement metrics for user:', userId);
     
     const totalNotifications = userId ? 
       (this.notificationHistory.get(userId)?.length || 0) :
@@ -462,7 +462,7 @@ export class UserNotificationHandlerImpl implements UserNotificationHandler {
       dismissalRate: 0.10,
       averageTimeToRead: 300000, // 5 minutes in ms
       preferredChannels: ['in_game' as NotificationChannel, 'websocket' as NotificationChannel],
-      peakEngagementHours: [9, 10, 11, 14, 15, 16, 20, 21]
+      peakEngagementHours: [9, 10, 11, 14, 15, 16, 20, 21],
     };
   }
 

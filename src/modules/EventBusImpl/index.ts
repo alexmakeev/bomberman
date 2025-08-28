@@ -13,16 +13,16 @@ import type {
   SubscriptionResult,
 } from '../../interfaces/core/EventBus';
 import { 
-  EventPriority,
   DeliveryMode,
+  EventPriority,
   FilterOperator,
 } from '../../types/events.d.ts';
 import type { 
   EventCategory,
+  EventFilter,
   EventSubscription,
   EventTarget,
   UniversalEvent,
-  EventFilter,
 } from '../../types/events.d.ts';
 import type { EntityId } from '../../types/common';
 
@@ -100,7 +100,7 @@ class EventBusImpl implements EventBus {
     type: string, 
     data: TData, 
     targets: EventTarget[],
-    options?: Partial<UniversalEvent<TData>>
+    options?: Partial<UniversalEvent<TData>>,
   ): Promise<EventPublishResult> {
     const event: UniversalEvent<TData> = {
       eventId: options?.eventId || `event-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -223,7 +223,7 @@ class EventBusImpl implements EventBus {
     subscriptionId: EntityId,
     categories: EventCategory | EventCategory[],
     handler: EventHandler<TData>,
-    filters?: EventFilter[]
+    filters?: EventFilter[],
   ): Promise<SubscriptionResult> {
     const categoriesArray = Array.isArray(categories) ? categories : [categories];
     
@@ -245,7 +245,7 @@ class EventBusImpl implements EventBus {
   async onEvent<TData = any>(
     subscriptionId: EntityId,
     eventType: string,
-    handler: EventHandler<TData>
+    handler: EventHandler<TData>,
   ): Promise<SubscriptionResult> {
     // For specific event types, we'll subscribe to all categories but filter by type
     const subscription: EventSubscription = {

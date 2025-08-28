@@ -98,9 +98,28 @@ docs/
 *.md
 README*
 
-# Test files
+# Test files (allow tests/front-end for UI testing)
 test/
-tests/
+tests/BombManager/
+tests/BossAI/
+tests/CollisionDetector/
+tests/DatabaseService/
+tests/EventBusImpl/
+tests/GameEventHandlerImpl/
+tests/GateManager/
+tests/LoggingService/
+tests/MazeGenerator/
+tests/MonsterAI/
+tests/PlayerStateManager/
+tests/PowerUpManager/
+tests/UnifiedGameServerImpl/
+tests/UserActionHandlerImpl/
+tests/UserNotificationHandlerImpl/
+tests/WebSocketHandler/
+tests/frontend/
+tests/integration/
+tests/utils/
+tests/setup.ts
 **/*.test.js
 **/*.test.ts
 **/*.spec.js

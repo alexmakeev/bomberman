@@ -181,6 +181,15 @@ export interface PlayerAction {
   timestamp: number
 }
 
+export interface GameAction {
+  id: string
+  type: 'move' | 'stop' | 'bomb' | 'powerup_collect' | 'respawn' | 'damage' | 'heal'
+  playerId: string
+  data: any
+  timestamp: number
+  sequence?: number
+}
+
 // Input and Controls
 export interface InputState {
   touches: TouchState[]

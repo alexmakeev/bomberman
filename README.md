@@ -191,6 +191,17 @@ npm run dev              # Start full development environment (server + client)
 npm run dev:server       # Start server with hot reload
 npm run dev:client       # Start client development server
 
+# Development Server Management
+
+## Unified Server Management Script
+./scripts/start-dev.sh start front    # Start frontend only (port 3000)
+./scripts/start-dev.sh start back     # Start backend only (port 8080) 
+./scripts/start-dev.sh start full     # Start both servers (recommended)
+./scripts/start-dev.sh stop front     # Stop frontend only
+./scripts/start-dev.sh stop back      # Stop backend only
+./scripts/start-dev.sh stop full      # Stop both servers
+./scripts/start-dev.sh status         # Show status of both servers
+
 # Building
 npm run build            # Build both server and client for production
 npm run build:server     # Build TypeScript server code
@@ -203,11 +214,210 @@ npm run lint:fix         # Auto-fix linting issues
 npm run test             # Run test suite
 npm run test:coverage    # Run tests with coverage
 
+# UI Testing (Playwright)
+npm run test:ui          # Run all UI tests using Docker browsers
+npm run test:ui:interactive  # Run UI tests in interactive mode
+
 # Docker Operations
 npm run docker:build     # Build Docker image
 npm run docker:up        # Start all services with Docker Compose
 npm run docker:down      # Stop all Docker services
 npm run docker:prod      # Start production Docker environment
+```
+
+### Development Server Management
+
+The project includes a **unified development server manager** that provides flexible control over frontend, backend, or both servers with proper dependency management.
+
+#### 🎯 Why Use the Unified Server Manager?
+
+- **Flexible Mode Selection**: Choose frontend-only, backend-only, or full environment
+- **Automatic Port Management**: Kills conflicting processes before starting
+- **Background Operation**: Runs servers in background with proper process management  
+- **Unified Status Monitoring**: Always shows status of both servers regardless of mode
+- **Docker Integration**: Automatically starts required database services for backend
+- **Clean Operations**: Proper stop/start sequence prevents port conflicts
+
+#### 🚀 Server Management Commands
+
+```bash
+# Start servers (automatically stops existing processes first)
+./scripts/start-dev.sh start front    # Frontend only - for UI development
+./scripts/start-dev.sh start back     # Backend only - for API development  
+./scripts/start-dev.sh start full     # Both servers - for full development
+
+# Stop servers  
+./scripts/start-dev.sh stop front     # Stop frontend only
+./scripts/start-dev.sh stop back      # Stop backend only
+./scripts/start-dev.sh stop full      # Stop both servers
+
+# Check status (always shows both servers)
+./scripts/start-dev.sh status         # Comprehensive status of all services
+```
+
+#### 📊 Server Status Output
+
+```bash
+$ ./scripts/start-dev-full.sh status
+📊 Development Environment Status
+--------------------------------
+
+🐳 Docker Services:
+NAME                     STATUS                    PORTS
+bomberman-postgres       Up 10 hours (healthy)     0.0.0.0:5432->5432/tcp
+bomberman-redis          Up 10 hours (healthy)     0.0.0.0:6379->6379/tcp
+
+🗄️  Backend Server (Port 8080):
+🟢 Server is running on port 8080
+📋 Process details:
+  PID  PPID CMD
+ 1234  5678 npm run dev:server
+🌐 URL: http://localhost:8080
+✅ Server is responding to requests
+
+🖥️  Frontend Server (Port 3000):
+🟢 Server is running on port 3000
+📋 Process details:
+  PID  PPID CMD
+ 5678  9012 npm run dev:client
+🌐 URL: http://localhost:3000
+✅ Server is responding to requests
+```
+
+#### ⚠️ Important Notes
+
+- **Flexible Modes**: Use `front` for UI development, `back` for API work, `full` for complete development
+- **Port Management**: Frontend runs on port 3000, Backend runs on port 8080
+- **Database Dependencies**: Backend modes automatically start PostgreSQL and Redis via Docker
+- **Automatic Cleanup**: Script always stops existing processes before starting new ones
+- **Background Operation**: Servers run in background, use appropriate `stop` command to terminate
+- **Unified Status**: Status command always shows both servers regardless of the mode used
+- **Default Mode**: If no mode is specified, `full` is used as default
+
+### UI Testing with Playwright
+
+The project includes comprehensive UI testing using **Playwright with Docker browsers** to ensure cross-platform compatibility while keeping the development environment clean. Tests cover both basic UI functionality and full integration scenarios based on documented use cases.
+
+#### 🎭 Test Architecture
+
+- **Docker-based browsers**: All browsers run in containers to avoid polluting the host OS
+- **Multi-browser testing**: Chrome, Firefox, Safari (WebKit) on desktop and mobile
+- **Visual regression**: Screenshots and videos captured for debugging
+- **Headless by default**: Fast execution with visual feedback when needed
+- **Use case driven**: Integration tests implement real user scenarios from sequence diagrams
+
+#### 🚀 Quick Start
+
+```bash
+# Start development server (required)
+npm run dev:client
+
+# Run basic UI tests
+npm run test:ui
+
+# Run integration tests (use cases)
+./scripts/test-integration.sh all
+
+# Interactive mode (keeps containers running)
+npm run test:ui:interactive
+```
+
+#### 📋 Integration Testing
+
+The project includes a dedicated integration test runner for comprehensive use case testing:
+
+```bash
+# Test specific use case categories
+./scripts/test-integration.sh gamer     # UC-G001, UC-G002, UC-G003 (player flows)
+./scripts/test-integration.sh admin     # UC-A001 (admin monitoring)  
+./scripts/test-integration.sh system    # WebSocket/Redis integration flows
+./scripts/test-integration.sh all       # All integration tests
+
+# Advanced options
+./scripts/test-integration.sh gamer --headed           # Run in headed mode
+./scripts/test-integration.sh admin --debug            # Debug mode with pauses
+./scripts/test-integration.sh system --reporter html   # HTML report output
+```
+
+#### 🛠️ Advanced Usage
+
+Use the dedicated script for more control:
+
+```bash
+# Run specific browser
+./scripts/test-playwright.sh --project "Desktop Chrome"
+./scripts/test-playwright.sh --project "Mobile Safari"
+
+# Run specific test file
+./scripts/test-playwright.sh --project "Desktop Chrome" basic-ui.test.ts
+
+# Run with debugging
+./scripts/test-playwright.sh --debug --project "Desktop Chrome"
+
+# Run all projects with custom settings
+./scripts/test-playwright.sh --max-failures 5 --reporter html
+```
+
+#### 📊 Available Test Projects
+
+**Basic UI Tests:**
+- **Desktop Chrome - Basic UI**: Core UI functionality testing
+- **Desktop Firefox - Basic UI**: Cross-browser compatibility
+- **Mobile Chrome - Basic UI**: Mobile interface testing  
+- **Mobile Safari - Basic UI**: iOS Safari compatibility
+
+**Integration Tests:**
+- **Desktop Chrome - Integration Tests**: Complete use case scenarios (UC-G001, UC-G002, UC-G003)
+- **Desktop Firefox - Critical Flows**: Cross-browser testing for critical user flows
+- **Mobile Chrome - Mobile Flows**: Mobile-specific gameplay and touch interactions
+- **Desktop Chrome - Admin Tests**: Administrative dashboard monitoring (UC-A001)
+- **Desktop Chrome - System Integration**: WebSocket/Redis event flows and pub/sub testing
+
+#### 🔍 Test Results
+
+After running tests, check these locations:
+
+- `./test-results/`: Screenshots, videos, and traces for failed tests
+- `./playwright-report/`: Interactive HTML report with detailed analysis
+- Console output: Real-time logging from frontend application
+
+#### 🧪 Test Categories
+
+**Basic UI Tests** (`tests/front-end/basic-ui.test.ts`):
+- Application loading and rendering
+- Navigation and routing
+- Basic user interface interactions
+- Cross-browser compatibility
+
+**Game UI Tests** (`tests/front-end/game-ui.test.ts`):
+- Game canvas rendering
+- Game controls and input handling
+- Game state visualization
+
+**Integration Tests** (`tests/front-end/integration/`):
+- **UC-G001**: Join Game Room - Complete player joining flow with edge cases
+- **UC-G002**: Create Game Room - Room creation and sharing functionality  
+- **UC-G003**: Play Cooperative Game - Full gameplay mechanics and cooperation
+- **UC-A001**: Monitor Game Rooms - Admin dashboard monitoring and management
+- **WebSocket-Redis Integration**: Real-time event system and pub/sub messaging
+
+#### 🐛 Debugging Tips
+
+1. **Check console logs**: Tests capture all browser console output
+2. **Review screenshots**: Visual evidence of what actually rendered
+3. **Use trace viewer**: Playwright's built-in debugging tools
+4. **Run specific tests**: Isolate issues with `--project` and test file filters
+5. **Integration test debugging**: Use `--debug` flag for step-by-step execution
+
+```bash
+# Debug a specific failing test
+./scripts/test-playwright.sh --debug --project "Desktop Chrome" basic-ui.test.ts
+
+# Debug specific integration test
+./scripts/test-integration.sh gamer --debug --project "Desktop Chrome"
+
+# View detailed HTML report
+npx playwright show-report
 ```
 
 ### Production Deployment

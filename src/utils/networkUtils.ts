@@ -5,7 +5,7 @@
  * @see docs/front-end/01-architecture-overview.md - Network layer
  */
 
-import type { WebSocketMessage, NetworkState, Player, GameAction } from '../types/game'
+import type { GameAction, NetworkState, Player, WebSocketMessage } from '../types/game';
 
 // WebSocket Connection Management
 export interface WebSocketManager {
@@ -26,81 +26,81 @@ export function createWebSocketManager(): WebSocketManager {
       isConnected: false,
       reconnectAttempts: 0,
       lastHeartbeat: 0,
-      latency: 0
+      latency: 0,
     },
     messageQueue: [],
     reconnectTimer: null,
     heartbeatTimer: null,
     onMessage: () => {},
     onConnectionChange: () => {},
-    onLatencyUpdate: () => {}
-  }
+    onLatencyUpdate: () => {},
+  };
 }
 
 export function connectWebSocket(
   manager: WebSocketManager,
   url: string,
-  protocols?: string[]
+  protocols?: string[],
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
-      manager.socket = new WebSocket(url, protocols)
+      manager.socket = new WebSocket(url, protocols);
       
       manager.socket.onopen = () => {
-        manager.state.isConnected = true
-        manager.state.reconnectAttempts = 0
-        manager.onConnectionChange(true)
+        manager.state.isConnected = true;
+        manager.state.reconnectAttempts = 0;
+        manager.onConnectionChange(true);
         
         // Start heartbeat
-        startHeartbeat(manager)
+        startHeartbeat(manager);
         
         // Send queued messages
-        flushMessageQueue(manager)
+        flushMessageQueue(manager);
         
-        resolve()
-      }
+        resolve();
+      };
       
       manager.socket.onclose = (event) => {
-        manager.state.isConnected = false
-        manager.onConnectionChange(false)
-        stopHeartbeat(manager)
+        manager.state.isConnected = false;
+        manager.onConnectionChange(false);
+        stopHeartbeat(manager);
         
         // Auto-reconnect if not a clean close
         if (!event.wasClean && manager.state.reconnectAttempts < 5) {
-          scheduleReconnect(manager, url, protocols)
+          scheduleReconnect(manager, url, protocols);
         }
-      }
+      };
       
       manager.socket.onerror = (error) => {
-        console.error('WebSocket error:', error)
-        reject(error)
-      }
+        console.error('WebSocket error:', error);
+        reject(error);
+      };
       
       manager.socket.onmessage = (event) => {
         try {
-          const message: WebSocketMessage = JSON.parse(event.data)
-          handleIncomingMessage(manager, message)
+          const message: WebSocketMessage = JSON.parse(event.data);
+          handleIncomingMessage(manager, message);
         } catch (error) {
-          console.error('Failed to parse WebSocket message:', error)
+          console.error('Failed to parse WebSocket message:', error);
         }
-      }
+      };
       
     } catch (error) {
-      reject(error)
+      reject(error);
     }
-  })
+  });
 }
 
 export function disconnectWebSocket(manager: WebSocketManager): void {
   if (manager.socket) {
-    manager.socket.close(1000, 'Client disconnect')
+    manager.socket.close(1000, 'Client disconnect');
   }
   
-  stopHeartbeat(manager)
+  stopHeartbeat(manager);
   
   if (manager.reconnectTimer) {
-    clearTimeout(manager.reconnectTimer)
-    manager.reconnectTimer = null
+    clearTimeout(manager.reconnectTimer);
+    manager.reconnectTimer = null;
   }
 }
 
@@ -109,78 +109,78 @@ export function sendMessage(manager: WebSocketManager, message: WebSocketMessage
     try {
       const messageWithTimestamp = {
         ...message,
-        timestamp: Date.now()
-      }
+        timestamp: Date.now(),
+      };
       
-      manager.socket.send(JSON.stringify(messageWithTimestamp))
-      return true
+      manager.socket.send(JSON.stringify(messageWithTimestamp));
+      return true;
     } catch (error) {
-      console.error('Failed to send WebSocket message:', error)
+      console.error('Failed to send WebSocket message:', error);
       
       // Queue message for retry
-      manager.messageQueue.push(message)
-      return false
+      manager.messageQueue.push(message);
+      return false;
     }
   } else {
     // Queue message for when connection is restored
-    manager.messageQueue.push(message)
-    return false
+    manager.messageQueue.push(message);
+    return false;
   }
 }
 
 function handleIncomingMessage(manager: WebSocketManager, message: WebSocketMessage): void {
   // Handle heartbeat responses
   if (message.type === 'heartbeat_response') {
-    const latency = Date.now() - manager.state.lastHeartbeat
-    manager.state.latency = latency
-    manager.onLatencyUpdate(latency)
-    return
+    const latency = Date.now() - manager.state.lastHeartbeat;
+    manager.state.latency = latency;
+    manager.onLatencyUpdate(latency);
+    return;
   }
   
   // Pass message to application handler
-  manager.onMessage(message)
+  manager.onMessage(message);
 }
 
 function startHeartbeat(manager: WebSocketManager): void {
   manager.heartbeatTimer = setInterval(() => {
     if (manager.state.isConnected) {
-      manager.state.lastHeartbeat = Date.now()
-      sendMessage(manager, { type: 'heartbeat', data: {} })
+      manager.state.lastHeartbeat = Date.now();
+      sendMessage(manager, { type: 'heartbeat', data: {} });
     }
-  }, 30000) // 30 seconds
+  }, 30000); // 30 seconds
 }
 
 function stopHeartbeat(manager: WebSocketManager): void {
   if (manager.heartbeatTimer) {
-    clearInterval(manager.heartbeatTimer)
-    manager.heartbeatTimer = null
+    clearInterval(manager.heartbeatTimer);
+    manager.heartbeatTimer = null;
   }
 }
 
 function scheduleReconnect(
   manager: WebSocketManager,
   url: string,
-  protocols?: string[]
+  protocols?: string[],
 ): void {
-  manager.state.reconnectAttempts++
+  manager.state.reconnectAttempts++;
   
-  const delay = Math.min(1000 * Math.pow(2, manager.state.reconnectAttempts), 30000)
+  const delay = Math.min(1000 * Math.pow(2, manager.state.reconnectAttempts), 30000);
   
   manager.reconnectTimer = setTimeout(() => {
-    console.log(`Attempting to reconnect (attempt ${manager.state.reconnectAttempts})...`)
+    console.log(`Attempting to reconnect (attempt ${manager.state.reconnectAttempts})...`);
     connectWebSocket(manager, url, protocols).catch(() => {
       // Reconnection failed, will try again
-    })
-  }, delay)
+    });
+  }, delay);
 }
 
 function flushMessageQueue(manager: WebSocketManager): void {
   while (manager.messageQueue.length > 0) {
-    const message = manager.messageQueue.shift()!
+    const message = manager.messageQueue.shift()!;
     if (!sendMessage(manager, message)) {
       // Failed to send, put it back at the front
-      manager.messageQueue.unshift(message)
-      break
+      manager.messageQueue.unshift(message);
+      break;
     }
   }
 }
@@ -189,15 +189,15 @@ function flushMessageQueue(manager: WebSocketManager): void {
 export function createPlayerActionMessage(
   playerId: string,
   roomId: string,
-  action: GameAction
+  action: GameAction,
 ): WebSocketMessage {
   return {
     type: 'player_action',
     data: action,
     playerId,
     roomId,
-    timestamp: Date.now()
-  }
+    timestamp: Date.now(),
+  };
 }
 
 export function createJoinRoomMessage(playerId: string, roomId: string, playerName: string): WebSocketMessage {
@@ -206,8 +206,8 @@ export function createJoinRoomMessage(playerId: string, roomId: string, playerNa
     data: { playerName },
     playerId,
     roomId,
-    timestamp: Date.now()
-  }
+    timestamp: Date.now(),
+  };
 }
 
 export function createLeaveRoomMessage(playerId: string, roomId: string): WebSocketMessage {
@@ -216,22 +216,22 @@ export function createLeaveRoomMessage(playerId: string, roomId: string): WebSoc
     data: {},
     playerId,
     roomId,
-    timestamp: Date.now()
-  }
+    timestamp: Date.now(),
+  };
 }
 
 export function createChatMessage(
   playerId: string,
   roomId: string,
-  message: string
+  message: string,
 ): WebSocketMessage {
   return {
     type: 'chat_message',
     data: { message },
     playerId,
     roomId,
-    timestamp: Date.now()
-  }
+    timestamp: Date.now(),
+  };
 }
 
 export function createGameStateRequestMessage(playerId: string, roomId: string): WebSocketMessage {
@@ -240,8 +240,8 @@ export function createGameStateRequestMessage(playerId: string, roomId: string):
     data: {},
     playerId,
     roomId,
-    timestamp: Date.now()
-  }
+    timestamp: Date.now(),
+  };
 }
 
 // Message Validation
@@ -251,38 +251,38 @@ export function isValidWebSocketMessage(data: any): data is WebSocketMessage {
     data !== null &&
     typeof data.type === 'string' &&
     data.hasOwnProperty('data')
-  )
+  );
 }
 
 export function validatePlayerAction(action: GameAction): boolean {
-  if (!action || typeof action !== 'object') return false
+  if (!action || typeof action !== 'object') {return false;}
   
-  const validTypes = ['movement', 'bomb', 'stop']
-  if (!validTypes.includes(action.type)) return false
+  const validTypes = ['movement', 'bomb', 'stop'];
+  if (!validTypes.includes(action.type)) {return false;}
   
   if (action.type === 'movement') {
-    const validDirections = ['up', 'down', 'left', 'right']
+    const validDirections = ['up', 'down', 'left', 'right'];
     return (
       validDirections.includes(action.direction!) &&
       typeof action.intensity === 'number' &&
       action.intensity >= 0 &&
       action.intensity <= 1
-    )
+    );
   }
   
-  return true
+  return true;
 }
 
 // Network Quality Detection
 export function detectNetworkQuality(latency: number): 'excellent' | 'good' | 'fair' | 'poor' {
-  if (latency < 50) return 'excellent'
-  if (latency < 100) return 'good'
-  if (latency < 200) return 'fair'
-  return 'poor'
+  if (latency < 50) {return 'excellent';}
+  if (latency < 100) {return 'good';}
+  if (latency < 200) {return 'fair';}
+  return 'poor';
 }
 
 export function shouldReduceQuality(latency: number): boolean {
-  return latency > 300
+  return latency > 300;
 }
 
 // Message Batching and Optimization
@@ -295,128 +295,128 @@ export interface MessageBatcher {
 
 export function createMessageBatcher(
   batchInterval: number = 16, // ~60fps
-  maxBatchSize: number = 10
+  maxBatchSize: number = 10,
 ): MessageBatcher {
   return {
     messages: [],
     batchTimer: null,
     batchInterval,
-    maxBatchSize
-  }
+    maxBatchSize,
+  };
 }
 
 export function addToBatch(
   batcher: MessageBatcher,
   manager: WebSocketManager,
-  message: WebSocketMessage
+  message: WebSocketMessage,
 ): void {
-  batcher.messages.push(message)
+  batcher.messages.push(message);
   
   // Send immediately if batch is full
   if (batcher.messages.length >= batcher.maxBatchSize) {
-    flushBatch(batcher, manager)
-    return
+    flushBatch(batcher, manager);
+    return;
   }
   
   // Schedule batch send if not already scheduled
   if (!batcher.batchTimer) {
     batcher.batchTimer = setTimeout(() => {
-      flushBatch(batcher, manager)
-    }, batcher.batchInterval)
+      flushBatch(batcher, manager);
+    }, batcher.batchInterval);
   }
 }
 
 export function flushBatch(batcher: MessageBatcher, manager: WebSocketManager): void {
-  if (batcher.messages.length === 0) return
+  if (batcher.messages.length === 0) {return;}
   
   if (batcher.messages.length === 1) {
     // Send single message
-    sendMessage(manager, batcher.messages[0])
+    sendMessage(manager, batcher.messages[0]);
   } else {
     // Send batch message
     const batchMessage: WebSocketMessage = {
       type: 'action_batch',
       data: { actions: batcher.messages },
-      timestamp: Date.now()
-    }
-    sendMessage(manager, batchMessage)
+      timestamp: Date.now(),
+    };
+    sendMessage(manager, batchMessage);
   }
   
   // Clear batch
-  batcher.messages = []
+  batcher.messages = [];
   
   if (batcher.batchTimer) {
-    clearTimeout(batcher.batchTimer)
-    batcher.batchTimer = null
+    clearTimeout(batcher.batchTimer);
+    batcher.batchTimer = null;
   }
 }
 
 // Connection State Management
 export function getConnectionStatusText(state: NetworkState): string {
   if (state.isConnected) {
-    const quality = detectNetworkQuality(state.latency)
-    return `Connected (${state.latency}ms - ${quality})`
+    const quality = detectNetworkQuality(state.latency);
+    return `Connected (${state.latency}ms - ${quality})`;
   } else if (state.reconnectAttempts > 0) {
-    return `Reconnecting... (attempt ${state.reconnectAttempts})`
+    return `Reconnecting... (attempt ${state.reconnectAttempts})`;
   } else {
-    return 'Disconnected'
+    return 'Disconnected';
   }
 }
 
 export function getConnectionStatusColor(state: NetworkState): string {
   if (state.isConnected) {
-    const quality = detectNetworkQuality(state.latency)
+    const quality = detectNetworkQuality(state.latency);
     switch (quality) {
-      case 'excellent': return '#2ECC71'
-      case 'good': return '#F39C12'
-      case 'fair': return '#E67E22'
-      case 'poor': return '#E74C3C'
+      case 'excellent': return '#2ECC71';
+      case 'good': return '#F39C12';
+      case 'fair': return '#E67E22';
+      case 'poor': return '#E74C3C';
     }
   }
-  return '#95A5A6' // Disconnected
+  return '#95A5A6'; // Disconnected
 }
 
 // Local Storage for Offline Support
 export function saveGameStateToLocal(gameState: any, roomId: string): void {
   try {
-    const key = `bomberman_game_state_${roomId}`
+    const key = `bomberman_game_state_${roomId}`;
     localStorage.setItem(key, JSON.stringify({
       gameState,
-      timestamp: Date.now()
-    }))
+      timestamp: Date.now(),
+    }));
   } catch (error) {
-    console.warn('Failed to save game state to localStorage:', error)
+    console.warn('Failed to save game state to localStorage:', error);
   }
 }
 
 export function loadGameStateFromLocal(roomId: string): any | null {
   try {
-    const key = `bomberman_game_state_${roomId}`
-    const saved = localStorage.getItem(key)
+    const key = `bomberman_game_state_${roomId}`;
+    const saved = localStorage.getItem(key);
     
-    if (!saved) return null
+    if (!saved) {return null;}
     
-    const { gameState, timestamp } = JSON.parse(saved)
+    const { gameState, timestamp } = JSON.parse(saved);
     
     // Don't use game states older than 5 minutes
     if (Date.now() - timestamp > 5 * 60 * 1000) {
-      localStorage.removeItem(key)
-      return null
+      localStorage.removeItem(key);
+      return null;
     }
     
-    return gameState
+    return gameState;
   } catch (error) {
-    console.warn('Failed to load game state from localStorage:', error)
-    return null
+    console.warn('Failed to load game state from localStorage:', error);
+    return null;
   }
 }
 
 export function clearLocalGameState(roomId: string): void {
   try {
-    const key = `bomberman_game_state_${roomId}`
-    localStorage.removeItem(key)
+    const key = `bomberman_game_state_${roomId}`;
+    localStorage.removeItem(key);
   } catch (error) {
-    console.warn('Failed to clear local game state:', error)
+    console.warn('Failed to clear local game state:', error);
   }
 }
 
@@ -424,15 +424,15 @@ export function clearLocalGameState(roomId: string): void {
 export function handleConnectionError(error: any): string {
   if (error instanceof Error) {
     if (error.message.includes('Failed to connect')) {
-      return 'Unable to connect to game server. Please check your internet connection.'
+      return 'Unable to connect to game server. Please check your internet connection.';
     } else if (error.message.includes('timeout')) {
-      return 'Connection timeout. The server may be overloaded.'
+      return 'Connection timeout. The server may be overloaded.';
     } else if (error.message.includes('refused')) {
-      return 'Connection refused. The game server may be down for maintenance.'
+      return 'Connection refused. The game server may be down for maintenance.';
     }
   }
   
-  return 'An unexpected network error occurred. Please try again.'
+  return 'An unexpected network error occurred. Please try again.';
 }
 
 export function shouldAttemptReconnect(error: any): boolean {
@@ -441,43 +441,43 @@ export function shouldAttemptReconnect(error: any): boolean {
     if (error.message.includes('unauthorized') || 
         error.message.includes('forbidden') ||
         error.message.includes('banned')) {
-      return false
+      return false;
     }
   }
   
-  return true
+  return true;
 }
 
 // URL and Environment Utilities
 export function getWebSocketUrl(): string {
-  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-  const host = window.location.host
+  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const {host} = window.location;
   
   // In development, might use different port
   if (host.includes('localhost') || host.includes('127.0.0.1')) {
-    const port = process.env.WS_PORT || '8080'
-    return `${protocol}//${host.split(':')[0]}:${port}/ws`
+    const port = process.env.WS_PORT || '8080';
+    return `${protocol}//${host.split(':')[0]}:${port}/ws`;
   }
   
-  return `${protocol}//${host}/ws`
+  return `${protocol}//${host}/ws`;
 }
 
 export function isOnline(): boolean {
-  return navigator.onLine
+  return navigator.onLine;
 }
 
 export function addOnlineListener(callback: (online: boolean) => void): void {
-  const handleOnline = () => callback(true)
-  const handleOffline = () => callback(false)
+  const handleOnline = () => callback(true);
+  const handleOffline = () => callback(false);
   
-  window.addEventListener('online', handleOnline)
-  window.addEventListener('offline', handleOffline)
+  window.addEventListener('online', handleOnline);
+  window.addEventListener('offline', handleOffline);
 }
 
 export function removeOnlineListener(callback: (online: boolean) => void): void {
-  const handleOnline = () => callback(true)
-  const handleOffline = () => callback(false)
+  const handleOnline = () => callback(true);
+  const handleOffline = () => callback(false);
   
-  window.removeEventListener('online', handleOnline)
-  window.removeEventListener('offline', handleOffline)
+  window.removeEventListener('online', handleOnline);
+  window.removeEventListener('offline', handleOffline);
 }

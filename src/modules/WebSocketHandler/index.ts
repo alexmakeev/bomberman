@@ -65,10 +65,10 @@ interface AuthResult {
 class WebSocketHandlerImpl {
   readonly eventBus: EventBus;
   private config?: WebSocketConfig;
-  private connections = new Map<EntityId, ConnectionInfo>();
-  private userConnections = new Map<EntityId, Set<EntityId>>();
+  private readonly connections = new Map<EntityId, ConnectionInfo>();
+  private readonly userConnections = new Map<EntityId, Set<EntityId>>();
   private isShutdown = false;
-  private stats = {
+  private readonly stats = {
     totalMessages: 0,
     authenticatedConnections: 0,
     lastStatsUpdate: Date.now(),
@@ -288,7 +288,7 @@ class WebSocketHandlerImpl {
     let broadcastCount = 0;
 
     for (const [connectionId, connectionInfo] of this.connections) {
-      if (!connectionInfo.authenticated) continue;
+      if (!connectionInfo.authenticated) {continue;}
 
       // Check if connection is subscribed to this event type
       const eventPattern = `${event.category}.${event.type}`;
@@ -296,7 +296,7 @@ class WebSocketHandlerImpl {
 
       for (const subscription of connectionInfo.subscriptions) {
         if (subscription === '*' || subscription === eventPattern || 
-            subscription.startsWith(event.category + '.')) {
+            subscription.startsWith(`${event.category}.`)) {
           shouldReceive = true;
           break;
         }
@@ -306,7 +306,7 @@ class WebSocketHandlerImpl {
         try {
           connectionInfo.socket.send(JSON.stringify({
             type: 'EVENT',
-            event: event,
+            event,
           }));
           broadcastCount++;
         } catch (error) {
@@ -340,8 +340,8 @@ class WebSocketHandlerImpl {
     }
 
     const now = Date.now();
-    const windowStart = connectionInfo.rateLimit.windowStart;
-    const windowMs = this.config.rateLimit.windowMs;
+    const {windowStart} = connectionInfo.rateLimit;
+    const {windowMs} = this.config.rateLimit;
 
     // Check if we need to reset the window
     if (now - windowStart >= windowMs) {

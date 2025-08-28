@@ -1,0 +1,12 @@
+# Docker Compose for Playwright Testing
+# Keeps browsers containerized and provides clean test environment
+
+services:
+  playwright-server:
+    image: mcr.microsoft.com/playwright:v1.55.0-jammy
+    container_name: bomberman-playwright-server
+    network_mode: "host"  # Use host network to access localhost:3000
+    environment:
+      - PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+    command: ["npx", "playwright", "run-server", "--port", "9222", "--host", "0.0.0.0"]
+    restart: unless-stopped
