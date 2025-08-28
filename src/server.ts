@@ -1,7 +1,12 @@
 /**
  * Bomberman Multiplayer Game Server
  * Entry point for the Node.js server with unified event system
+ * Ref: docs/architecture/server-architecture.md for server design
  */
+
+// Load environment variables from .env file - must be first import
+// Ref: docs/architecture/deployment-setup.md for configuration details
+import 'dotenv/config';
 
 import Koa from 'koa';
 import Router from 'koa-router';
