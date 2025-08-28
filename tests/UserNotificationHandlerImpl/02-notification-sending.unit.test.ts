@@ -14,10 +14,12 @@ import { EventBusImpl } from '../../src/modules/EventBusImpl';
 import type { 
   UserNotificationHandler, 
   EnhancedNotificationData, 
-  NotificationDeliveryResult,
+  NotificationDeliveryResult
+} from '../../src/interfaces/specialized/UserNotificationHandler';
+import { 
   NotificationChannel,
   NotificationPriority
-} from '../../src/interfaces/specialized/UserNotificationHandler';
+} from '../../src/interfaces/specialized/UserNotificationHandler.d.ts';
 import type { EventBus, EventBusConfig } from '../../src/interfaces/core/EventBus';
 import { NotificationType } from '../../src/types/events.d.ts';
 
