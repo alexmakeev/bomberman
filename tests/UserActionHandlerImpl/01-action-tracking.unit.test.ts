@@ -14,10 +14,12 @@ import { UserActionHandlerImpl } from '../../src/modules/UserActionHandlerImpl';
 import { EventBusImpl } from '../../src/modules/EventBusImpl';
 import type { 
   UserActionHandler, 
-  EnhancedUserActionData, 
+  EnhancedUserActionData
+} from '../../src/interfaces/specialized/UserActionHandler';
+import { 
   UserActionType, 
   ActionResult 
-} from '../../src/interfaces/specialized/UserActionHandler';
+} from '../../src/interfaces/specialized/UserActionHandler.d.ts';
 import type { EventBus, EventBusConfig, EventPublishResult } from '../../src/interfaces/core/EventBus';
 
 describe('UserActionHandlerImpl - Action Tracking', () => {
