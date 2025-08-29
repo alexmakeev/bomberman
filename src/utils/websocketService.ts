@@ -272,8 +272,9 @@ export function getWebSocketService(): WebSocketService {
   if (!webSocketService) {
     // Use environment-specific WebSocket URL
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const {host} = window.location;
-    const wsUrl = `${protocol}//${host}/ws`;
+    const hostname = window.location.hostname;
+    // WebSocket server runs on port 8080, not the frontend port
+    const wsUrl = `${protocol}//${hostname}:8080/ws`;
     
     webSocketService = new WebSocketService(wsUrl);
   }

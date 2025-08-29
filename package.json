@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "./scripts/start-dev.sh start full",
-    "dev:server": "nodemon --exec ts-node src/server-minimal.ts",
+    "dev:server": "nodemon --exec ts-node src/server.ts",
     "dev:client": "vite dev",
     "dev:front": "./scripts/start-dev.sh start front",
     "dev:back": "./scripts/start-dev.sh start back", 
