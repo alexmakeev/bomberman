@@ -6,7 +6,7 @@
  */
 
 import { defineStore } from 'pinia';
-import { computed, ref } from 'vue';
+import { computed, ref, readonly } from 'vue';
 import type { UISettings } from '../types/game';
 
 export const useUIStore = defineStore('ui', () => {
