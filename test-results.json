@@ -236,13 +236,38 @@
                   "expectedStatus": "passed",
                   "projectId": "Desktop Chrome - Admin Tests",
                   "projectName": "Desktop Chrome - Admin Tests",
-                  "results": [],
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "interrupted",
+                      "duration": 14402,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-29T17:22:59.763Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/alexmak/bomberman/test-results/integration-uc-a001-monito-03c36--monitors-active-game-rooms-Desktop-Chrome---Admin-Tests/test-failed-2.png"
+                        },
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/alexmak/bomberman/test-results/integration-uc-a001-monito-03c36--monitors-active-game-rooms-Desktop-Chrome---Admin-Tests/test-failed-1.png"
+                        }
+                      ]
+                    }
+                  ],
                   "status": "skipped"
                 }
               ],
               "id": "23ea656dad703a75aadc-d27a9e2208896f1f486e",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 43,
+              "line": 53,
               "column": 7
             },
             {
@@ -262,7 +287,7 @@
               ],
               "id": "23ea656dad703a75aadc-e9a3759eb24964855ab8",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 99,
+              "line": 109,
               "column": 7
             },
             {
@@ -282,7 +307,7 @@
               ],
               "id": "23ea656dad703a75aadc-3ebb3a480181d6945ab3",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 119,
+              "line": 129,
               "column": 7
             },
             {
@@ -302,7 +327,7 @@
               ],
               "id": "23ea656dad703a75aadc-db9872b0c9ca367ec3b8",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 154,
+              "line": 164,
               "column": 7
             },
             {
@@ -322,7 +347,7 @@
               ],
               "id": "23ea656dad703a75aadc-3b28762a4b4f4e8b9909",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 186,
+              "line": 196,
               "column": 7
             },
             {
@@ -342,7 +367,7 @@
               ],
               "id": "23ea656dad703a75aadc-7812fdc7f235797f6ccc",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 223,
+              "line": 233,
               "column": 7
             },
             {
@@ -362,7 +387,7 @@
               ],
               "id": "23ea656dad703a75aadc-ed8d91e962df2b653e34",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 259,
+              "line": 269,
               "column": 7
             },
             {
@@ -382,7 +407,7 @@
               ],
               "id": "23ea656dad703a75aadc-d8a6d28434694b32dce2",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 300,
+              "line": 310,
               "column": 7
             }
           ]
@@ -390,12 +415,12 @@
         {
           "title": "UC-A001: Advanced Monitoring Features",
           "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-          "line": 367,
+          "line": 377,
           "column": 6,
           "specs": [
             {
               "title": "Export room data functionality",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -408,13 +433,32 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "interrupted",
-                      "duration": 15388,
-                      "errors": [],
+                      "status": "failed",
+                      "duration": 15369,
+                      "error": {
+                        "message": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.admin-dashboard') to be visible\u001b[22m\n",
+                        "stack": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.admin-dashboard') to be visible\u001b[22m\n\n    at /home/alexmak/bomberman/tests/front-end/integration/uc-a001-monitor-game-rooms.integration.test.ts:386:16",
+                        "location": {
+                          "file": "/home/alexmak/bomberman/tests/front-end/integration/uc-a001-monitor-game-rooms.integration.test.ts",
+                          "column": 16,
+                          "line": 386
+                        },
+                        "snippet": "  384 |     }\n  385 |     \n> 386 |     await page.waitForSelector('.admin-dashboard');\n      |                ^\n  387 |     \n  388 |     // Look for export functionality\n  389 |     const exportButton = page.locator('button:has-text(\"Export\"), button:has-text(\"Download\"), .export-button');"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/home/alexmak/bomberman/tests/front-end/integration/uc-a001-monitor-game-rooms.integration.test.ts",
+                            "column": 16,
+                            "line": 386
+                          },
+                          "message": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.admin-dashboard') to be visible\u001b[22m\n\n\n  384 |     }\n  385 |     \n> 386 |     await page.waitForSelector('.admin-dashboard');\n      |                ^\n  387 |     \n  388 |     // Look for export functionality\n  389 |     const exportButton = page.locator('button:has-text(\"Export\"), button:has-text(\"Download\"), .export-button');\n    at /home/alexmak/bomberman/tests/front-end/integration/uc-a001-monitor-game-rooms.integration.test.ts:386:16"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-29T17:19:38.846Z",
+                      "startTime": "2025-08-29T17:22:58.704Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -427,20 +471,25 @@
                           "contentType": "text/markdown",
                           "path": "/home/alexmak/bomberman/test-results/integration-uc-a001-monito-4c9d4-ort-room-data-functionality-Desktop-Chrome---Admin-Tests/error-context.md"
                         }
-                      ]
+                      ],
+                      "errorLocation": {
+                        "file": "/home/alexmak/bomberman/tests/front-end/integration/uc-a001-monitor-game-rooms.integration.test.ts",
+                        "column": 16,
+                        "line": 386
+                      }
                     }
                   ],
-                  "status": "skipped"
+                  "status": "unexpected"
                 }
               ],
               "id": "23ea656dad703a75aadc-b21bf17adff15567999c",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 368,
+              "line": 378,
               "column": 7
             },
             {
               "title": "Real-time alerts and notifications",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -453,58 +502,27 @@
                     {
                       "workerIndex": 1,
                       "parallelIndex": 1,
-                      "status": "failed",
-                      "duration": 15411,
-                      "error": {
-                        "message": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.admin-dashboard') to be visible\u001b[22m\n",
-                        "stack": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.admin-dashboard') to be visible\u001b[22m\n\n    at /home/alexmak/bomberman/tests/front-end/integration/uc-a001-monitor-game-rooms.integration.test.ts:402:16",
-                        "location": {
-                          "file": "/home/alexmak/bomberman/tests/front-end/integration/uc-a001-monitor-game-rooms.integration.test.ts",
-                          "column": 16,
-                          "line": 402
-                        },
-                        "snippet": "  400 |     }\n  401 |     \n> 402 |     await page.waitForSelector('.admin-dashboard');\n      |                ^\n  403 |     \n  404 |     // Check for alert/notification system\n  405 |     const alertsPanel = page.locator('.alerts, .notifications, .warnings');"
-                      },
-                      "errors": [
+                      "status": "passed",
+                      "duration": 485,
+                      "errors": [],
+                      "stdout": [
                         {
-                          "location": {
-                            "file": "/home/alexmak/bomberman/tests/front-end/integration/uc-a001-monitor-game-rooms.integration.test.ts",
-                            "column": 16,
-                            "line": 402
-                          },
-                          "message": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.admin-dashboard') to be visible\u001b[22m\n\n\n  400 |     }\n  401 |     \n> 402 |     await page.waitForSelector('.admin-dashboard');\n      |                ^\n  403 |     \n  404 |     // Check for alert/notification system\n  405 |     const alertsPanel = page.locator('.alerts, .notifications, .warnings');\n    at /home/alexmak/bomberman/tests/front-end/integration/uc-a001-monitor-game-rooms.integration.test.ts:402:16"
+                          "text": "✅ Real-time alerts system verified\n"
                         }
                       ],
-                      "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-29T17:19:38.819Z",
+                      "startTime": "2025-08-29T17:22:58.729Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/home/alexmak/bomberman/test-results/integration-uc-a001-monito-fa5e3-me-alerts-and-notifications-Desktop-Chrome---Admin-Tests/test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/home/alexmak/bomberman/test-results/integration-uc-a001-monito-fa5e3-me-alerts-and-notifications-Desktop-Chrome---Admin-Tests/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/home/alexmak/bomberman/tests/front-end/integration/uc-a001-monitor-game-rooms.integration.test.ts",
-                        "column": 16,
-                        "line": 402
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "23ea656dad703a75aadc-556ff933e2865310e4d7",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 394,
+              "line": 404,
               "column": 7
             },
             {
@@ -518,13 +536,31 @@
                   "expectedStatus": "passed",
                   "projectId": "Desktop Chrome - Admin Tests",
                   "projectName": "Desktop Chrome - Admin Tests",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 403,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Historical data and trends verified\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-29T17:22:59.338Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
               "id": "23ea656dad703a75aadc-58e266ac7b18f97c324a",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 424,
+              "line": 434,
               "column": 7
             }
           ]
@@ -538,10 +574,10 @@
     }
   ],
   "stats": {
-    "startTime": "2025-08-29T17:19:38.121Z",
-    "duration": 16276.915,
-    "expected": 0,
-    "skipped": 10,
+    "startTime": "2025-08-29T17:22:58.007Z",
+    "duration": 16385.459000000003,
+    "expected": 2,
+    "skipped": 8,
     "unexpected": 1,
     "flaky": 0
   }

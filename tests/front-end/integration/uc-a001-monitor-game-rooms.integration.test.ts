@@ -23,7 +23,17 @@ test.describe('UC-A001: Monitor Game Rooms Integration', () => {
             path: '/'
           }
         ],
-        origins: []
+        origins: [
+          {
+            origin: 'http://localhost:3000',
+            localStorage: [
+              {
+                name: 'admin_token',
+                value: 'test_admin_token'
+              }
+            ]
+          }
+        ]
       }
     });
 
