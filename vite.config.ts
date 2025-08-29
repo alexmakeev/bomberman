@@ -4,7 +4,7 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [vue()],
-  root: './src/frontend',
+  root: './src',
   base: '/',
   
   // Development server configuration
@@ -18,12 +18,13 @@ export default defineConfig({
 
   // Build configuration
   build: {
-    outDir: '../../dist/frontend',
+    outDir: '../dist/frontend',
     emptyOutDir: true,
     sourcemap: true,
     
     // Mobile optimization
     rollupOptions: {
+      input: resolve(__dirname, 'src/frontend/index.html'),
       output: {
         manualChunks: {
           'vendor': ['vue', 'pinia'],
