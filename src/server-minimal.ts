@@ -9,12 +9,24 @@ import { WebSocketServer } from 'ws';
 const app = new Koa();
 const PORT = 8080;
 
-// Simple health check endpoint
+// API and health check endpoints
 app.use(async (ctx, next) => {
   if (ctx.path === '/') {
     ctx.body = { status: 'OK', message: 'Bomberman Server Running with WebSocket' };
     ctx.status = 200;
+  } else if (ctx.path === '/api/health') {
+    ctx.body = { status: 'healthy', timestamp: Date.now() };
+    ctx.status = 200;
+  } else if (ctx.path.startsWith('/api/')) {
+    // Handle other API requests
+    ctx.body = { 
+      error: 'API endpoint not implemented', 
+      path: ctx.path,
+      method: ctx.method 
+    };
+    ctx.status = 501; // Not Implemented instead of 502
   } else {
+    // Pass to next middleware
     await next();
   }
 });
