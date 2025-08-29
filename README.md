@@ -140,6 +140,9 @@ graph TB
 
 Comprehensive documentation is available in the `docs/` directory:
 
+### **Development Reference**
+- [`SCRIPTS.md`](SCRIPTS.md) - Complete reference for all development scripts and commands
+
 ### **Use Cases**
 - [`docs/use-cases/gamer.md`](docs/use-cases/gamer.md) - Player user stories and scenarios
 - [`docs/use-cases/admin.md`](docs/use-cases/admin.md) - Administrative use cases and workflows
@@ -418,6 +421,22 @@ After running tests, check these locations:
 
 # View detailed HTML report
 npx playwright show-report
+```
+
+#### ⚠️ Playwright Setup Notes
+
+**Docker-based Playwright**: This project uses Docker containers for browsers to avoid local installation issues.
+
+- **Docker container must be running**: `docker ps | grep playwright` should show `bomberman-playwright-server`
+- **Start container if needed**: `docker compose -f docker/playwright/docker-compose.yml up -d`
+- **Local browser installs won't work**: Commands like `npx playwright install` are not needed
+- **Use project scripts**: Always use `./scripts/test-playwright.sh` or `./scripts/test-integration.sh`
+- **Don't run `npx playwright test` directly**: It will try to use local browsers that aren't installed
+
+**Correct usage:**
+```bash
+./scripts/test-playwright.sh basic-ui.test.ts              # ✅ Works with Docker
+npx playwright test basic-ui.test.ts                       # ❌ Fails - no local browsers
 ```
 
 ### Production Deployment

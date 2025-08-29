@@ -44,9 +44,14 @@ const router = createRouter({
       name: 'Settings', 
       component: (): Promise<typeof import('*.vue')> => import('./views/SettingsView.vue'),
     },
+    {
+      path: '/admin',
+      name: 'Admin',
+      component: (): Promise<typeof import('*.vue')> => import('./views/AdminView.vue'),
+    },
   ],
 });
-console.log('✅ Router created with 3 routes');
+console.log('✅ Router created with 4 routes');
 
 // Create Vue app
 console.log('🎮 Creating Vue app instance...');
