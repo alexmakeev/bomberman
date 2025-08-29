@@ -116,6 +116,55 @@ export const usePlayerStore = defineStore('player', () => {
     networkSyncTime.value = 0;
   }
 
+  async function initializePlayer(playerData?: Partial<Player>): Promise<void> {
+    console.log('🔄 Initializing player store...');
+    
+    try {
+      // If playerData provided, use it to populate store
+      if (playerData) {
+        if (playerData.id) id.value = playerData.id;
+        if (playerData.name) name.value = playerData.name;
+        if (playerData.color) color.value = playerData.color;
+        if (playerData.position) position.value = { ...playerData.position };
+        if (typeof playerData.health === 'number') health.value = playerData.health;
+        if (typeof playerData.maxHealth === 'number') maxHealth.value = playerData.maxHealth;
+        if (typeof playerData.bombCount === 'number') bombCount.value = playerData.bombCount;
+        if (typeof playerData.maxBombs === 'number') maxBombs.value = playerData.maxBombs;
+        if (typeof playerData.bombPower === 'number') bombPower.value = playerData.bombPower;
+        if (typeof playerData.speed === 'number') speed.value = playerData.speed;
+        if (typeof playerData.isAlive === 'boolean') isAlive.value = playerData.isAlive;
+        if (typeof playerData.score === 'number') score.value = playerData.score;
+        if (playerData.powerUps) powerUps.value = [...playerData.powerUps];
+      } else {
+        // Create a new player with default values if no data provided
+        const defaultPlayer: Player = {
+          id: generateId(),
+          name: `Player_${Math.floor(Math.random() * 1000)}`,
+          color: 'red',
+          position: { x: 64, y: 64 },
+          health: 100,
+          maxHealth: 100,
+          bombCount: 1,
+          maxBombs: 1,
+          bombPower: 1,
+          speed: 100,
+          isAlive: true,
+          isMoving: false,
+          direction: null,
+          score: 0,
+          powerUps: [],
+          respawnTimer: 0,
+        };
+        createPlayer(defaultPlayer);
+      }
+      
+      console.log('✅ Player store initialized successfully');
+    } catch (error) {
+      console.error('❌ Failed to initialize player store:', error);
+      throw error;
+    }
+  }
+
   function initializeWithRoomConfig(config: any): void {
     if (config.maxHealth) {maxHealth.value = config.maxHealth;}
     if (config.startingBombs) {
@@ -550,6 +599,7 @@ export const usePlayerStore = defineStore('player', () => {
     // Actions
     createPlayer,
     resetPlayer,
+    initializePlayer,
     initializeWithRoomConfig,
     movePlayer,
     stopMovement,

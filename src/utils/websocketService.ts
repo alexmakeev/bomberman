@@ -6,8 +6,8 @@
  * @see src/types/websocket.d.ts - Message type definitions
  */
 
-import { MessageType } from '../types/websocket';
-import type { WebSocketMessage } from '../types/websocket';
+import { MessageType } from '../types/websocket.d';
+import type { WebSocketMessage } from '../types/websocket.d';
 import type { GameAction } from '../types/game';
 
 export class WebSocketService {
