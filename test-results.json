@@ -234,38 +234,31 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Admin Tests",
-                  "projectName": "Desktop Chrome - Admin Tests",
+                  "projectId": "Desktop Chrome - Integration Tests",
+                  "projectName": "Desktop Chrome - Integration Tests",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "interrupted",
-                      "duration": 14402,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 361,
                       "errors": [],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Admin monitoring functionality verified\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-29T17:22:59.763Z",
+                      "startTime": "2025-08-29T17:31:05.417Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/home/alexmak/bomberman/test-results/integration-uc-a001-monito-03c36--monitors-active-game-rooms-Desktop-Chrome---Admin-Tests/test-failed-2.png"
-                        },
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/home/alexmak/bomberman/test-results/integration-uc-a001-monito-03c36--monitors-active-game-rooms-Desktop-Chrome---Admin-Tests/test-failed-1.png"
-                        }
-                      ]
+                      "attachments": []
                     }
                   ],
-                  "status": "skipped"
+                  "status": "expected"
                 }
               ],
-              "id": "23ea656dad703a75aadc-d27a9e2208896f1f486e",
+              "id": "23ea656dad703a75aadc-cb6bfda11b5eabd78082",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
               "line": 53,
               "column": 7
@@ -279,15 +272,33 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Admin Tests",
-                  "projectName": "Desktop Chrome - Admin Tests",
-                  "results": [],
-                  "status": "skipped"
+                  "projectId": "Desktop Chrome - Integration Tests",
+                  "projectName": "Desktop Chrome - Integration Tests",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 150,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ No active rooms scenario handled\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-29T17:31:06.055Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "23ea656dad703a75aadc-e9a3759eb24964855ab8",
+              "id": "23ea656dad703a75aadc-8dc19b5bab495307d227",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 109,
+              "line": 106,
               "column": 7
             },
             {
@@ -299,15 +310,33 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Admin Tests",
-                  "projectName": "Desktop Chrome - Admin Tests",
-                  "results": [],
-                  "status": "skipped"
+                  "projectId": "Desktop Chrome - Integration Tests",
+                  "projectName": "Desktop Chrome - Integration Tests",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 181,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Connection issues with cached data handled\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-29T17:31:06.222Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "23ea656dad703a75aadc-3ebb3a480181d6945ab3",
+              "id": "23ea656dad703a75aadc-ab0aaa9d5a132ee3c910",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 129,
+              "line": 126,
               "column": 7
             },
             {
@@ -319,19 +348,37 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Admin Tests",
-                  "projectName": "Desktop Chrome - Admin Tests",
-                  "results": [],
-                  "status": "skipped"
+                  "projectId": "Desktop Chrome - Integration Tests",
+                  "projectName": "Desktop Chrome - Integration Tests",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 188,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Real-time updates verified\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-29T17:31:06.420Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "23ea656dad703a75aadc-db9872b0c9ca367ec3b8",
+              "id": "23ea656dad703a75aadc-48aebd7e19c4dc5e0fa6",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 164,
+              "line": 161,
               "column": 7
             },
             {
-              "title": "Room details expansion and information display",
+              "title": "Room details information display",
               "ok": true,
               "tags": [],
               "tests": [
@@ -339,15 +386,33 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Admin Tests",
-                  "projectName": "Desktop Chrome - Admin Tests",
-                  "results": [],
-                  "status": "skipped"
+                  "projectId": "Desktop Chrome - Integration Tests",
+                  "projectName": "Desktop Chrome - Integration Tests",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 339,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Room details display verified\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-29T17:31:05.801Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "23ea656dad703a75aadc-3b28762a4b4f4e8b9909",
+              "id": "23ea656dad703a75aadc-ad973e8330f10a2a5c54",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 196,
+              "line": 185,
               "column": 7
             },
             {
@@ -359,15 +424,33 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Admin Tests",
-                  "projectName": "Desktop Chrome - Admin Tests",
-                  "results": [],
-                  "status": "skipped"
+                  "projectId": "Desktop Chrome - Integration Tests",
+                  "projectName": "Desktop Chrome - Integration Tests",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 166,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Statistics dashboard verified\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-29T17:31:06.350Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "23ea656dad703a75aadc-7812fdc7f235797f6ccc",
+              "id": "23ea656dad703a75aadc-57ac86618caa9523d936",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 233,
+              "line": 221,
               "column": 7
             },
             {
@@ -379,15 +462,33 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Admin Tests",
-                  "projectName": "Desktop Chrome - Admin Tests",
-                  "results": [],
-                  "status": "skipped"
+                  "projectId": "Desktop Chrome - Integration Tests",
+                  "projectName": "Desktop Chrome - Integration Tests",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 171,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Filtering and searching verified\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-29T17:31:06.534Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "23ea656dad703a75aadc-ed8d91e962df2b653e34",
+              "id": "23ea656dad703a75aadc-cc90eccd4a13d2368053",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 269,
+              "line": 257,
               "column": 7
             },
             {
@@ -399,15 +500,33 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Admin Tests",
-                  "projectName": "Desktop Chrome - Admin Tests",
-                  "results": [],
-                  "status": "skipped"
+                  "projectId": "Desktop Chrome - Integration Tests",
+                  "projectName": "Desktop Chrome - Integration Tests",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 140,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Room management quick actions verified\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-29T17:31:06.716Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "23ea656dad703a75aadc-d8a6d28434694b32dce2",
+              "id": "23ea656dad703a75aadc-67cd368d65be551ca4cb",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 310,
+              "line": 296,
               "column": 7
             }
           ]
@@ -415,76 +534,45 @@
         {
           "title": "UC-A001: Advanced Monitoring Features",
           "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-          "line": 377,
+          "line": 342,
           "column": 6,
           "specs": [
             {
               "title": "Export room data functionality",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Admin Tests",
-                  "projectName": "Desktop Chrome - Admin Tests",
+                  "projectId": "Desktop Chrome - Integration Tests",
+                  "projectName": "Desktop Chrome - Integration Tests",
                   "results": [
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 15369,
-                      "error": {
-                        "message": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.admin-dashboard') to be visible\u001b[22m\n",
-                        "stack": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.admin-dashboard') to be visible\u001b[22m\n\n    at /home/alexmak/bomberman/tests/front-end/integration/uc-a001-monitor-game-rooms.integration.test.ts:386:16",
-                        "location": {
-                          "file": "/home/alexmak/bomberman/tests/front-end/integration/uc-a001-monitor-game-rooms.integration.test.ts",
-                          "column": 16,
-                          "line": 386
-                        },
-                        "snippet": "  384 |     }\n  385 |     \n> 386 |     await page.waitForSelector('.admin-dashboard');\n      |                ^\n  387 |     \n  388 |     // Look for export functionality\n  389 |     const exportButton = page.locator('button:has-text(\"Export\"), button:has-text(\"Download\"), .export-button');"
-                      },
-                      "errors": [
+                      "status": "passed",
+                      "duration": 596,
+                      "errors": [],
+                      "stdout": [
                         {
-                          "location": {
-                            "file": "/home/alexmak/bomberman/tests/front-end/integration/uc-a001-monitor-game-rooms.integration.test.ts",
-                            "column": 16,
-                            "line": 386
-                          },
-                          "message": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.admin-dashboard') to be visible\u001b[22m\n\n\n  384 |     }\n  385 |     \n> 386 |     await page.waitForSelector('.admin-dashboard');\n      |                ^\n  387 |     \n  388 |     // Look for export functionality\n  389 |     const exportButton = page.locator('button:has-text(\"Export\"), button:has-text(\"Download\"), .export-button');\n    at /home/alexmak/bomberman/tests/front-end/integration/uc-a001-monitor-game-rooms.integration.test.ts:386:16"
+                          "text": "✅ Export functionality verified\n"
                         }
                       ],
-                      "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-29T17:22:58.704Z",
+                      "startTime": "2025-08-29T17:31:04.706Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/home/alexmak/bomberman/test-results/integration-uc-a001-monito-4c9d4-ort-room-data-functionality-Desktop-Chrome---Admin-Tests/test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/home/alexmak/bomberman/test-results/integration-uc-a001-monito-4c9d4-ort-room-data-functionality-Desktop-Chrome---Admin-Tests/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/home/alexmak/bomberman/tests/front-end/integration/uc-a001-monitor-game-rooms.integration.test.ts",
-                        "column": 16,
-                        "line": 386
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
-              "id": "23ea656dad703a75aadc-b21bf17adff15567999c",
+              "id": "23ea656dad703a75aadc-b4f4447791222bf0bd47",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 378,
+              "line": 343,
               "column": 7
             },
             {
@@ -496,14 +584,14 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Admin Tests",
-                  "projectName": "Desktop Chrome - Admin Tests",
+                  "projectId": "Desktop Chrome - Integration Tests",
+                  "projectName": "Desktop Chrome - Integration Tests",
                   "results": [
                     {
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 485,
+                      "duration": 518,
                       "errors": [],
                       "stdout": [
                         {
@@ -512,7 +600,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-29T17:22:58.729Z",
+                      "startTime": "2025-08-29T17:31:04.692Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -520,9 +608,9 @@
                   "status": "expected"
                 }
               ],
-              "id": "23ea656dad703a75aadc-556ff933e2865310e4d7",
+              "id": "23ea656dad703a75aadc-55bb43e5fc035a6b7cb7",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 404,
+              "line": 369,
               "column": 7
             },
             {
@@ -534,14 +622,14 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Admin Tests",
-                  "projectName": "Desktop Chrome - Admin Tests",
+                  "projectId": "Desktop Chrome - Integration Tests",
+                  "projectName": "Desktop Chrome - Integration Tests",
                   "results": [
                     {
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 403,
+                      "duration": 453,
                       "errors": [],
                       "stdout": [
                         {
@@ -550,7 +638,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-29T17:22:59.338Z",
+                      "startTime": "2025-08-29T17:31:05.315Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -558,9 +646,9 @@
                   "status": "expected"
                 }
               ],
-              "id": "23ea656dad703a75aadc-58e266ac7b18f97c324a",
+              "id": "23ea656dad703a75aadc-93c2233284b6943b92d8",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 434,
+              "line": 399,
               "column": 7
             }
           ]
@@ -568,17 +656,13 @@
       ]
     }
   ],
-  "errors": [
-    {
-      "message": "\u001b[31mTesting stopped early after 1 maximum allowed failures.\u001b[39m"
-    }
-  ],
+  "errors": [],
   "stats": {
-    "startTime": "2025-08-29T17:22:58.007Z",
-    "duration": 16385.459000000003,
-    "expected": 2,
-    "skipped": 8,
-    "unexpected": 1,
+    "startTime": "2025-08-29T17:31:03.792Z",
+    "duration": 3127.042,
+    "expected": 11,
+    "skipped": 0,
+    "unexpected": 0,
     "flaky": 0
   }
 }

@@ -104,7 +104,12 @@ run_project_tests() {
     local cmd="PW_TEST_CONNECT_WS_ENDPOINT=$PLAYWRIGHT_ENDPOINT npx playwright test"
     
     if [ -n "$test_file" ]; then
-        cmd="$cmd $TEST_DIR/$test_file"
+        # If test_file already starts with tests/, use it as-is, otherwise prepend TEST_DIR
+        if [[ "$test_file" == tests/* ]]; then
+            cmd="$cmd $test_file"
+        else
+            cmd="$cmd $TEST_DIR/$test_file"
+        fi
     else
         cmd="$cmd $TEST_DIR"
     fi
