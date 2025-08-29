@@ -234,13 +234,13 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
+                  "projectId": "Desktop Chrome - Admin Tests",
+                  "projectName": "Desktop Chrome - Admin Tests",
                   "results": [],
                   "status": "skipped"
                 }
               ],
-              "id": "23ea656dad703a75aadc-cb6bfda11b5eabd78082",
+              "id": "23ea656dad703a75aadc-d27a9e2208896f1f486e",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
               "line": 43,
               "column": 7
@@ -254,13 +254,13 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
+                  "projectId": "Desktop Chrome - Admin Tests",
+                  "projectName": "Desktop Chrome - Admin Tests",
                   "results": [],
                   "status": "skipped"
                 }
               ],
-              "id": "23ea656dad703a75aadc-8dc19b5bab495307d227",
+              "id": "23ea656dad703a75aadc-e9a3759eb24964855ab8",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
               "line": 99,
               "column": 7
@@ -274,13 +274,13 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
+                  "projectId": "Desktop Chrome - Admin Tests",
+                  "projectName": "Desktop Chrome - Admin Tests",
                   "results": [],
                   "status": "skipped"
                 }
               ],
-              "id": "23ea656dad703a75aadc-ab0aaa9d5a132ee3c910",
+              "id": "23ea656dad703a75aadc-3ebb3a480181d6945ab3",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
               "line": 119,
               "column": 7
@@ -294,13 +294,13 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
+                  "projectId": "Desktop Chrome - Admin Tests",
+                  "projectName": "Desktop Chrome - Admin Tests",
                   "results": [],
                   "status": "skipped"
                 }
               ],
-              "id": "23ea656dad703a75aadc-48aebd7e19c4dc5e0fa6",
+              "id": "23ea656dad703a75aadc-db9872b0c9ca367ec3b8",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
               "line": 154,
               "column": 7
@@ -314,13 +314,13 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
+                  "projectId": "Desktop Chrome - Admin Tests",
+                  "projectName": "Desktop Chrome - Admin Tests",
                   "results": [],
                   "status": "skipped"
                 }
               ],
-              "id": "23ea656dad703a75aadc-f6764cae4484d1a98295",
+              "id": "23ea656dad703a75aadc-3b28762a4b4f4e8b9909",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
               "line": 186,
               "column": 7
@@ -334,13 +334,13 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
+                  "projectId": "Desktop Chrome - Admin Tests",
+                  "projectName": "Desktop Chrome - Admin Tests",
                   "results": [],
                   "status": "skipped"
                 }
               ],
-              "id": "23ea656dad703a75aadc-57ac86618caa9523d936",
+              "id": "23ea656dad703a75aadc-7812fdc7f235797f6ccc",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
               "line": 223,
               "column": 7
@@ -354,13 +354,13 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
+                  "projectId": "Desktop Chrome - Admin Tests",
+                  "projectName": "Desktop Chrome - Admin Tests",
                   "results": [],
                   "status": "skipped"
                 }
               ],
-              "id": "23ea656dad703a75aadc-cc90eccd4a13d2368053",
+              "id": "23ea656dad703a75aadc-ed8d91e962df2b653e34",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
               "line": 259,
               "column": 7
@@ -374,13 +374,13 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
+                  "projectId": "Desktop Chrome - Admin Tests",
+                  "projectName": "Desktop Chrome - Admin Tests",
                   "results": [],
                   "status": "skipped"
                 }
               ],
-              "id": "23ea656dad703a75aadc-67cd368d65be551ca4cb",
+              "id": "23ea656dad703a75aadc-d8a6d28434694b32dce2",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
               "line": 300,
               "column": 7
@@ -402,30 +402,30 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
+                  "projectId": "Desktop Chrome - Admin Tests",
+                  "projectName": "Desktop Chrome - Admin Tests",
                   "results": [
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "interrupted",
-                      "duration": 15359,
+                      "duration": 15388,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-29T16:57:17.972Z",
+                      "startTime": "2025-08-29T17:19:38.846Z",
                       "annotations": [],
                       "attachments": [
                         {
                           "name": "screenshot",
                           "contentType": "image/png",
-                          "path": "/home/alexmak/bomberman/test-results/integration-uc-a001-monito-4c9d4-ort-room-data-functionality-Desktop-Chrome---Integration-Tests/test-failed-1.png"
+                          "path": "/home/alexmak/bomberman/test-results/integration-uc-a001-monito-4c9d4-ort-room-data-functionality-Desktop-Chrome---Admin-Tests/test-failed-1.png"
                         },
                         {
                           "name": "error-context",
                           "contentType": "text/markdown",
-                          "path": "/home/alexmak/bomberman/test-results/integration-uc-a001-monito-4c9d4-ort-room-data-functionality-Desktop-Chrome---Integration-Tests/error-context.md"
+                          "path": "/home/alexmak/bomberman/test-results/integration-uc-a001-monito-4c9d4-ort-room-data-functionality-Desktop-Chrome---Admin-Tests/error-context.md"
                         }
                       ]
                     }
@@ -433,7 +433,7 @@
                   "status": "skipped"
                 }
               ],
-              "id": "23ea656dad703a75aadc-b4f4447791222bf0bd47",
+              "id": "23ea656dad703a75aadc-b21bf17adff15567999c",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
               "line": 368,
               "column": 7
@@ -447,14 +447,14 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
+                  "projectId": "Desktop Chrome - Admin Tests",
+                  "projectName": "Desktop Chrome - Admin Tests",
                   "results": [
                     {
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "failed",
-                      "duration": 15332,
+                      "duration": 15411,
                       "error": {
                         "message": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.admin-dashboard') to be visible\u001b[22m\n",
                         "stack": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.admin-dashboard') to be visible\u001b[22m\n\n    at /home/alexmak/bomberman/tests/front-end/integration/uc-a001-monitor-game-rooms.integration.test.ts:402:16",
@@ -478,18 +478,18 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-29T16:57:17.999Z",
+                      "startTime": "2025-08-29T17:19:38.819Z",
                       "annotations": [],
                       "attachments": [
                         {
                           "name": "screenshot",
                           "contentType": "image/png",
-                          "path": "/home/alexmak/bomberman/test-results/integration-uc-a001-monito-fa5e3-me-alerts-and-notifications-Desktop-Chrome---Integration-Tests/test-failed-1.png"
+                          "path": "/home/alexmak/bomberman/test-results/integration-uc-a001-monito-fa5e3-me-alerts-and-notifications-Desktop-Chrome---Admin-Tests/test-failed-1.png"
                         },
                         {
                           "name": "error-context",
                           "contentType": "text/markdown",
-                          "path": "/home/alexmak/bomberman/test-results/integration-uc-a001-monito-fa5e3-me-alerts-and-notifications-Desktop-Chrome---Integration-Tests/error-context.md"
+                          "path": "/home/alexmak/bomberman/test-results/integration-uc-a001-monito-fa5e3-me-alerts-and-notifications-Desktop-Chrome---Admin-Tests/error-context.md"
                         }
                       ],
                       "errorLocation": {
@@ -502,7 +502,7 @@
                   "status": "unexpected"
                 }
               ],
-              "id": "23ea656dad703a75aadc-55bb43e5fc035a6b7cb7",
+              "id": "23ea656dad703a75aadc-556ff933e2865310e4d7",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
               "line": 394,
               "column": 7
@@ -516,895 +516,15 @@
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
+                  "projectId": "Desktop Chrome - Admin Tests",
+                  "projectName": "Desktop Chrome - Admin Tests",
                   "results": [],
                   "status": "skipped"
                 }
               ],
-              "id": "23ea656dad703a75aadc-93c2233284b6943b92d8",
+              "id": "23ea656dad703a75aadc-58e266ac7b18f97c324a",
               "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
               "line": 424,
-              "column": 7
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "integration/uc-g001-join-game-room.integration.test.ts",
-      "file": "integration/uc-g001-join-game-room.integration.test.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "UC-G001: Join Game Room Integration",
-          "file": "integration/uc-g001-join-game-room.integration.test.ts",
-          "line": 9,
-          "column": 6,
-          "specs": [
-            {
-              "title": "Main Success Scenario: Gamer successfully joins existing room",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "0d4b0f0804667afc1df0-cafd5888db30690e1216",
-              "file": "integration/uc-g001-join-game-room.integration.test.ts",
-              "line": 40,
-              "column": 7
-            },
-            {
-              "title": "Extension 3a: Room is full",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "0d4b0f0804667afc1df0-cfa16cf43e7245e70eab",
-              "file": "integration/uc-g001-join-game-room.integration.test.ts",
-              "line": 81,
-              "column": 7
-            },
-            {
-              "title": "Extension 3b: Room does not exist",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "0d4b0f0804667afc1df0-76f82baf2f8cc8be2128",
-              "file": "integration/uc-g001-join-game-room.integration.test.ts",
-              "line": 102,
-              "column": 7
-            },
-            {
-              "title": "Extension 4a: Name already taken",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "0d4b0f0804667afc1df0-3c69cedfe80e292d349e",
-              "file": "integration/uc-g001-join-game-room.integration.test.ts",
-              "line": 116,
-              "column": 7
-            },
-            {
-              "title": "Extension 6a: Network issues and auto-retry",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "0d4b0f0804667afc1df0-d71b98df44bdcffc8677",
-              "file": "integration/uc-g001-join-game-room.integration.test.ts",
-              "line": 153,
-              "column": 7
-            },
-            {
-              "title": "Real-time synchronization: Players see each other join instantly",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "0d4b0f0804667afc1df0-5848d00f03fbf9191640",
-              "file": "integration/uc-g001-join-game-room.integration.test.ts",
-              "line": 174,
-              "column": 7
-            },
-            {
-              "title": "Mobile responsive: Join flow works on mobile viewport",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "0d4b0f0804667afc1df0-4dce97ce0920094570fc",
-              "file": "integration/uc-g001-join-game-room.integration.test.ts",
-              "line": 206,
-              "column": 7
-            }
-          ]
-        },
-        {
-          "title": "UC-G001: Edge Cases and Error Handling",
-          "file": "integration/uc-g001-join-game-room.integration.test.ts",
-          "line": 238,
-          "column": 6,
-          "specs": [
-            {
-              "title": "Empty room code handling",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "0d4b0f0804667afc1df0-77fe5d7883a97f84f658",
-              "file": "integration/uc-g001-join-game-room.integration.test.ts",
-              "line": 239,
-              "column": 7
-            },
-            {
-              "title": "Invalid room code format handling",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "0d4b0f0804667afc1df0-994400418658b5777ba9",
-              "file": "integration/uc-g001-join-game-room.integration.test.ts",
-              "line": 250,
-              "column": 7
-            },
-            {
-              "title": "Connection timeout handling",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "0d4b0f0804667afc1df0-9012147c2133cfad1ef6",
-              "file": "integration/uc-g001-join-game-room.integration.test.ts",
-              "line": 269,
-              "column": 7
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "integration/uc-g002-create-game-room.integration.test.ts",
-      "file": "integration/uc-g002-create-game-room.integration.test.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "UC-G002: Create Game Room Integration",
-          "file": "integration/uc-g002-create-game-room.integration.test.ts",
-          "line": 9,
-          "column": 6,
-          "specs": [
-            {
-              "title": "Main Success Scenario: Player successfully creates room",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "789e591251b485a7674b-02e9eb4ed404eb62f0b3",
-              "file": "integration/uc-g002-create-game-room.integration.test.ts",
-              "line": 18,
-              "column": 7
-            },
-            {
-              "title": "Extension 3a: Room creation fails",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "789e591251b485a7674b-52e315aaed5691aa4886",
-              "file": "integration/uc-g002-create-game-room.integration.test.ts",
-              "line": 79,
-              "column": 7
-            },
-            {
-              "title": "Extension 4a: Connection lost during room creation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "789e591251b485a7674b-2c30863551124f3c851f",
-              "file": "integration/uc-g002-create-game-room.integration.test.ts",
-              "line": 103,
-              "column": 7
-            },
-            {
-              "title": "Extension 6a: Sharing not available",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "789e591251b485a7674b-47dc4691429a361a775f",
-              "file": "integration/uc-g002-create-game-room.integration.test.ts",
-              "line": 121,
-              "column": 7
-            },
-            {
-              "title": "Room settings validation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "789e591251b485a7674b-bec2b88e1782311492cb",
-              "file": "integration/uc-g002-create-game-room.integration.test.ts",
-              "line": 154,
-              "column": 7
-            },
-            {
-              "title": "Multiple room creation by same user",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "789e591251b485a7674b-2b7f9fac02389e6eb4b6",
-              "file": "integration/uc-g002-create-game-room.integration.test.ts",
-              "line": 177,
-              "column": 7
-            },
-            {
-              "title": "Room persistence and accessibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "789e591251b485a7674b-738aa652b8b45d169933",
-              "file": "integration/uc-g002-create-game-room.integration.test.ts",
-              "line": 207,
-              "column": 7
-            },
-            {
-              "title": "Room creation with mobile viewport",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "789e591251b485a7674b-0ec01fee35c33e11e791",
-              "file": "integration/uc-g002-create-game-room.integration.test.ts",
-              "line": 234,
-              "column": 7
-            }
-          ]
-        },
-        {
-          "title": "UC-G002: Room Host Privileges",
-          "file": "integration/uc-g002-create-game-room.integration.test.ts",
-          "line": 260,
-          "column": 6,
-          "specs": [
-            {
-              "title": "Host can configure room settings",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "789e591251b485a7674b-80be39bf3b508090071e",
-              "file": "integration/uc-g002-create-game-room.integration.test.ts",
-              "line": 261,
-              "column": 7
-            },
-            {
-              "title": "Room URL sharing functionality",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "789e591251b485a7674b-64e9b3ac8acbb410c039",
-              "file": "integration/uc-g002-create-game-room.integration.test.ts",
-              "line": 291,
-              "column": 7
-            },
-            {
-              "title": "Room code generation and format",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "789e591251b485a7674b-d57e96e8481487101a72",
-              "file": "integration/uc-g002-create-game-room.integration.test.ts",
-              "line": 325,
-              "column": 7
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "integration/uc-g003-play-cooperative-game.integration.test.ts",
-      "file": "integration/uc-g003-play-cooperative-game.integration.test.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "UC-G003: Play Cooperative Game Integration",
-          "file": "integration/uc-g003-play-cooperative-game.integration.test.ts",
-          "line": 9,
-          "column": 6,
-          "specs": [
-            {
-              "title": "Main Success Scenario: Complete cooperative gameplay flow",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7bf043c6e852ada97615-2df6e5cfededc4f93db6",
-              "file": "integration/uc-g003-play-cooperative-game.integration.test.ts",
-              "line": 59,
-              "column": 7
-            },
-            {
-              "title": "Extension 2a: Network lag interpolation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7bf043c6e852ada97615-9540db54c5dca7ddcb42",
-              "file": "integration/uc-g003-play-cooperative-game.integration.test.ts",
-              "line": 111,
-              "column": 7
-            },
-            {
-              "title": "Extension 4a: Friendly fire warning system",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7bf043c6e852ada97615-7c40a9860e4501b711c2",
-              "file": "integration/uc-g003-play-cooperative-game.integration.test.ts",
-              "line": 145,
-              "column": 7
-            },
-            {
-              "title": "Extension 6a: Player elimination and respawn",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7bf043c6e852ada97615-629b8012a326ed53cfcb",
-              "file": "integration/uc-g003-play-cooperative-game.integration.test.ts",
-              "line": 169,
-              "column": 7
-            },
-            {
-              "title": "Extension 7a: Monster waves when gates destroyed",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7bf043c6e852ada97615-3b43dd1c30337fb69f8e",
-              "file": "integration/uc-g003-play-cooperative-game.integration.test.ts",
-              "line": 206,
-              "column": 7
-            },
-            {
-              "title": "Real-time synchronization between players",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7bf043c6e852ada97615-cd982ef3e7efad45b3b6",
-              "file": "integration/uc-g003-play-cooperative-game.integration.test.ts",
-              "line": 236,
-              "column": 7
-            },
-            {
-              "title": "Mobile touch controls integration",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7bf043c6e852ada97615-62b80981b05bedb674c1",
-              "file": "integration/uc-g003-play-cooperative-game.integration.test.ts",
-              "line": 265,
-              "column": 7
-            }
-          ]
-        },
-        {
-          "title": "UC-G003: Game Performance and Optimization",
-          "file": "integration/uc-g003-play-cooperative-game.integration.test.ts",
-          "line": 379,
-          "column": 6,
-          "specs": [
-            {
-              "title": "Frame rate stability during gameplay",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7bf043c6e852ada97615-05c3821b8f54b15a75e0",
-              "file": "integration/uc-g003-play-cooperative-game.integration.test.ts",
-              "line": 380,
-              "column": 7
-            },
-            {
-              "title": "Memory usage stability during extended gameplay",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7bf043c6e852ada97615-816ac7a30289239b47dc",
-              "file": "integration/uc-g003-play-cooperative-game.integration.test.ts",
-              "line": 424,
-              "column": 7
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "integration/websocket-redis-pubsub.integration.test.ts",
-      "file": "integration/websocket-redis-pubsub.integration.test.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "WebSocket-Redis Pub/Sub Integration",
-          "file": "integration/websocket-redis-pubsub.integration.test.ts",
-          "line": 9,
-          "column": 6,
-          "specs": [
-            {
-              "title": "Real-time event synchronization through WebSocket-Redis bridge",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "b1d430506f7ac2e38c64-d06860319d23b23d1f46",
-              "file": "integration/websocket-redis-pubsub.integration.test.ts",
-              "line": 36,
-              "column": 7
-            },
-            {
-              "title": "Message delivery through pub/sub channels",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "b1d430506f7ac2e38c64-3ee52cd3de0ae48bd85d",
-              "file": "integration/websocket-redis-pubsub.integration.test.ts",
-              "line": 79,
-              "column": 7
-            },
-            {
-              "title": "Event ordering and consistency",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "b1d430506f7ac2e38c64-c73c9b483b78856f170c",
-              "file": "integration/websocket-redis-pubsub.integration.test.ts",
-              "line": 108,
-              "column": 7
-            },
-            {
-              "title": "Connection recovery and event replay",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "b1d430506f7ac2e38c64-fcde4ff6daff72211b41",
-              "file": "integration/websocket-redis-pubsub.integration.test.ts",
-              "line": 158,
-              "column": 7
-            },
-            {
-              "title": "Channel subscription and unsubscription",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "b1d430506f7ac2e38c64-5c02091ef34cc33967df",
-              "file": "integration/websocket-redis-pubsub.integration.test.ts",
-              "line": 187,
-              "column": 7
-            },
-            {
-              "title": "Error handling and resilience",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "b1d430506f7ac2e38c64-2574be2f64e2e1a2155b",
-              "file": "integration/websocket-redis-pubsub.integration.test.ts",
-              "line": 218,
-              "column": 7
-            },
-            {
-              "title": "Message queuing during disconnection",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "b1d430506f7ac2e38c64-e631f66147aee91d6d1a",
-              "file": "integration/websocket-redis-pubsub.integration.test.ts",
-              "line": 268,
-              "column": 7
-            }
-          ]
-        },
-        {
-          "title": "WebSocket-Redis Performance Tests",
-          "file": "integration/websocket-redis-pubsub.integration.test.ts",
-          "line": 347,
-          "column": 6,
-          "specs": [
-            {
-              "title": "High-frequency event handling",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "b1d430506f7ac2e38c64-9933dc00fd20b5edf798",
-              "file": "integration/websocket-redis-pubsub.integration.test.ts",
-              "line": 348,
-              "column": 7
-            },
-            {
-              "title": "Memory usage during extended session",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "b1d430506f7ac2e38c64-2c9681d1c5b125185099",
-              "file": "integration/websocket-redis-pubsub.integration.test.ts",
-              "line": 384,
               "column": 7
             }
           ]
@@ -1418,10 +538,10 @@
     }
   ],
   "stats": {
-    "startTime": "2025-08-29T16:57:17.284Z",
-    "duration": 16174.427,
+    "startTime": "2025-08-29T17:19:38.121Z",
+    "duration": 16276.915,
     "expected": 0,
-    "skipped": 49,
+    "skipped": 10,
     "unexpected": 1,
     "flaky": 0
   }

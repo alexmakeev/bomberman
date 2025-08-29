@@ -151,14 +151,29 @@ const exportFormat = ref('json')
 
 // Check for existing admin authentication
 onMounted(() => {
+  // Debug: log all cookies
+  console.log('AdminView: All cookies:', document.cookie)
+  
   // Check for admin token cookie or session
   const adminToken = document.cookie
     .split('; ')
     .find(row => row.startsWith('admin_token='))
-    
+  
+  console.log('AdminView: Found admin token:', adminToken)
+  
   if (adminToken) {
-    isAuthenticated.value = true
-    loadDashboardData()
+    const tokenValue = adminToken.split('=')[1]
+    console.log('AdminView: Token value:', tokenValue)
+    // Accept both manual login token and test token
+    if (tokenValue === 'test_admin_token' || tokenValue === 'admin_login_token') {
+      console.log('AdminView: Valid token, authenticating user')
+      isAuthenticated.value = true
+      loadDashboardData()
+    } else {
+      console.log('AdminView: Invalid token value')
+    }
+  } else {
+    console.log('AdminView: No admin token found in cookies')
   }
   
   // Start real-time updates
@@ -187,7 +202,7 @@ function handleLogin() {
   if (password.value === 'admin123') {
     isAuthenticated.value = true
     // Set admin token cookie
-    document.cookie = 'admin_token=test_admin_token; path=/; domain=localhost'
+    document.cookie = 'admin_token=admin_login_token; path=/; domain=localhost'
     loadDashboardData()
     password.value = ''
   } else {
