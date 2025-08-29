@@ -9,6 +9,7 @@
 import { MessageType } from '../types/websocket.d';
 import type { WebSocketMessage } from '../types/websocket.d';
 import type { GameAction } from '../types/game';
+import { generateId } from './gameUtils';
 
 export class WebSocketService {
   private ws: WebSocket | null = null;
@@ -21,6 +22,26 @@ export class WebSocketService {
   private isConnecting = false;
 
   constructor(private readonly url: string) {}
+
+  // Helper method to create properly formatted WebSocket messages
+  private createMessage(messageType: MessageType, type: string, data: any): any {
+    return {
+      messageType,
+      type,
+      data,
+      timestamp: new Date(),
+      protocolVersion: '1.0',
+      eventId: generateId(),
+      category: 'game_events', // Default category
+      sourceId: 'client',
+      targets: [{ type: 'broadcast', id: '*' }],
+      metadata: {
+        priority: 'normal',
+        retryable: true,
+        persistent: false
+      }
+    };
+  }
 
   // Connection Management
   connect(): Promise<void> {
@@ -106,39 +127,34 @@ export class WebSocketService {
 
   // Convenience methods for common message types
   sendPlayerAction(action: GameAction): boolean {
-    return this.send({
-      messageType: MessageType.PLAYER_ACTION,
-      type: 'player_action',
-      data: action,
-      timestamp: new Date(),
-    });
+    const message = this.createMessage(MessageType.PLAYER_ACTION, 'player_action', action);
+    return this.send(message);
   }
 
   sendPlayerMove(playerId: string, direction: string, position: { x: number, y: number }): boolean {
-    return this.send({
-      messageType: MessageType.PLAYER_MOVE,
-      type: 'player_move',
-      data: {
-        playerId,
-        direction,
-        position,
-        timestamp: new Date(),
-      },
+    const message = this.createMessage(MessageType.PLAYER_MOVE, 'player_move', {
+      playerId,
+      direction,
+      position,
       timestamp: new Date(),
     });
+    return this.send(message);
   }
 
   sendPlayerBomb(playerId: string, position: { x: number, y: number }): boolean {
-    return this.send({
-      messageType: MessageType.PLAYER_BOMB,
-      type: 'player_bomb',
-      data: {
-        playerId,
-        position,
-        timestamp: new Date(),
-      },
+    const message = this.createMessage(MessageType.PLAYER_BOMB, 'player_bomb', {
+      playerId,
+      position,
       timestamp: new Date(),
     });
+    return this.send(message);
+  }
+
+  sendSyncRequest(playerId: string): boolean {
+    const message = this.createMessage('PLAYER_SYNC_REQUEST' as MessageType, 'player_sync_request', {
+      playerId
+    });
+    return this.send(message);
   }
 
   // Event System
@@ -211,12 +227,8 @@ export class WebSocketService {
     this.stopHeartbeat();
     this.heartbeatInterval = window.setInterval(() => {
       if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-        this.send({
-          messageType: MessageType.PING,
-          type: 'ping',
-          data: {},
-          timestamp: new Date(),
-        });
+        const message = this.createMessage(MessageType.PING, 'ping', {});
+        this.send(message);
       }
     }, 30000); // Ping every 30 seconds
   }

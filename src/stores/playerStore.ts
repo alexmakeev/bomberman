@@ -560,12 +560,7 @@ export const usePlayerStore = defineStore('player', () => {
     }
     
     // Request state synchronization
-    ws.send({
-      messageType: 'PLAYER_SYNC_REQUEST' as any,
-      type: 'player_sync_request',
-      data: { playerId: id.value },
-      timestamp: Date.now(),
-    });
+    ws.sendSyncRequest(id.value);
   }
 
   // Return store interface

@@ -183,7 +183,7 @@ export interface PlayerAction {
 
 export interface GameAction {
   id: string
-  type: 'move' | 'stop' | 'bomb' | 'powerup_collect' | 'respawn' | 'damage' | 'heal'
+  type: 'move' | 'stop' | 'bomb' | 'powerup_collect' | 'respawn' | 'damage' | 'heal' | 'score'
   playerId: string
   data: any
   timestamp: number
@@ -253,6 +253,9 @@ export interface NotificationMessage {
   timestamp: number
   duration: number
   priority: 'low' | 'normal' | 'high'
+  isRead?: boolean
+  isPersistent?: boolean
+  actions?: Array<{ label: string; handler: () => void; style?: string }>
 }
 
 export interface UISettings {
