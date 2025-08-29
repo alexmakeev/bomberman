@@ -318,3 +318,95 @@ export interface GameError {
   stack?: string
   context?: any
 }
+
+// Missing exports that are referenced by other type files
+export interface PlayerGameState {
+  playerId: string
+  state: 'alive' | 'dead' | 'respawning'
+  position: Position
+  health: number
+  score: number
+}
+
+export interface PlayerAbilities {
+  bombCount: number
+  bombPower: number
+  speed: number
+  canWalkThroughBombs: boolean
+  canKickBombs: boolean
+}
+
+export interface PlayerInventory {
+  powerUps: PowerUpType[]
+  keys: string[]
+  items: string[]
+}
+
+export interface RespawnInfo {
+  timeRemaining: number
+  spawnPosition: Position
+  invulnerabilityDuration: number
+}
+
+export type GameMode = 'cooperative' | 'competitive' | 'survival'
+export type DifficultyLevel = 'easy' | 'normal' | 'hard' | 'extreme'
+export type MapSize = 'small' | 'medium' | 'large'
+export type MapTheme = 'classic' | 'forest' | 'ice' | 'volcanic'
+export type MapLayout = 'open' | 'maze' | 'rooms'
+
+export interface Game {
+  id: string
+  roomId: string
+  state: GameState
+  players: Player[]
+  startTime: number
+}
+
+export type BombStatus = 'armed' | 'exploding' | 'exploded'
+export type TileType = 'empty' | 'wall' | 'destructible'
+export type MonsterStatus = 'idle' | 'patrolling' | 'chasing' | 'attacking'
+export type DeathCause = 'explosion' | 'monster' | 'trap' | 'timeout'
+
+export interface PowerUpEffect {
+  type: PowerUpType
+  duration?: number
+  magnitude: number
+}
+
+export interface WebSocketPlayerAction {
+  id: string
+  type: string
+  playerId: string
+  timestamp: number
+}
+
+export interface WebSocketInputState {
+  keys: Record<string, boolean>
+  mouse: { x: number, y: number, buttons: number }
+  touch: Array<{ x: number, y: number, id: number }>
+}
+
+export interface SpawnPoint {
+  position: Position
+  type: 'player' | 'monster' | 'powerup'
+  active: boolean
+}
+
+export interface AbilityEffect {
+  type: string
+  duration: number
+  effect: any
+}
+
+export interface Gate {
+  id: string
+  position: Position
+  isDestroyed: boolean
+  type: 'exit' | 'secret'
+}
+
+export interface ObjectiveStatus {
+  type: 'kill_boss' | 'find_exit' | 'survive'
+  completed: boolean
+  progress: number
+}

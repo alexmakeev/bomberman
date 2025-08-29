@@ -9,7 +9,7 @@ import { EntityId, Timestamp, Position, Direction, AnimationState } from './comm
 import { Room, RoomSettings, RoomPlayer, ChatMessage } from './room';
 import { Game, GameState, PlayerGameState, Bomb, PowerUp, Monster, Boss, Gate, ObjectiveStatus } from './game';
 import { Player, DeviceInfo } from './player';
-import { AdminAction, SystemMetrics } from './admin';
+import { AuditAction as AdminAction, SystemMetrics } from './admin';
 import { 
   UniversalEvent, 
   EventCategory, 
@@ -804,31 +804,21 @@ export enum WebSocketChannelCategory {
 /**
  * Redis channel naming patterns - now integrated with EventBus
  */
-export class ChannelPatterns {
+export declare class ChannelPatterns {
   /** Generate channel for event category and entity */
-  static forEntity(category: EventCategory, entityType: string, entityId: EntityId): string {
-    return `${category}:${entityType}:${entityId}`;
-  }
+  static forEntity(category: EventCategory, entityType: string, entityId: EntityId): string;
   
   /** Generate channel for global category */
-  static forCategory(category: EventCategory): string {
-    return `${category}:global`;
-  }
+  static forCategory(category: EventCategory): string;
   
   /** Generate channel for user-specific events */
-  static forUser(userId: EntityId, category: EventCategory): string {
-    return `user:${userId}:${category}`;
-  }
+  static forUser(userId: EntityId, category: EventCategory): string;
   
   /** Generate channel for room-specific events */
-  static forRoom(roomId: EntityId, category: EventCategory): string {
-    return `room:${roomId}:${category}`;
-  }
+  static forRoom(roomId: EntityId, category: EventCategory): string;
   
   /** Generate channel for game-specific events */
-  static forGame(gameId: EntityId, category: EventCategory): string {
-    return `game:${gameId}:${category}`;
-  }
+  static forGame(gameId: EntityId, category: EventCategory): string;
 }
 
 /**
@@ -1055,3 +1045,12 @@ export type {
 } from './game';
 
 export type { ObjectiveStatus } from './game';
+
+// Missing type definitions
+export type RedisEventType = 'publish' | 'subscribe' | 'message';
+
+export interface ChannelSubscription {
+  id: string;
+  channel: string;
+  filter?: any;
+}
