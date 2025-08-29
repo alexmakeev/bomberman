@@ -25,9 +25,30 @@ import type {
   WebSocketMessage,
 } from '../types/game';
 import { getWebSocketService } from '../utils/websocketService';
+import type { MessageType } from '../types/websocket.d';
 import { generateId, generateRoomId } from '../utils/gameUtils';
 
 export const useGameStore = defineStore('game', () => {
+  // Helper to create properly formatted WebSocket messages
+  function createWSMessage(messageType: string, type: string, data: any): any {
+    return {
+      messageType: messageType as MessageType,
+      type,
+      data,
+      timestamp: new Date(),
+      protocolVersion: '1.0',
+      eventId: generateId(),
+      category: 'game_events',
+      sourceId: 'client',
+      targets: [{ type: 'broadcast', id: '*' }],
+      metadata: {
+        priority: 'normal',
+        retryable: true,
+        persistent: false
+      }
+    };
+  }
+
   // State - Game Room and Session
   const roomId = ref<string>('');
   const gameState = ref<GameState>('waiting');
@@ -113,15 +134,11 @@ export const useGameStore = defineStore('game', () => {
     const ws = getWebSocketService();
     await ws.connect();
     
-    ws.send({
-      messageType: 'ROOM_CREATE' as any,
-      type: 'room_create',
-      data: {
-        roomId: roomId.value,
-        config: roomConfig,
-      },
-      timestamp: new Date(),
+    const message = createWSMessage('ROOM_CREATE', 'room_create', {
+      roomId: roomId.value,
+      config: roomConfig,
     });
+    ws.send(message);
     
     console.log(`Room ${roomId.value} created successfully`);
   }
@@ -135,15 +152,11 @@ export const useGameStore = defineStore('game', () => {
     await ws.connect();
     
     // Send join request
-    ws.send({
-      messageType: 'ROOM_JOIN' as any,
-      type: 'room_join',
-      data: {
-        roomId: targetRoomId,
-        player: playerData,
-      },
-      timestamp: new Date(),
+    const message = createWSMessage('ROOM_JOIN', 'room_join', {
+      roomId: targetRoomId,
+      player: playerData,
     });
+    ws.send(message);
     
     // Reset game state for new room
     resetGameState();
@@ -155,12 +168,8 @@ export const useGameStore = defineStore('game', () => {
     // Send leave message to server
     const ws = getWebSocketService();
     if (ws.isConnected) {
-      ws.send({
-        messageType: 'ROOM_LEAVE' as any,
-        type: 'room_leave',
-        data: { roomId: roomId.value },
-        timestamp: new Date(),
-      });
+      const message = createWSMessage('ROOM_LEAVE', 'room_leave', { roomId: roomId.value });
+      ws.send(message);
     }
     
     // Reset game state
@@ -174,7 +183,7 @@ export const useGameStore = defineStore('game', () => {
   // Actions - Game Flow
   function startGame(): void {
     gameState.value = 'playing';
-    gameStartTime.value = new Date();
+    gameStartTime.value = Date.now();
     timeRemaining.value = 300000; // Reset to 5 minutes
     
     // Start game timer
@@ -183,12 +192,8 @@ export const useGameStore = defineStore('game', () => {
     // Send start message to server
     const ws = getWebSocketService();
     if (ws.isConnected) {
-      ws.send({
-        messageType: 'GAME_START' as any,
-        type: 'game_start',
-        data: { roomId: roomId.value },
-        timestamp: new Date(),
-      });
+      const message = createWSMessage('GAME_START', 'game_start', { roomId: roomId.value });
+      ws.send(message);
     }
     
     console.log('Game started!');
@@ -202,12 +207,8 @@ export const useGameStore = defineStore('game', () => {
       // Send pause message to server
       const ws = getWebSocketService();
       if (ws.isConnected) {
-        ws.send({
-          messageType: 'GAME_PAUSE' as any,
-          type: 'game_pause',
-          data: { roomId: roomId.value },
-          timestamp: new Date(),
-        });
+        const message = createWSMessage('GAME_PAUSE', 'game_pause', { roomId: roomId.value });
+        ws.send(message);
       }
     }
   }
@@ -220,12 +221,8 @@ export const useGameStore = defineStore('game', () => {
       // Send resume message to server
       const ws = getWebSocketService();
       if (ws.isConnected) {
-        ws.send({
-          messageType: 'GAME_RESUME' as any,
-          type: 'game_resume',
-          data: { roomId: roomId.value },
-          timestamp: new Date(),
-        });
+        const message = createWSMessage('GAME_RESUME', 'game_resume', { roomId: roomId.value });
+        ws.send(message);
       }
     }
   }
@@ -238,16 +235,12 @@ export const useGameStore = defineStore('game', () => {
     // Send end message to server
     const ws = getWebSocketService();
     if (ws.isConnected) {
-      ws.send({
-        messageType: 'GAME_END' as any,
-        type: 'game_end',
-        data: { 
-          roomId: roomId.value,
-          result,
-          finalScore: totalScore.value,
-        },
-        timestamp: new Date(),
+      const message = createWSMessage('GAME_END', 'game_end', {
+        roomId: roomId.value,
+        result,
+        finalScore: totalScore.value,
       });
+      ws.send(message);
     }
     
     console.log(`Game ended: ${result}`);
@@ -399,7 +392,7 @@ export const useGameStore = defineStore('game', () => {
       center: bomb.position,
       cells: calculateExplosionCells(bomb.position, bomb.power),
       damage: 25,
-      createdAt: new Date(),
+      createdAt: Date.now(),
       duration: 1000,
     };
     
@@ -525,7 +518,7 @@ export const useGameStore = defineStore('game', () => {
         id: `powerup-${Date.now()}`,
         type: randomType,
         position,
-        createdAt: new Date()
+        createdAt: Date.now()
       };
       
       addPowerUp(powerUp);
@@ -676,12 +669,8 @@ export const useGameStore = defineStore('game', () => {
     // Request full state sync from server
     const ws = getWebSocketService();
     if (ws.isConnected && roomId.value) {
-      ws.send({
-        messageType: 'SYNC_REQUEST' as any,
-        type: 'sync_request',
-        data: { roomId: roomId.value },
-        timestamp: new Date(),
-      });
+      const message = createWSMessage('SYNC_REQUEST', 'sync_request', { roomId: roomId.value });
+      ws.send(message);
     }
   }
 
