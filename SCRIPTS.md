@@ -36,13 +36,27 @@ npm run test:coverage    # Run tests [with coverage]
 ```
 
 ### UI Tests (Playwright)
+**Use test-playwright.sh script - it handles all Docker setup automatically!**
+
 ```bash
+# Run all tests (recommended)
+./scripts/test-playwright.sh
+
+# Run specific test file (for debugging individual tests)
+./scripts/test-playwright.sh uc-g001-join-game-room.integration.test.ts
+
+# Run specific project type
+./scripts/test-playwright.sh --project "Desktop Chrome - Integration Tests"
+./scripts/test-playwright.sh --project "Desktop Chrome - Basic UI"
+./scripts/test-playwright.sh --project "Desktop Chrome - Game UI"
+
+# Debug mode (shows browser, detailed output)
+./scripts/test-playwright.sh --debug --project "Desktop Chrome - Integration Tests"
+
+# Alternative npm commands (less flexible)
 npm run test:ui                    # All UI tests [Docker browsers]
 npm run test:ui:interactive        # Interactive mode [Docker browsers]
 npm run test:playwright            # Direct Playwright runner
-./scripts/test-playwright.sh       # All projects
-./scripts/test-playwright.sh --project "Desktop Chrome"  # Specific browser
-./scripts/test-playwright.sh --debug  # Debug mode
 ```
 
 #### Docker Headless Browser Setup

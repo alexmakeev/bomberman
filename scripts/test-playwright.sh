@@ -12,12 +12,18 @@ echo "===================================="
 PLAYWRIGHT_ENDPOINT="ws://127.0.0.1:9222/"
 TEST_DIR="tests/front-end"
 
-# Available projects
+# Available projects (matching playwright.config.ts)
 PROJECTS=(
-  "Desktop Chrome"
-  "Desktop Firefox" 
-  "Mobile Chrome"
-  "Mobile Safari"
+  "Desktop Chrome - Basic UI"
+  "Desktop Firefox - Basic UI"
+  "Mobile Chrome - Basic UI"
+  "Mobile Safari - Basic UI"
+  "Desktop Chrome - Game UI"
+  "Desktop Chrome - Integration Tests"
+  "Desktop Firefox - Critical Flows"
+  "Mobile Chrome - Mobile Flows"
+  "Desktop Chrome - Admin Tests"
+  "Desktop Chrome - System Integration"
 )
 
 # Function to show usage
@@ -27,10 +33,11 @@ show_usage() {
     echo ""
     echo "Options:"
     echo "  --project <name>     Run tests for specific project:"
-    echo "                       - 'Desktop Chrome'"
-    echo "                       - 'Desktop Firefox'"
-    echo "                       - 'Mobile Chrome'"
-    echo "                       - 'Mobile Safari'"
+    echo "                       - 'Desktop Chrome - Integration Tests'  (for e2e tests)"
+    echo "                       - 'Desktop Chrome - Basic UI'           (for basic UI)"
+    echo "                       - 'Desktop Chrome - Game UI'            (for game UI)"
+    echo "                       - 'Desktop Chrome - Admin Tests'        (for admin)"
+    echo "                       - 'Desktop Chrome - System Integration' (for system)"
     echo "                       - 'all' (default)"
     echo "  --headed             Run in headed mode (if supported)"
     echo "  --debug              Run in debug mode"
@@ -39,10 +46,11 @@ show_usage() {
     echo "  --help               Show this help"
     echo ""
     echo "Examples:"
-    echo "  $0                                    # Run all projects"
-    echo "  $0 --project 'Desktop Chrome'        # Run only Chrome desktop"
-    echo "  $0 --project 'Mobile Chrome' basic-ui.test.ts"
-    echo "  $0 --debug --project 'Desktop Chrome'"
+    echo "  $0                                                          # Run all projects"
+    echo "  $0 --project 'Desktop Chrome - Integration Tests'          # Integration tests"
+    echo "  $0 uc-g001-join-game-room.integration.test.ts              # Specific test file"
+    echo "  $0 --project 'Desktop Chrome - Basic UI' basic-ui.test.ts  # UI test in Chrome"
+    echo "  $0 --debug --project 'Desktop Chrome - Integration Tests'  # Debug integration"
     echo ""
 }
 
