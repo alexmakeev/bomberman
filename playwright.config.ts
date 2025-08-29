@@ -76,7 +76,8 @@ export default defineConfig({
         ...devices['iPhone 12'],
         launchOptions: {
           executablePath: process.env.PLAYWRIGHT_WEBKIT_EXECUTABLE_PATH || undefined,
-        }
+        },
+        permissions: [], // Safari doesn't support clipboard permissions
       },
     },
     
