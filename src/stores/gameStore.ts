@@ -120,7 +120,7 @@ export const useGameStore = defineStore('game', () => {
         roomId: roomId.value,
         config: roomConfig,
       },
-      timestamp: Date.now(),
+      timestamp: new Date(),
     });
     
     console.log(`Room ${roomId.value} created successfully`);
@@ -142,7 +142,7 @@ export const useGameStore = defineStore('game', () => {
         roomId: targetRoomId,
         player: playerData,
       },
-      timestamp: Date.now(),
+      timestamp: new Date(),
     });
     
     // Reset game state for new room
@@ -159,7 +159,7 @@ export const useGameStore = defineStore('game', () => {
         messageType: 'ROOM_LEAVE' as any,
         type: 'room_leave',
         data: { roomId: roomId.value },
-        timestamp: Date.now(),
+        timestamp: new Date(),
       });
     }
     
@@ -174,7 +174,7 @@ export const useGameStore = defineStore('game', () => {
   // Actions - Game Flow
   function startGame(): void {
     gameState.value = 'playing';
-    gameStartTime.value = Date.now();
+    gameStartTime.value = new Date();
     timeRemaining.value = 300000; // Reset to 5 minutes
     
     // Start game timer
@@ -187,7 +187,7 @@ export const useGameStore = defineStore('game', () => {
         messageType: 'GAME_START' as any,
         type: 'game_start',
         data: { roomId: roomId.value },
-        timestamp: Date.now(),
+        timestamp: new Date(),
       });
     }
     
@@ -206,7 +206,7 @@ export const useGameStore = defineStore('game', () => {
           messageType: 'GAME_PAUSE' as any,
           type: 'game_pause',
           data: { roomId: roomId.value },
-          timestamp: Date.now(),
+          timestamp: new Date(),
         });
       }
     }
@@ -224,7 +224,7 @@ export const useGameStore = defineStore('game', () => {
           messageType: 'GAME_RESUME' as any,
           type: 'game_resume',
           data: { roomId: roomId.value },
-          timestamp: Date.now(),
+          timestamp: new Date(),
         });
       }
     }
@@ -246,7 +246,7 @@ export const useGameStore = defineStore('game', () => {
           result,
           finalScore: totalScore.value,
         },
-        timestamp: Date.now(),
+        timestamp: new Date(),
       });
     }
     
@@ -399,7 +399,7 @@ export const useGameStore = defineStore('game', () => {
       center: bomb.position,
       cells: calculateExplosionCells(bomb.position, bomb.power),
       damage: 25,
-      createdAt: Date.now(),
+      createdAt: new Date(),
       duration: 1000,
     };
     
@@ -525,7 +525,7 @@ export const useGameStore = defineStore('game', () => {
         id: `powerup-${Date.now()}`,
         type: randomType,
         position,
-        createdAt: Date.now()
+        createdAt: new Date()
       };
       
       addPowerUp(powerUp);
@@ -680,7 +680,7 @@ export const useGameStore = defineStore('game', () => {
         messageType: 'SYNC_REQUEST' as any,
         type: 'sync_request',
         data: { roomId: roomId.value },
-        timestamp: Date.now(),
+        timestamp: new Date(),
       });
     }
   }

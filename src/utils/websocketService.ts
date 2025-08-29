@@ -110,7 +110,7 @@ export class WebSocketService {
       messageType: MessageType.PLAYER_ACTION,
       type: 'player_action',
       data: action,
-      timestamp: Date.now(),
+      timestamp: new Date(),
     });
   }
 
@@ -122,9 +122,9 @@ export class WebSocketService {
         playerId,
         direction,
         position,
-        timestamp: Date.now(),
+        timestamp: new Date(),
       },
-      timestamp: Date.now(),
+      timestamp: new Date(),
     });
   }
 
@@ -135,9 +135,9 @@ export class WebSocketService {
       data: {
         playerId,
         position,
-        timestamp: Date.now(),
+        timestamp: new Date(),
       },
-      timestamp: Date.now(),
+      timestamp: new Date(),
     });
   }
 
@@ -215,7 +215,7 @@ export class WebSocketService {
           messageType: MessageType.PING,
           type: 'ping',
           data: {},
-          timestamp: Date.now(),
+          timestamp: new Date(),
         });
       }
     }, 30000); // Ping every 30 seconds
