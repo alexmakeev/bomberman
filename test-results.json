@@ -213,44 +213,40 @@
   },
   "suites": [
     {
-      "title": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-      "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
+      "title": "basic-ui.test.ts",
+      "file": "basic-ui.test.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "UC-A001: Monitor Game Rooms Integration",
-          "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-          "line": 9,
+          "title": "Bomberman Frontend - Basic UI",
+          "file": "basic-ui.test.ts",
+          "line": 8,
           "column": 6,
           "specs": [
             {
-              "title": "Main Success Scenario: Admin monitors active game rooms",
+              "title": "should load the home page successfully",
               "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
+                  "projectId": "Desktop Firefox - Basic UI",
+                  "projectName": "Desktop Firefox - Basic UI",
                   "results": [
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 361,
+                      "duration": 2638,
                       "errors": [],
-                      "stdout": [
-                        {
-                          "text": "✅ Admin monitoring functionality verified\n"
-                        }
-                      ],
+                      "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-29T17:31:05.417Z",
+                      "startTime": "2025-08-29T18:07:28.660Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -258,37 +254,77 @@
                   "status": "expected"
                 }
               ],
-              "id": "23ea656dad703a75aadc-cb6bfda11b5eabd78082",
-              "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 53,
+              "id": "d13466ded0b3fa9c8e8f-1433c546cab9fb8be6d9",
+              "file": "basic-ui.test.ts",
+              "line": 20,
               "column": 7
             },
             {
-              "title": "Extension 2a: No active rooms scenario",
+              "title": "should display main navigation elements",
               "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
+                  "projectId": "Desktop Firefox - Basic UI",
+                  "projectName": "Desktop Firefox - Basic UI",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2687,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Found 0 buttons on the page\n"
+                        },
+                        {
+                          "text": "Found 0 links on the page\n"
+                        },
+                        {
+                          "text": "Found 0 inputs on the page\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-29T18:07:28.668Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d13466ded0b3fa9c8e8f-6ad889a028fcdffa1949",
+              "file": "basic-ui.test.ts",
+              "line": 32,
+              "column": 7
+            },
+            {
+              "title": "should handle viewport resizing (responsive design)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Firefox - Basic UI",
+                  "projectName": "Desktop Firefox - Basic UI",
                   "results": [
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 150,
+                      "duration": 1717,
                       "errors": [],
-                      "stdout": [
-                        {
-                          "text": "✅ No active rooms scenario handled\n"
-                        }
-                      ],
+                      "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-29T17:31:06.055Z",
+                      "startTime": "2025-08-29T18:07:31.742Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -296,37 +332,84 @@
                   "status": "expected"
                 }
               ],
-              "id": "23ea656dad703a75aadc-8dc19b5bab495307d227",
-              "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 106,
+              "id": "d13466ded0b3fa9c8e8f-578cf44dd7f90d8e304e",
+              "file": "basic-ui.test.ts",
+              "line": 55,
               "column": 7
             },
             {
-              "title": "Extension 4a: Connection issues with cached data",
+              "title": "should not have JavaScript errors",
               "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
+                  "projectId": "Desktop Firefox - Basic UI",
+                  "projectName": "Desktop Firefox - Basic UI",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3602,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "JavaScript errors found: []\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-29T18:07:32.287Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d13466ded0b3fa9c8e8f-284eb2453323655b1546",
+              "file": "basic-ui.test.ts",
+              "line": 73,
+              "column": 7
+            },
+            {
+              "title": "should display page content structure",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Firefox - Basic UI",
+                  "projectName": "Desktop Firefox - Basic UI",
                   "results": [
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 181,
+                      "duration": 1573,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "✅ Connection issues with cached data handled\n"
+                          "text": "Page structure preview: \n  <div id=\"app\" data-v-app=\"\"><div class=\"bomberman-app\"><div data-v-4ce3c322=\"\" class=\"app-layout\"><main data-v-4ce3c322=\"\" class=\"main-content\"></main></div></div></div>\n  \n  <script type=\"module\" src=\"/main.ts?t=1756490210552\"></script>\n  \n  <script>\n    // Remove loading screen when app is ready\n    window.addEventListener('load', () => {\n      const loadingScreen = document.getElementById('loading-screen');\n      if (loadingScreen) {\n        setTimeout(() => {\n          loadingScreen.style...\n"
+                        },
+                        {
+                          "text": "Found 0 Vue components/elements\n"
+                        },
+                        {
+                          "text": "Found 0 canvas elements\n"
+                        },
+                        {
+                          "text": "Page text content: \n  \n  \n  \n  \n  \n    // Remove loading screen when app is ready\n    window.addEventListener('load', () => {\n      const loadingScreen = document.getElementById('loading-screen');\n      if (loadingScree...\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-29T17:31:06.222Z",
+                      "startTime": "2025-08-29T18:07:33.501Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -334,321 +417,9 @@
                   "status": "expected"
                 }
               ],
-              "id": "23ea656dad703a75aadc-ab0aaa9d5a132ee3c910",
-              "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 126,
-              "column": 7
-            },
-            {
-              "title": "Real-time updates: Room list updates automatically",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 188,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "✅ Real-time updates verified\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-29T17:31:06.420Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "23ea656dad703a75aadc-48aebd7e19c4dc5e0fa6",
-              "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 161,
-              "column": 7
-            },
-            {
-              "title": "Room details information display",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 339,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "✅ Room details display verified\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-29T17:31:05.801Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "23ea656dad703a75aadc-ad973e8330f10a2a5c54",
-              "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 185,
-              "column": 7
-            },
-            {
-              "title": "Statistics dashboard with various metrics",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 166,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "✅ Statistics dashboard verified\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-29T17:31:06.350Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "23ea656dad703a75aadc-57ac86618caa9523d936",
-              "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 221,
-              "column": 7
-            },
-            {
-              "title": "Filtering and searching room list",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 171,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "✅ Filtering and searching verified\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-29T17:31:06.534Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "23ea656dad703a75aadc-cc90eccd4a13d2368053",
-              "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 257,
-              "column": 7
-            },
-            {
-              "title": "Room management quick actions",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 140,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "✅ Room management quick actions verified\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-29T17:31:06.716Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "23ea656dad703a75aadc-67cd368d65be551ca4cb",
-              "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 296,
-              "column": 7
-            }
-          ]
-        },
-        {
-          "title": "UC-A001: Advanced Monitoring Features",
-          "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-          "line": 342,
-          "column": 6,
-          "specs": [
-            {
-              "title": "Export room data functionality",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 596,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "✅ Export functionality verified\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-29T17:31:04.706Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "23ea656dad703a75aadc-b4f4447791222bf0bd47",
-              "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 343,
-              "column": 7
-            },
-            {
-              "title": "Real-time alerts and notifications",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 518,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "✅ Real-time alerts system verified\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-29T17:31:04.692Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "23ea656dad703a75aadc-55bb43e5fc035a6b7cb7",
-              "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 369,
-              "column": 7
-            },
-            {
-              "title": "Historical data and trends",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Integration Tests",
-                  "projectName": "Desktop Chrome - Integration Tests",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 453,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "✅ Historical data and trends verified\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-29T17:31:05.315Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "23ea656dad703a75aadc-93c2233284b6943b92d8",
-              "file": "integration/uc-a001-monitor-game-rooms.integration.test.ts",
-              "line": 399,
+              "id": "d13466ded0b3fa9c8e8f-b108416f6582fa417a73",
+              "file": "basic-ui.test.ts",
+              "line": 99,
               "column": 7
             }
           ]
@@ -658,9 +429,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-08-29T17:31:03.792Z",
-    "duration": 3127.042,
-    "expected": 11,
+    "startTime": "2025-08-29T18:07:28.021Z",
+    "duration": 7929.713,
+    "expected": 5,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

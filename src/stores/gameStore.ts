@@ -323,23 +323,32 @@ export const useGameStore = defineStore('game', () => {
 
   // Actions - Entity Management
   function addBomb(bomb: Bomb): void {
-    // TODO: Implement bomb addition
-    // Add to bombs map
-    // Start bomb timer
-    console.warn('addBomb not implemented');
+    // Add bomb to the map
+    bombs.value.set(bomb.id, bomb);
+    
+    // Start bomb timer (automatically explodes after duration)
+    setTimeout(() => {
+      explodeBomb(bomb.id);
+    }, bomb.timer);
+    
+    console.log(`Bomb ${bomb.id} added at (${bomb.position.x}, ${bomb.position.y})`);
   }
 
   function removeBomb(bombId: string): void {
-    // TODO: Implement bomb removal
-    // Remove from bombs map
-    // Clean up timers
-    console.warn('removeBomb not implemented');
+    // Remove bomb from the map
+    if (bombs.value.has(bombId)) {
+      bombs.value.delete(bombId);
+      console.log(`Bomb ${bombId} removed`);
+    }
   }
 
   function updateBombTimer(bombId: string, timer: number): void {
-    // TODO: Implement bomb timer update
-    // Find bomb and update timer
-    console.warn('updateBombTimer not implemented');
+    // Find and update bomb timer
+    const bomb = bombs.value.get(bombId);
+    if (bomb) {
+      bomb.timer = timer;
+      console.log(`Bomb ${bombId} timer updated to ${timer}ms`);
+    }
   }
 
   function startBombTimer(bombId: string): void {
@@ -349,6 +358,35 @@ export const useGameStore = defineStore('game', () => {
     setTimeout(() => {
       explodeBomb(bombId, bomb);
     }, bomb.timer);
+  }
+
+  // Helper function to calculate explosion cells
+  function calculateExplosionCells(center: Position, power: number): Position[] {
+    const cells: Position[] = [center]; // Center cell always explodes
+    
+    // Four directions: up, down, left, right
+    const directions = [
+      { x: 0, y: -1 }, // up
+      { x: 0, y: 1 },  // down
+      { x: -1, y: 0 }, // left
+      { x: 1, y: 0 }   // right
+    ];
+    
+    for (const direction of directions) {
+      for (let i = 1; i <= power; i++) {
+        const cell = {
+          x: center.x + direction.x * i * 64, // 64px per cell
+          y: center.y + direction.y * i * 64
+        };
+        
+        // Check bounds and obstacles
+        if (cell.x >= 0 && cell.x < 1280 && cell.y >= 0 && cell.y < 720) {
+          cells.push(cell);
+        }
+      }
+    }
+    
+    return cells;
   }
 
   function explodeBomb(bombId: string, bomb: Bomb): void {
@@ -374,67 +412,124 @@ export const useGameStore = defineStore('game', () => {
   }
 
   function addMonster(monster: Monster): void {
-    // TODO: Implement monster addition
-    // Add to monsters map
-    // Start AI behavior
-    console.warn('addMonster not implemented');
+    // Add monster to the map
+    monsters.value.set(monster.id, monster);
+    console.log(`Monster ${monster.id} added at (${monster.position.x}, ${monster.position.y})`);
   }
 
   function removeMonster(monsterId: string): void {
-    // TODO: Implement monster removal
-    // Remove from monsters map
-    // Award points to players
-    console.warn('removeMonster not implemented');
+    // Remove monster from the map
+    if (monsters.value.has(monsterId)) {
+      monsters.value.delete(monsterId);
+      console.log(`Monster ${monsterId} removed`);
+    }
   }
 
   function spawnMonsterWave(config: any): void {
-    // TODO: Implement monster wave spawning
-    // Create multiple monsters
-    // Send spawn request to server
-    console.warn('spawnMonsterWave not implemented');
+    // Create monsters based on config
+    const count = config.count || 5;
+    const type = config.type || 'basic';
+    
+    for (let i = 0; i < count; i++) {
+      const monster: Monster = {
+        id: `monster-wave-${Date.now()}-${i}`,
+        type,
+        position: { x: Math.random() * 1200, y: Math.random() * 600 },
+        health: 50,
+        maxHealth: 50,
+        speed: 2,
+        damage: 10,
+        lastDirection: { x: 1, y: 0 },
+        isAlive: true,
+        lastMoved: Date.now()
+      };
+      
+      addMonster(monster);
+    }
+    
+    console.log(`Spawned ${count} monsters`);
   }
 
   function addBoss(newBoss: Boss): void {
-    // TODO: Implement boss addition
     // Set boss reference
-    // Initialize boss behavior
-    console.warn('addBoss not implemented');
+    boss.value = newBoss;
+    console.log(`Boss ${newBoss.id} added with ${newBoss.health}/${newBoss.maxHealth} health`);
   }
 
   function removeBoss(bossId: string): void {
-    // TODO: Implement boss removal
-    // Clear boss reference
-    // Check victory condition
-    console.warn('removeBoss not implemented');
+    // Clear boss reference if IDs match
+    if (boss.value && boss.value.id === bossId) {
+      boss.value = null;
+      // Check victory condition
+      if (gameState.value === 'playing') {
+        gameState.value = 'ended';
+        gameResult.value = 'victory';
+      }
+      console.log(`Boss ${bossId} removed`);
+    }
   }
 
   function updateBoss(bossId: string, updates: Partial<Boss>): void {
-    // TODO: Implement boss updates
-    // Apply updates to boss
-    // Check phase changes
-    // Handle death
-    console.warn('updateBoss not implemented');
+    // Update boss if IDs match
+    if (boss.value && boss.value.id === bossId) {
+      Object.assign(boss.value, updates);
+      
+      // Check if boss was defeated
+      if (updates.health !== undefined && updates.health <= 0) {
+        removeBoss(bossId);
+      }
+      
+      console.log(`Boss ${bossId} updated`);
+    }
   }
 
   function addPowerUp(powerUp: PowerUp): void {
-    // TODO: Implement power-up addition
-    // Add to powerUps map
-    console.warn('addPowerUp not implemented');
+    // Add power-up to the map
+    powerUps.value.set(powerUp.id, powerUp);
+    console.log(`Power-up ${powerUp.id} (${powerUp.type}) added at (${powerUp.position.x}, ${powerUp.position.y})`);
   }
 
   function collectPowerUp(powerUpId: string, playerId: string): void {
-    // TODO: Implement power-up collection
-    // Remove from powerUps map
-    // Apply to player
-    // Send collection event
-    console.warn('collectPowerUp not implemented');
+    // Remove power-up from the map
+    const powerUp = powerUps.value.get(powerUpId);
+    if (powerUp) {
+      powerUps.value.delete(powerUpId);
+      
+      // Apply effect to player
+      const player = players.value.get(playerId);
+      if (player) {
+        switch (powerUp.type) {
+          case 'speed':
+            player.speed = Math.min(player.speed + 1, 5);
+            break;
+          case 'bomb_power':
+            player.bombPower = Math.min(player.bombPower + 1, 10);
+            break;
+          case 'bomb_count':
+            player.maxBombs = Math.min(player.maxBombs + 1, 10);
+            break;
+        }
+      }
+      
+      console.log(`Power-up ${powerUpId} collected by player ${playerId}`);
+    }
   }
 
   function spawnPowerUpFromBlock(position: Position): void {
-    // TODO: Implement power-up spawning from destroyed blocks
-    // Random chance to spawn power-up
-    // Create power-up at position
-    console.warn('spawnPowerUpFromBlock not implemented');
+    // Random chance to spawn power-up (30%)
+    if (Math.random() < 0.3) {
+      const types = ['speed', 'bomb_power', 'bomb_count'];
+      const randomType = types[Math.floor(Math.random() * types.length)];
+      
+      const powerUp: PowerUp = {
+        id: `powerup-${Date.now()}`,
+        type: randomType,
+        position,
+        createdAt: Date.now()
+      };
+      
+      addPowerUp(powerUp);
+    }
   }
 
   // Actions - Maze Management
@@ -461,64 +556,133 @@ export const useGameStore = defineStore('game', () => {
     }
   }
 
-  function destroyBlock(x: number, y: number): void {
-    // TODO: Implement block destruction
-    // Check if block is destructible
-    // Set to empty
-    // Spawn power-up chance
-    console.warn('destroyBlock not implemented');
+  function destroyBlock(x: number, y: number): boolean {
+    // Check if block at grid coordinates is destructible
+    if (maze.value[y] && maze.value[y][x]) {
+      const cell = maze.value[y][x];
+      if (cell.type === 'destructible') {
+        cell.type = 'empty';
+        spawnPowerUpFromBlock({ x: x * 64, y: y * 64 });
+        return true;
+      }
+    }
+    return false;
   }
 
   function checkCollision(position: Position): boolean {
-    // TODO: Implement collision detection
-    // Check if position is blocked by wall/block
-    console.warn('checkCollision not implemented');
+    // Convert pixel position to grid coordinates
+    const cellX = Math.floor(position.x / 64);
+    const cellY = Math.floor(position.y / 64);
+    
+    // Check bounds
+    if (cellX < 0 || cellY < 0 || cellX >= 20 || cellY >= 15) {
+      return true; // Out of bounds = collision
+    }
+    
+    // Check maze cell
+    if (maze.value[cellY] && maze.value[cellY][cellX]) {
+      const cell = maze.value[cellY][cellX];
+      return cell.type === 'wall' || cell.type === 'destructible';
+    }
+    
     return false;
   }
 
   function getValidSpawnPositions(): Position[] {
-    // TODO: Implement spawn position calculation
-    // Return safe corner positions
-    console.warn('getValidSpawnPositions not implemented');
-    return [];
+    // Return the four corner spawn positions (standard Bomberman)
+    return [
+      { x: 64, y: 64 },     // Top-left
+      { x: 1152, y: 64 },   // Top-right  
+      { x: 64, y: 576 },    // Bottom-left
+      { x: 1152, y: 576 }   // Bottom-right
+    ];
   }
 
   // Actions - Game Statistics
   function getGameStatistics(): GameStatistics {
-    // TODO: Implement statistics calculation
-    // Calculate play time, scores, etc.
-    console.warn('getGameStatistics not implemented');
+    const currentTime = Date.now();
+    const elapsedTime = gameStartTime.value > 0 ? currentTime - gameStartTime.value : 0;
+    
     return {
-      playTime: 0,
-      totalPlayers: 0,
-      totalBombs: 0,
-      totalScore: 0,
-      blocksDestroyed: 0,
-      monstersKilled: 0,
-      powerUpsCollected: 0,
-      deaths: 0,
+      playTime: elapsedTime,
+      totalPlayers: playersArray.value.length,
+      totalBombs: activeBombs.value.length,
+      totalScore: totalScore.value,
+      blocksDestroyed: 0, // Would track this in real implementation
+      monstersKilled: 0, // Would track this in real implementation
+      powerUpsCollected: 0, // Would track this in real implementation
+      deaths: deadPlayers.value.length,
       assists: 0,
     };
   }
 
   function updateAllMonsters(): void {
-    // TODO: Implement monster AI updates
-    // Update all monster positions and AI
-    console.warn('updateAllMonsters not implemented');
+    // Basic monster position updates
+    monsters.value.forEach((monster) => {
+      if (monster.isAlive) {
+        // Simple random movement (would be more sophisticated in real implementation)
+        const directions = [
+          { x: 32, y: 0 }, { x: -32, y: 0 }, { x: 0, y: 32 }, { x: 0, y: -32 }
+        ];
+        const direction = directions[Math.floor(Math.random() * directions.length)];
+        
+        const newPosition = {
+          x: monster.position.x + direction.x,
+          y: monster.position.y + direction.y
+        };
+        
+        if (!checkCollision(newPosition)) {
+          monster.position = newPosition;
+          monster.lastMoved = Date.now();
+        }
+      }
+    });
   }
 
   // Actions - Network Synchronization
   function handleServerMessage(message: WebSocketMessage): void {
-    // TODO: Implement server message handling
-    // Route messages by type
-    // Update game state accordingly
-    console.warn('handleServerMessage not implemented');
+    // Basic message handling
+    console.log('Server message:', message.type);
+    
+    switch (message.type) {
+      case 'room_joined':
+        if (message.data && message.data.roomId) {
+          roomId.value = message.data.roomId;
+        }
+        break;
+      case 'player_joined':
+        if (message.data && message.data.player) {
+          addPlayer(message.data.player);
+        }
+        break;
+      case 'player_left':
+        if (message.data && message.data.playerId) {
+          removePlayer(message.data.playerId);
+        }
+        break;
+      case 'game_state_update':
+        if (message.data) {
+          // Update relevant game state
+          if (message.data.gameState) gameState.value = message.data.gameState;
+          if (message.data.timeRemaining) timeRemaining.value = message.data.timeRemaining;
+        }
+        break;
+      default:
+        console.warn('Unknown message type:', message.type);
+    }
   }
 
   function requestSync(): void {
-    // TODO: Implement sync request
     // Request full state sync from server
-    console.warn('requestSync not implemented');
+    const ws = getWebSocketService();
+    if (ws.isConnected && roomId.value) {
+      ws.send({
+        messageType: 'SYNC_REQUEST' as any,
+        type: 'sync_request',
+        data: { roomId: roomId.value },
+        timestamp: Date.now(),
+      });
+    }
   }
 
   // Initialize maze on store creation

@@ -55,7 +55,8 @@ export default defineConfig({
         ...devices['Desktop Firefox'],
         launchOptions: {
           executablePath: process.env.PLAYWRIGHT_FIREFOX_EXECUTABLE_PATH || undefined,
-        }
+        },
+        permissions: [], // Firefox doesn't support clipboard permissions
       },
     },
     {
@@ -112,7 +113,8 @@ export default defineConfig({
         ...devices['Desktop Firefox'],
         launchOptions: {
           executablePath: process.env.PLAYWRIGHT_FIREFOX_EXECUTABLE_PATH || undefined,
-        }
+        },
+        permissions: [], // Firefox doesn't support clipboard permissions
       },
       timeout: 45000,
     },

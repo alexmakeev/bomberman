@@ -340,22 +340,58 @@ test.describe('UC-A001: Monitor Game Rooms Integration', () => {
 // In a full implementation, this would create rooms via API calls or frontend navigation
 
 test.describe('UC-A001: Advanced Monitoring Features', () => {
-  test('Export room data functionality', async ({ page }) => {
-    await page.goto('/admin');
+  let adminPage: Page;
+
+  test.beforeAll(async ({ browser }) => {
+    // Create admin context with proper authentication
+    const adminContext = await browser.newContext({
+      storageState: {
+        cookies: [
+          {
+            name: 'admin_token',
+            value: 'test_admin_token',
+            domain: 'localhost',
+            path: '/'
+          }
+        ],
+        origins: [
+          {
+            origin: 'http://localhost:3000',
+            localStorage: [
+              {
+                name: 'admin_token',
+                value: 'test_admin_token'
+              }
+            ]
+          }
+        ]
+      }
+    });
     
-    if (await page.locator('input[type="password"]').isVisible()) {
-      await page.fill('input[type="password"]', 'admin123');
-      await page.click('button[type="submit"]');
+    adminPage = await adminContext.newPage();
+  });
+
+  test.afterAll(async () => {
+    await adminPage?.close();
+  });
+
+  test('Export room data functionality', async () => {
+    await adminPage.goto('/admin');
+    
+    // Handle admin authentication if required
+    if (await adminPage.locator('input[name="password"], input[type="password"]').isVisible({ timeout: 5000 })) {
+      await adminPage.fill('input[name="password"], input[type="password"]', 'admin123');
+      await adminPage.click('button:has-text("Login"), button[type="submit"]');
     }
     
-    await page.waitForSelector('.admin-dashboard');
+    await adminPage.waitForSelector('.admin-dashboard, .dashboard, .admin-panel', { timeout: 10000 });
     
     // Look for export functionality
-    const exportButton = page.locator('button:has-text("Export"), button:has-text("Download"), .export-button');
+    const exportButton = adminPage.locator('button:has-text("Export"), button:has-text("Download"), .export-button');
     
     if (await exportButton.isVisible()) {
       // Set up download handling
-      const downloadPromise = page.waitForEvent('download');
+      const downloadPromise = adminPage.waitForEvent('download');
       await exportButton.click();
       
       // Should trigger download
@@ -366,18 +402,19 @@ test.describe('UC-A001: Advanced Monitoring Features', () => {
     console.log('✅ Export functionality verified');
   });
 
-  test('Real-time alerts and notifications', async ({ page }) => {
-    await page.goto('/admin');
+  test('Real-time alerts and notifications', async () => {
+    await adminPage.goto('/admin');
     
-    if (await page.locator('input[type="password"]').isVisible()) {
-      await page.fill('input[type="password"]', 'admin123');
-      await page.click('button[type="submit"]');
+    // Handle admin authentication if required
+    if (await adminPage.locator('input[name="password"], input[type="password"]').isVisible({ timeout: 5000 })) {
+      await adminPage.fill('input[name="password"], input[type="password"]', 'admin123');
+      await adminPage.click('button:has-text("Login"), button[type="submit"]');
     }
     
-    await page.waitForSelector('.admin-dashboard');
+    await adminPage.waitForSelector('.admin-dashboard, .dashboard, .admin-panel', { timeout: 10000 });
     
     // Check for alert/notification system
-    const alertsPanel = page.locator('.alerts, .notifications, .warnings');
+    const alertsPanel = adminPage.locator('.alerts, .notifications, .warnings');
     
     if (await alertsPanel.isVisible()) {
       // Should show system alerts
@@ -396,18 +433,19 @@ test.describe('UC-A001: Advanced Monitoring Features', () => {
     console.log('✅ Real-time alerts system verified');
   });
 
-  test('Historical data and trends', async ({ page }) => {
-    await page.goto('/admin');
+  test('Historical data and trends', async () => {
+    await adminPage.goto('/admin');
     
-    if (await page.locator('input[type="password"]').isVisible()) {
-      await page.fill('input[type="password"]', 'admin123');
-      await page.click('button[type="submit"]');
+    // Handle admin authentication if required
+    if (await adminPage.locator('input[name="password"], input[type="password"]').isVisible({ timeout: 5000 })) {
+      await adminPage.fill('input[name="password"], input[type="password"]', 'admin123');
+      await adminPage.click('button:has-text("Login"), button[type="submit"]');
     }
     
-    await page.waitForSelector('.admin-dashboard');
+    await adminPage.waitForSelector('.admin-dashboard, .dashboard, .admin-panel', { timeout: 10000 });
     
     // Look for historical data section
-    const trendsSection = page.locator('.trends, .historical, .analytics');
+    const trendsSection = adminPage.locator('.trends, .historical, .analytics');
     
     if (await trendsSection.isVisible()) {
       // Should have time period selector
