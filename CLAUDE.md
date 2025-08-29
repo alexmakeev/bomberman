@@ -1,10 +1,11 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
 ## Project Overview
 
-A cooperative multiplayer Bomberman game built with a **unified event system architecture** that allows friends to play together in real-time. Players work as a team to complete objectives while avoiding accidental friendly fire. The game features an advanced EventBus infrastructure that handles game events, user notifications, user actions, and admin events through a single reusable pub/sub system. Supports room-based multiplayer, cross-platform play (desktop/mobile browsers), PWA capabilities, and classic 8-bit pixel art graphics.
+A cooperative multiplayer Bomberman game built with a **unified event system architecture** that allows friends to play together in real-time.
+Players work as a team to complete objectives while avoiding accidental friendly fire.
+The game features an advanced EventBus infrastructure that handles game events, user notifications, user actions, and admin events through a single reusable pub/sub system.
+Supports room-based multiplayer, cross-platform play (desktop/mobile browsers), PWA capabilities, and classic 8-bit pixel art graphics.
 
 ## Game Features
 
@@ -69,10 +70,6 @@ A cooperative multiplayer Bomberman game built with a **unified event system arc
 - **PostgreSQL**: Persistent data, analytics, audit logs, user management
 - **Dual-storage pipeline**: Automatic conversion from real-time to persistent data
 
-## Development Commands
-
-*To be added once tech stack is chosen (Node.js/Express, Python/Flask, etc.)*
-
 ## Key Directories
 
 Current directory structure:
@@ -83,12 +80,8 @@ Current directory structure:
 - `/docs/sequence-diagrams/` - Updated interaction flows with EventBus integration
 - `/docs/schema/` - Data model specifications
 - `/docs/` - Comprehensive game design and API documentation
-
-*To be added during implementation:*
-- `/client/` - Frontend game client
-- `/server/` - WebSocket server and game logic
-- `/shared/` - Common game constants and utilities
-- `/assets/` - 8-bit sprites and audio files
+- `/scripts/` - Development and testing shell scripts
+@include SCRIPTS.md
 
 ## Technical Requirements
 
@@ -126,3 +119,6 @@ Current directory structure:
 - IMPORTANT! when I ask any kind of code/files change - reflect all changes at doc folder files, so, all docs will be up to date.
 - instead of commenting unused code - implement stubs, some times it will need to create a new file. In this project we keep types separately from modules code, so, put stabs into ./src/modules and needed module file(s)
 - When you write any code try to makec comments with references to docs/schemas/types - behave as you would behave if you know that one day you will not remember what you did and why
+
+## SUPER IMPORTANT CORE RULES
+**Reference**: [CORE_RULES.md](CORE_RULES.md) - Critical workflow and development rules that MUST be followed
