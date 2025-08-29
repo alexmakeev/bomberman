@@ -13,7 +13,7 @@ export default defineConfig({
     host: true, // Allow access from mobile devices on same network
     open: false,
     cors: true,
-    hmr: true, // Use same port as dev server
+    hmr: false, // Disable HMR for lighter dev server
   },
 
   // Build configuration
