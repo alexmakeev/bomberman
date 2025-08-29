@@ -22,6 +22,7 @@ import type {
   Player,
   Position,
   PowerUp,
+  PowerUpType,
   WebSocketMessage,
 } from '../types/game';
 import { getWebSocketService } from '../utils/websocketService';
@@ -75,7 +76,7 @@ export const useGameStore = defineStore('game', () => {
   const maze = ref<Maze>([]);
   
   // State - Internal Timers
-  const gameTimer = ref<NodeJS.Timer | null>(null);
+  const gameTimer = ref<number | null>(null);
   const syncTimer = ref<NodeJS.Timer | null>(null);
 
   // Computed Properties - Game State
@@ -255,7 +256,7 @@ export const useGameStore = defineStore('game', () => {
       if (timeRemaining.value <= 0) {
         endGame('Time up');
       }
-    }, 1000);
+    }, 1000) as any;
   }
   
   function stopGameTimer(): void {
@@ -296,11 +297,11 @@ export const useGameStore = defineStore('game', () => {
     players.value.delete(playerId);
     
     // Clean up player-owned entities
-    for (const [bombId, bomb] of bombs.value) {
+    Array.from(bombs.value.entries()).forEach(([bombId, bomb]) => {
       if (bomb.ownerId === playerId) {
         bombs.value.delete(bombId);
       }
-    }
+    });
     
     console.log(`Player ${playerId} removed from game`);
   }
@@ -321,7 +322,10 @@ export const useGameStore = defineStore('game', () => {
     
     // Start bomb timer (automatically explodes after duration)
     setTimeout(() => {
-      explodeBomb(bomb.id);
+      const currentBomb = bombs.value.get(bomb.id);
+      if (currentBomb) {
+        explodeBomb(bomb.id, currentBomb);
+      }
     }, bomb.timer);
     
     console.log(`Bomb ${bomb.id} added at (${bomb.position.x}, ${bomb.position.y})`);
@@ -431,10 +435,15 @@ export const useGameStore = defineStore('game', () => {
         health: 50,
         maxHealth: 50,
         speed: 2,
-        damage: 10,
-        lastDirection: { x: 1, y: 0 },
         isAlive: true,
-        lastMoved: Date.now()
+        direction: 'down',
+        isMoving: false,
+        lastMoveTime: Date.now(),
+        pathfinding: {
+          target: null,
+          path: [],
+          lastUpdate: Date.now()
+        }
       };
       
       addMonster(monster);
@@ -492,7 +501,7 @@ export const useGameStore = defineStore('game', () => {
       const player = players.value.get(playerId);
       if (player) {
         switch (powerUp.type) {
-          case 'speed':
+          case 'speed_boost':
             player.speed = Math.min(player.speed + 1, 5);
             break;
           case 'bomb_power':
@@ -511,14 +520,15 @@ export const useGameStore = defineStore('game', () => {
   function spawnPowerUpFromBlock(position: Position): void {
     // Random chance to spawn power-up (30%)
     if (Math.random() < 0.3) {
-      const types = ['speed', 'bomb_power', 'bomb_count'];
+      const types: PowerUpType[] = ['speed_boost', 'bomb_power', 'bomb_count'];
       const randomType = types[Math.floor(Math.random() * types.length)];
       
       const powerUp: PowerUp = {
         id: `powerup-${Date.now()}`,
         type: randomType,
         position,
-        createdAt: Date.now()
+        createdAt: Date.now(),
+        isCollected: false
       };
       
       addPowerUp(powerUp);
@@ -553,8 +563,8 @@ export const useGameStore = defineStore('game', () => {
     // Check if block at grid coordinates is destructible
     if (maze.value[y] && maze.value[y][x]) {
       const cell = maze.value[y][x];
-      if (cell.type === 'destructible') {
-        cell.type = 'empty';
+      if (cell === 2) { // 2 = destructible
+        maze.value[y][x] = 0; // 0 = empty
         spawnPowerUpFromBlock({ x: x * 64, y: y * 64 });
         return true;
       }
@@ -573,9 +583,9 @@ export const useGameStore = defineStore('game', () => {
     }
     
     // Check maze cell
-    if (maze.value[cellY] && maze.value[cellY][cellX]) {
+    if (maze.value[cellY] && maze.value[cellY][cellX] !== undefined) {
       const cell = maze.value[cellY][cellX];
-      return cell.type === 'wall' || cell.type === 'destructible';
+      return cell === 1 || cell === 2; // 1 = wall, 2 = destructible
     }
     
     return false;
@@ -626,7 +636,7 @@ export const useGameStore = defineStore('game', () => {
         
         if (!checkCollision(newPosition)) {
           monster.position = newPosition;
-          monster.lastMoved = Date.now();
+          monster.lastMoveTime = Date.now();
         }
       }
     });
