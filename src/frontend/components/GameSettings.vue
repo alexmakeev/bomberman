@@ -87,13 +87,13 @@
 
 <script setup lang="ts">
 import { reactive, computed, onMounted } from 'vue'
-import { useUIStore } from '@/stores/uiStore'
+import { useUIStore } from '../../stores/uiStore'
 import { 
   loadAudioSettings, 
   saveAudioSettings, 
   loadUISettings, 
   saveUISettings 
-} from '@/utils/storageUtils'
+} from '../../utils/storageUtils'
 
 defineEmits<{
   close: []

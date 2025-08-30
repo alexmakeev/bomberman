@@ -111,14 +111,14 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { usePlayerStore } from '@/stores/playerStore'
-import { useGameStore } from '@/stores/gameStore'
-import { useUIStore } from '@/stores/uiStore'
-import { useNotificationStore } from '@/stores/notificationStore'
+import { usePlayerStore } from '../../stores/playerStore'
+import { useGameStore } from '../../stores/gameStore'
+import { useUIStore } from '../../stores/uiStore'
+import { useNotificationStore } from '../../stores/notificationStore'
 import GameMinimap from '@/components/GameMinimap.vue'
 import GameSettings from '@/components/GameSettings.vue'
-import { UnifiedInputManager } from '@/utils/inputManager'
-import { setupCanvas, resizeCanvas, calculateViewportTransform } from '@/utils/renderingUtils'
+import { UnifiedInputManager } from '../../utils/inputManager'
+import { setupCanvas, resizeCanvas, calculateViewportTransform } from '../../utils/renderingUtils'
 import type { Position, Size } from '@/types/game'
 
 interface Props {

@@ -25,9 +25,9 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { usePlayerStore } from '@/stores/playerStore'
-import { useGameStore } from '@/stores/gameStore'
-import { useUIStore } from '@/stores/uiStore'
+import { usePlayerStore } from '../../stores/playerStore'
+import { useGameStore } from '../../stores/gameStore'
+import { useUIStore } from '../../stores/uiStore'
 
 const playerStore = usePlayerStore()
 const gameStore = useGameStore()
