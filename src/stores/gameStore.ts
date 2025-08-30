@@ -115,7 +115,7 @@ export const useGameStore = defineStore('game', () => {
   });
 
   // Actions - Room Management
-  async function createRoom(roomConfig: any): Promise<void> {
+  async function createRoom(roomConfig: any): Promise<string> {
     // Generate room ID
     roomId.value = generateRoomId();
     
@@ -142,6 +142,9 @@ export const useGameStore = defineStore('game', () => {
     ws.send(message);
     
     console.log(`Room ${roomId.value} created successfully`);
+    
+    // Return the generated room ID
+    return roomId.value;
   }
 
   async function joinRoom(targetRoomId: string, playerData: any): Promise<void> {
