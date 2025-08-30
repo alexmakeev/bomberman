@@ -563,6 +563,15 @@ export const usePlayerStore = defineStore('player', () => {
     ws.sendSyncRequest(id.value);
   }
 
+  // Compatibility aliases for GameView.vue
+  function startMoving(newDirection: Direction, intensity: number = 1): void {
+    movePlayer(newDirection, intensity);
+  }
+
+  function stopMoving(): void {
+    stopMovement();
+  }
+
   // Return store interface
   return {
     // State (reactive but not readonly since they're modified internally)
@@ -614,5 +623,9 @@ export const usePlayerStore = defineStore('player', () => {
     syncWithServer,
     queueAction,
     onWebSocketReconnect,
+    
+    // Compatibility aliases
+    startMoving,
+    stopMoving,
   };
 });

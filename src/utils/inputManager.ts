@@ -251,6 +251,37 @@ export class UnifiedInputManager extends EventTarget implements InputManager {
     this.config.keyRepeatDelay = Math.max(50, Math.min(500, ms));
   }
 
+  // Public methods for GameView compatibility
+  handleMouse(action: 'down' | 'move' | 'up', event: MouseEvent): void {
+    // Convert mouse events to touch-like events for unified handling
+    const rect = (event.target as HTMLElement).getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    
+    switch (action) {
+      case 'down':
+        // Simulate touch start
+        this.handleMovementInput({ direction: this.calculateDirection(x - rect.width/2, y - rect.height/2), intensity: 1 });
+        break;
+      case 'move':
+        // Handle mouse movement (optional - for hover effects)
+        break;
+      case 'up':
+        // Simulate touch end
+        this.handleStopInput();
+        break;
+    }
+  }
+
+  handleKeyboard(action: 'down' | 'up', event: KeyboardEvent): void {
+    // Delegate to existing private methods
+    if (action === 'down') {
+      this.handleKeyDown(event);
+    } else if (action === 'up') {
+      this.handleKeyUp(event);
+    }
+  }
+
   // Touch Event Handlers
   private handleTouchStart(event: TouchEvent): void {
     event.preventDefault();

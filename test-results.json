@@ -9,10 +9,8 @@
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
-    "maxFailures": 1,
-    "metadata": {
-      "actualWorkers": 2
-    },
+    "maxFailures": 0,
+    "metadata": {},
     "preserveOutput": "always",
     "reporter": [
       [
@@ -42,9 +40,7 @@
         "outputDir": "/home/alexmak/bomberman/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 2
-        },
+        "metadata": {},
         "id": "Desktop Chrome - Basic UI",
         "name": "Desktop Chrome - Basic UI",
         "testDir": "/home/alexmak/bomberman/tests/front-end",
@@ -58,9 +54,7 @@
         "outputDir": "/home/alexmak/bomberman/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 2
-        },
+        "metadata": {},
         "id": "Desktop Firefox - Basic UI",
         "name": "Desktop Firefox - Basic UI",
         "testDir": "/home/alexmak/bomberman/tests/front-end",
@@ -74,9 +68,7 @@
         "outputDir": "/home/alexmak/bomberman/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 2
-        },
+        "metadata": {},
         "id": "Mobile Chrome - Basic UI",
         "name": "Mobile Chrome - Basic UI",
         "testDir": "/home/alexmak/bomberman/tests/front-end",
@@ -90,9 +82,7 @@
         "outputDir": "/home/alexmak/bomberman/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 2
-        },
+        "metadata": {},
         "id": "Mobile Safari - Basic UI",
         "name": "Mobile Safari - Basic UI",
         "testDir": "/home/alexmak/bomberman/tests/front-end",
@@ -106,9 +96,7 @@
         "outputDir": "/home/alexmak/bomberman/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 2
-        },
+        "metadata": {},
         "id": "Desktop Chrome - Game UI",
         "name": "Desktop Chrome - Game UI",
         "testDir": "/home/alexmak/bomberman/tests/front-end",
@@ -122,9 +110,7 @@
         "outputDir": "/home/alexmak/bomberman/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 2
-        },
+        "metadata": {},
         "id": "Desktop Chrome - Integration Tests",
         "name": "Desktop Chrome - Integration Tests",
         "testDir": "/home/alexmak/bomberman/tests/front-end",
@@ -138,9 +124,7 @@
         "outputDir": "/home/alexmak/bomberman/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 2
-        },
+        "metadata": {},
         "id": "Desktop Firefox - Critical Flows",
         "name": "Desktop Firefox - Critical Flows",
         "testDir": "/home/alexmak/bomberman/tests/front-end",
@@ -154,9 +138,7 @@
         "outputDir": "/home/alexmak/bomberman/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 2
-        },
+        "metadata": {},
         "id": "Mobile Chrome - Mobile Flows",
         "name": "Mobile Chrome - Mobile Flows",
         "testDir": "/home/alexmak/bomberman/tests/front-end",
@@ -170,9 +152,7 @@
         "outputDir": "/home/alexmak/bomberman/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 2
-        },
+        "metadata": {},
         "id": "Desktop Chrome - Admin Tests",
         "name": "Desktop Chrome - Admin Tests",
         "testDir": "/home/alexmak/bomberman/tests/front-end",
@@ -186,9 +166,7 @@
         "outputDir": "/home/alexmak/bomberman/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 2
-        },
+        "metadata": {},
         "id": "Desktop Chrome - System Integration",
         "name": "Desktop Chrome - System Integration",
         "testDir": "/home/alexmak/bomberman/tests/front-end",
@@ -211,227 +189,17 @@
       "timeout": 120000
     }
   },
-  "suites": [
+  "suites": [],
+  "errors": [
     {
-      "title": "basic-ui.test.ts",
-      "file": "basic-ui.test.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "Bomberman Frontend - Basic UI",
-          "file": "basic-ui.test.ts",
-          "line": 8,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should load the home page successfully",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Basic UI",
-                  "projectName": "Desktop Chrome - Basic UI",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1445,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-29T19:36:45.667Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "d13466ded0b3fa9c8e8f-0d13024108c64e3f6e04",
-              "file": "basic-ui.test.ts",
-              "line": 20,
-              "column": 7
-            },
-            {
-              "title": "should display main navigation elements",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Basic UI",
-                  "projectName": "Desktop Chrome - Basic UI",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 1476,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "Found 3 buttons on the page\n"
-                        },
-                        {
-                          "text": "Found 0 links on the page\n"
-                        },
-                        {
-                          "text": "Found 0 inputs on the page\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-29T19:36:45.609Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "d13466ded0b3fa9c8e8f-5756e88fefb59d72052f",
-              "file": "basic-ui.test.ts",
-              "line": 32,
-              "column": 7
-            },
-            {
-              "title": "should handle viewport resizing (responsive design)",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Basic UI",
-                  "projectName": "Desktop Chrome - Basic UI",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 1621,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-29T19:36:47.205Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "d13466ded0b3fa9c8e8f-a5bdb2e44d0dafb0d01f",
-              "file": "basic-ui.test.ts",
-              "line": 55,
-              "column": 7
-            },
-            {
-              "title": "should not have JavaScript errors",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Basic UI",
-                  "projectName": "Desktop Chrome - Basic UI",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 3418,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "JavaScript errors found: [\n  \u001b[32m'Failed to load resource: the server responded with a status of 404 (Not Found)'\u001b[39m,\n  \u001b[32m'Failed to load resource: the server responded with a status of 404 (Not Found)'\u001b[39m,\n  \u001b[32m'Failed to load resource: the server responded with a status of 404 (Not Found)'\u001b[39m,\n  \u001b[32m'Failed to load resource: the server responded with a status of 404 (Not Found)'\u001b[39m,\n  \u001b[32m'Failed to load resource: the server responded with a status of 404 (Not Found)'\u001b[39m,\n  \u001b[32m'Failed to load resource: the server responded with a status of 404 (Not Found)'\u001b[39m,\n  \u001b[32m'TypeError: Failed to fetch dynamically imported module: http://localhost:3000/views/GameView.vue'\u001b[39m,\n  \u001b[32m'Failed to create game: TypeError: Failed to fetch dynamically imported module: http://localhost:3000/views/GameView.vue'\u001b[39m\n]\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-29T19:36:47.231Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "d13466ded0b3fa9c8e8f-5f8cf5626820d6c2dcf8",
-              "file": "basic-ui.test.ts",
-              "line": 73,
-              "column": 7
-            },
-            {
-              "title": "should display page content structure",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Desktop Chrome - Basic UI",
-                  "projectName": "Desktop Chrome - Basic UI",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 1344,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "Page structure preview: \n  <div id=\"app\" data-v-app=\"\"><div class=\"bomberman-app\"><div data-v-4ce3c322=\"\" class=\"app-layout\"><main data-v-4ce3c322=\"\" class=\"main-content\"><div data-v-c3e9f06f=\"\" class=\"home-view\"><div data-v-c3e9f06f=\"\" class=\"hero-section\"><div data-v-c3e9f06f=\"\" class=\"game-logo\"><h1 data-v-c3e9f06f=\"\" class=\"title\">💣 BOMBERMAN</h1><p data-v-c3e9f06f=\"\" class=\"subtitle\">Cooperative Multiplayer</p></div><div data-v-c3e9f06f=\"\" class=\"main-menu\"><button data-v-c3e9f06f=\"\" class=\"menu-button primary\"><...\n"
-                        },
-                        {
-                          "text": "Found 0 Vue components/elements\n"
-                        },
-                        {
-                          "text": "Found 0 canvas elements\n"
-                        },
-                        {
-                          "text": "Page text content: \n  💣 BOMBERMANCooperative Multiplayer🎮Create Game🚪Join Game⚙️SettingsOffline\n  \n  \n  \n  \n    // Remove loading screen when app is ready\n    window.addEventListener('load', () => {\n      const loadi...\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-29T19:36:48.863Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "d13466ded0b3fa9c8e8f-0fc3a9bd65433c52886e",
-              "file": "basic-ui.test.ts",
-              "line": 99,
-              "column": 7
-            }
-          ]
-        }
-      ]
+      "message": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
+      "stack": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments."
     }
   ],
-  "errors": [],
   "stats": {
-    "startTime": "2025-08-29T19:36:44.912Z",
-    "duration": 5807.019,
-    "expected": 5,
+    "startTime": "2025-08-30T07:40:55.730Z",
+    "duration": 301.961,
+    "expected": 0,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

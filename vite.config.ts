@@ -4,7 +4,7 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [vue()],
-  root: './src',
+  root: './src/frontend',
   base: '/',
   
   // Development server configuration
@@ -14,17 +14,19 @@ export default defineConfig({
     open: false,
     cors: true,
     hmr: false, // Disable HMR for lighter dev server
+    fs: {
+      allow: ['..'], // Allow access to parent directory (src/)
+    },
   },
 
   // Build configuration
   build: {
-    outDir: '../dist/frontend',
+    outDir: '../../dist/frontend',
     emptyOutDir: true,
     sourcemap: true,
     
     // Mobile optimization
     rollupOptions: {
-      input: resolve(__dirname, 'src/frontend/index.html'),
       output: {
         manualChunks: {
           'vendor': ['vue', 'pinia'],
