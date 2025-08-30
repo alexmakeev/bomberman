@@ -28,6 +28,17 @@ import type {
 import { getWebSocketService } from '../utils/websocketService';
 import type { MessageType } from '../types/websocket.d';
 import { generateId, generateRoomId } from '../utils/gameUtils';
+import { 
+  renderMaze, 
+  renderPlayer, 
+  renderBomb, 
+  renderMonster, 
+  renderBoss, 
+  renderPowerUp, 
+  renderExplosion,
+  type ViewportTransform,
+  COLORS 
+} from '../utils/renderingUtils';
 
 export const useGameStore = defineStore('game', () => {
   // Helper to create properly formatted WebSocket messages
@@ -540,9 +551,22 @@ export const useGameStore = defineStore('game', () => {
 
   // Actions - Maze Management
   function initializeMaze(): void {
-    // Initialize a 15x15 maze (960px / 64px = 15 cells)
-    const size = 15;
-    maze.value = Array(size).fill(null).map(() => Array(size).fill(0));
+    console.log('🏗️ Initializing maze...');
+    
+    // TEMPORARY FIX: Create a simple working maze for debugging
+    maze.value = [
+      [1, 1, 1, 1, 1],
+      [1, 0, 0, 0, 1],
+      [1, 0, 0, 0, 1],
+      [1, 0, 0, 0, 1],
+      [1, 1, 1, 1, 1]
+    ];
+    
+    console.log('✅ TEMP: Simple maze created', {
+      size: maze.value.length,
+      sample: maze.value[0]
+    });
+    return;
     
     // Add walls around perimeter
     for (let x = 0; x < size; x++) {
@@ -755,5 +779,78 @@ export const useGameStore = defineStore('game', () => {
     updateAllMonsters,
     handleServerMessage,
     requestSync,
+    
+    // Rendering
+    render,
   };
+  
+  // Game render method
+  function render(ctx: CanvasRenderingContext2D, transform: ViewportTransform, deltaTime: number): void {
+    console.log('🎨 GameStore render called', { 
+      canvasSize: { width: ctx.canvas.width, height: ctx.canvas.height },
+      mazeExists: !!maze.value,
+      mazeSize: Array.isArray(maze.value) ? maze.value.length : 0,
+      mazeFirstRow: Array.isArray(maze.value) && Array.isArray(maze.value[0]) ? maze.value[0].length : 0,
+      playersCount: players.value.length,
+      deltaTime 
+    });
+    
+    // Clear canvas
+    ctx.fillStyle = COLORS.BACKGROUND;
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    
+    // Don't render if no maze is initialized
+    if (!Array.isArray(maze.value) || maze.value.length === 0 || !Array.isArray(maze.value[0]) || maze.value[0].length === 0) {
+      console.log('❌ No maze data available for rendering', {
+        isMazeArray: Array.isArray(maze.value),
+        mazeLength: maze.value?.length,
+        isFirstRowArray: Array.isArray(maze.value?.[0]),
+        firstRowLength: maze.value?.[0]?.length
+      });
+      return;
+    }
+    
+    console.log('✅ Rendering game with maze size:', maze.value.length);
+    
+    // Render maze
+    renderMaze(ctx, maze.value, transform);
+    
+    // Render explosions (behind entities)
+    explosions.value.forEach(explosion => {
+      renderExplosion(ctx, explosion, transform);
+    });
+    
+    // Render power-ups
+    powerUps.value.forEach(powerUp => {
+      renderPowerUp(ctx, powerUp, transform, Date.now());
+    });
+    
+    // Render bombs
+    bombs.value.forEach(bomb => {
+      renderBomb(ctx, bomb, transform, Date.now());
+    });
+    
+    // Render monsters
+    monsters.value.forEach(monster => {
+      renderMonster(ctx, monster, transform);
+    });
+    
+    // Render boss if present
+    if (boss.value) {
+      renderBoss(ctx, boss.value, transform);
+    }
+    
+    // Render players
+    const currentPlayerId = getCurrentPlayerId();
+    players.value.forEach(player => {
+      const isLocalPlayer = player.id === currentPlayerId;
+      renderPlayer(ctx, player, transform, isLocalPlayer);
+    });
+  }
+  
+  // Helper function to get current player ID
+  function getCurrentPlayerId(): string {
+    // This should come from playerStore, but for now return first player
+    return players.value.length > 0 ? players.value[0].id : '';
+  }
 });

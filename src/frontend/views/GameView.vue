@@ -115,11 +115,11 @@ import { usePlayerStore } from '../../stores/playerStore'
 import { useGameStore } from '../../stores/gameStore'
 import { useUIStore } from '../../stores/uiStore'
 import { useNotificationStore } from '../../stores/notificationStore'
-import GameMinimap from '@/components/GameMinimap.vue'
-import GameSettings from '@/components/GameSettings.vue'
+import GameMinimap from '../components/GameMinimap.vue'
+import GameSettings from '../components/GameSettings.vue'
 import { UnifiedInputManager } from '../../utils/inputManager'
 import { setupCanvas, resizeCanvas, calculateViewportTransform } from '../../utils/renderingUtils'
-import type { Position, Size } from '@/types/game'
+import type { Position, Size } from '../../types/game'
 
 interface Props {
   roomId?: string
@@ -303,10 +303,13 @@ let animationFrame: number | null = null
 let lastTime = 0
 
 function gameLoop(currentTime: number) {
+  console.log('🔄 gameLoop called', { currentTime, isGameActive: gameStore.isGameActive });
+  
   const deltaTime = currentTime - lastTime
   lastTime = currentTime
   
-  if (gameCanvas.value && gameStore.isPlaying) {
+  if (gameCanvas.value && (gameStore.isGameActive || gameStore.maze)) {
+    console.log('✅ Canvas and game condition met', { isGameActive: gameStore.isGameActive, hasMaze: !!gameStore.maze });
     const ctx = gameCanvas.value.getContext('2d')
     if (ctx) {
       // Clear canvas
@@ -320,6 +323,7 @@ function gameLoop(currentTime: number) {
       )
       
       // Render game state
+      console.log('🎮 GameView calling gameStore.render', { deltaTime });
       gameStore.render(ctx, transform, deltaTime)
     }
   }
@@ -330,10 +334,13 @@ function gameLoop(currentTime: number) {
 }
 
 function startGameLoop() {
+  console.log('🔄 startGameLoop called');
   if (animationFrame) {
+    console.log('⏹️ Canceling existing animation frame');
     cancelAnimationFrame(animationFrame)
   }
   lastTime = performance.now()
+  console.log('📺 Requesting first animation frame');
   animationFrame = requestAnimationFrame(gameLoop)
 }
 
@@ -408,9 +415,11 @@ onMounted(async () => {
     window.addEventListener('viewport-change', handleResize)
     
     // Start game loop
+    console.log('🚀 Starting game loop...');
     startGameLoop()
     
     loadingMessage.value = ''
+    console.log('✅ Game initialization complete');
     notificationStore.showSuccess('Game Ready', 'Touch and drag to move, second finger to bomb!')
     
   } catch (error) {

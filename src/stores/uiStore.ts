@@ -103,9 +103,45 @@ export const useUIStore = defineStore('ui', () => {
 
   // Actions - Device Detection
   function detectDevice(): void {
-    // TODO: Implement device detection
-    // Check screen size, touch capability, user agent
-    console.warn('detectDevice not implemented');
+    // Check screen size for device type
+    const screenWidth = window.screen.width;
+    const viewportWidth = window.innerWidth;
+    
+    // Detect touch capability
+    const hasTouchScreen = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    
+    // User agent detection for additional context
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isMobileUA = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+    const isTabletUA = /ipad|android.*tablet|kindle|playbook|silk/i.test(userAgent);
+    
+    // Determine device type based on screen size and capabilities
+    if (screenWidth <= 768 || (hasTouchScreen && isMobileUA && !isTabletUA)) {
+      isMobile.value = true;
+      isTablet.value = false;
+      isDesktop.value = false;
+      touchControlsEnabled.value = true;
+    } else if (screenWidth <= 1024 || (hasTouchScreen && isTabletUA)) {
+      isMobile.value = false;
+      isTablet.value = true;
+      isDesktop.value = false;
+      touchControlsEnabled.value = true;
+    } else {
+      isMobile.value = false;
+      isTablet.value = false;
+      isDesktop.value = true;
+      touchControlsEnabled.value = hasTouchScreen;
+    }
+    
+    // Update touch controls visibility based on device
+    showTouchControls.value = isMobile.value || isTablet.value;
+    
+    // Detect screen orientation
+    if (screen.orientation) {
+      screenOrientation.value = screen.orientation.type.includes('portrait') ? 'portrait' : 'landscape';
+    } else {
+      screenOrientation.value = window.innerHeight > window.innerWidth ? 'portrait' : 'landscape';
+    }
   }
 
   function updateViewportSize(): void {

@@ -137,4 +137,63 @@ test.describe('GameView Input Manager', () => {
       log.includes('is not a function')
     )).toHaveLength(0);
   });
+
+  test('should render game content on canvas (no black screen)', async ({ page }) => {
+    // This test specifically checks for the black canvas issue
+    const renderLogs = [];
+    const errorLogs = [];
+    
+    page.on('console', msg => {
+      const text = msg.text();
+      if (msg.type() === 'error') {
+        errorLogs.push(text);
+      }
+      if (text.includes('GameStore render called') || text.includes('Maze initialized') || text.includes('No maze data')) {
+        renderLogs.push(text);
+      }
+    });
+    
+    // Wait for game to fully initialize and render
+    await page.waitForTimeout(3000);
+    
+    // Check that the game loop is running and render is being called
+    expect(renderLogs.filter(log => log.includes('GameStore render called'))).not.toHaveLength(0);
+    
+    // Check that maze was initialized successfully
+    expect(renderLogs.filter(log => log.includes('Maze initialized'))).not.toHaveLength(0);
+    
+    // Should not have "No maze data" errors
+    expect(renderLogs.filter(log => log.includes('No maze data available'))).toHaveLength(0);
+    
+    // No render-related errors should occur
+    expect(errorLogs.filter(log => 
+      log.includes('render') || 
+      log.includes('canvas') ||
+      log.includes('maze')
+    )).toHaveLength(0);
+    
+    // Test that canvas actually has content by checking if it can be drawn on
+    const canvasHasContent = await page.evaluate(() => {
+      const canvas = document.querySelector('.game-canvas');
+      if (!canvas) return false;
+      
+      const ctx = canvas.getContext('2d');
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      
+      // Check if there are any non-black pixels (indicating actual game content)
+      for (let i = 0; i < imageData.data.length; i += 4) {
+        const r = imageData.data[i];
+        const g = imageData.data[i + 1]; 
+        const b = imageData.data[i + 2];
+        
+        // If we find any non-black pixel, the canvas has content
+        if (r !== 0 || g !== 0 || b !== 0) {
+          return true;
+        }
+      }
+      return false;
+    });
+    
+    expect(canvasHasContent).toBe(true);
+  });
 });
